@@ -2,19 +2,19 @@ import {
   Field, Float,
   GraphQLTimestamp, ID, Int, ObjectType
 } from '@nestjs/graphql';
-import { Payments } from 'src/_entities/payment.entity';
+import { Payment } from 'src/_entities/payment.entity';
 import { User } from 'src/_entities/user.entity';
 import {
+  BaseEntity,
   Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany, PrimaryGeneratedColumn
+  CreateDateColumn,
+  Entity, ManyToOne,
+  OneToMany, PrimaryGeneratedColumn, UpdateDateColumn
 } from 'typeorm';
 
 @ObjectType()
-@Entity('paymentplan', { schema: 'testing' })
-export class Paymentplan {
+@Entity('paymentplan')
+export class Paymentplan extends BaseEntity {
   @Field(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -38,24 +38,20 @@ export class Paymentplan {
   @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', {
     name: 'postDate',
-    default: () => "'CURRENT_TIMESTAMP(3)'",
   })
+  @CreateDateColumn()
   postDate: Date;
 
   @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @Field(() => User, { description: 'Example field (placeholder)' })
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'postedBy', referencedColumnName: 'postedBy' })
   postedBy: User;
 
-  @Field(() => [Payments], { description: 'Example field (placeholder)' })
-  @OneToMany(() => Payments, (payments) => payments.paymentPlan)
-  payments: Payments[];
-
-  @Field(() => [User])
-  @OneToMany(() => User, (user) => user.paymentPlan)
-  users: User[];
+  @Field(() => [Payment], { description: 'Example field (placeholder)' })
+  @OneToMany(() => Payment, (payment) => payment.paymentPlan)
+  payments: Payment[];
 }

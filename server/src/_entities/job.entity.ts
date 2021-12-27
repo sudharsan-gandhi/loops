@@ -1,18 +1,19 @@
 import { Field, GraphQLTimestamp, ID, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/_entities/user.entity';
 import {
+  BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
-  JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
-@Index('Job_postedBy_fkey', ['postedBy'], {})
-@Entity('job', { schema: 'testing' })
-export class Job {
+@Entity('job')
+export class Job extends BaseEntity {
   @Field(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -28,14 +29,15 @@ export class Job {
   @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', {
     name: 'postDate',
-    default: () => "'CURRENT_TIMESTAMP(3)'",
   })
+  @CreateDateColumn()
   postDate: Date;
 
   @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', { name: 'expirationDate' })
   expirationDate: Date;
 
+  @UpdateDateColumn()
   @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', { name: 'updatedAt' })
   updatedAt: Date;
@@ -45,6 +47,5 @@ export class Job {
     onDelete: 'NO ACTION',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'postedBy', referencedColumnName: 'id' }])
   postedBy: User;
 }

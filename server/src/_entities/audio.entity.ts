@@ -1,25 +1,23 @@
-import { ObjectType, Field, Int, ID, registerEnumType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Pack } from 'src/_entities/pack.entity';
 import {
+  BaseEntity,
   Column,
   Entity,
-  Index,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pack } from 'src/_entities/pack.entity';
 
 export enum AudioType {
-  oneshot='oneshot',
-  loop='loop'
+  oneshot = 'oneshot',
+  loop = 'loop',
 }
 
-registerEnumType(AudioType, {name: 'AudioType'});
+registerEnumType(AudioType, { name: 'AudioType' });
 
 @ObjectType()
-@Index('Audio_packId_fkey', ['packId'], {})
-@Entity('audio', { schema: 'testing' })
-export class Audio {
+@Entity('audio')
+export class Audio extends BaseEntity {
   @Field(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
@@ -57,6 +55,5 @@ export class Audio {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: 'packId', referencedColumnName: 'id' }])
   pack: Pack;
 }

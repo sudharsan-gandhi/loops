@@ -1,21 +1,22 @@
 import {
-  ObjectType,
   Field,
-  Int,
-  ID,
   GraphQLTimestamp,
+  ID,
+  Int,
+  ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
+import { Pack } from 'src/_entities/pack.entity';
+import { Paymentplan } from 'src/_entities/payment-plan.entity';
 import {
+  BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
-  Index,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pack } from 'src/_entities/pack.entity';
-import { Paymentplan } from 'src/_entities/payment-plan.entity';
+import { User } from '.';
 
 export enum PaymentModel {
   PayPal = 'PayPal',
@@ -28,18 +29,17 @@ export enum PlanType {
 }
 
 registerEnumType(PaymentModel, { name: 'PaymentModel' });
+registerEnumType(PlanType, { name: 'PlanType' });
 
 @ObjectType()
-@Index('Payments_packId_fkey', ['packId'], {})
-@Index('Payments_paymentPlanId_fkey', ['paymentPlanId'], {})
-@Entity('payments', { schema: 'testing' })
-export class Payments {
+@Entity('payment')
+export class Payment extends BaseEntity {
   @Field(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Field(() => PlanType, { description: 'Example field (placeholder)' })
-  @Column('enum', { name: 'type', enum: ['subscription', 'buy'] })
+  @Column('enum', { name: 'PlanType', enum: PlanType })
   type: PlanType;
 
   @Field(() => Int, { description: 'Example filed (placeholder)' })
@@ -47,7 +47,8 @@ export class Payments {
   price: number;
 
   @Field(() => GraphQLTimestamp, { description: 'Example filed (placeholder)' })
-  @Column('datetime', { name: 'date', default: () => "'CURRENT_TIMESTAMP(3)'" })
+  @Column('datetime', { name: 'date' })
+  @CreateDateColumn()
   date: Date;
 
   @Field(() => GraphQLTimestamp, { description: 'Example filed (placeholder)' })
@@ -59,7 +60,7 @@ export class Payments {
   planEndDate: Date;
 
   @Field(() => PaymentModel, { description: 'Example filed (placeholder)' })
-  @Column('enum', { name: 'paymentMode', enum: ['PayPal', 'MoPay'] })
+  @Column('enum', { name: 'paymentMode', enum: PaymentModel })
   paymentMode: PaymentModel;
 
   @Field({ description: 'Example filed (placeholder)' })
@@ -75,7 +76,6 @@ export class Payments {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: 'packId', referencedColumnName: 'id' }])
   pack: Pack;
 
   @Field(() => Paymentplan, { description: 'Example filed (placeholder)' })
@@ -83,6 +83,12 @@ export class Payments {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })
-  @JoinColumn([{ name: 'paymentPlanId', referencedColumnName: 'id' }])
   paymentPlan: Paymentplan;
+
+  @Field(() => User, { description: 'Example field (1)' })
+  @ManyToOne(() => User, (user) => user.payments, {
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
+  })
+  user: User;
 }

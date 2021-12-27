@@ -47,7 +47,7 @@ type Audio {
   path: String!
 
   """Example field (placeholder)"""
-  audioType: String!
+  audioType: AudioType!
 
   """Example field (placeholder)"""
   key: String!
@@ -57,6 +57,11 @@ type Audio {
 
   """Example field (placeholder)"""
   pack: Pack!
+}
+
+enum AudioType {
+  oneshot
+  loop
 }
 
 type Paymentplan {
@@ -85,16 +90,36 @@ type Paymentplan {
   postedBy: User!
 
   """Example field (placeholder)"""
-  payments: [Payments!]!
-  users: [User!]!
+  payments: [Payment!]!
 }
 
-type Payments {
+type Rave {
+  id: ID!
+
+  """Example field (placeholder)"""
+  followerId: Int!
+
+  """Example field (placeholder)"""
+  followingId: Int!
+
+  """Example field (placeholder)"""
+  follower: User!
+
+  """Example field (placeholder)"""
+  following: User!
+}
+
+type Wishlist {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Payment {
   """Example field (placeholder)"""
   id: ID!
 
   """Example field (placeholder)"""
-  type: String!
+  type: PlanType!
 
   """Example filed (placeholder)"""
   price: Int!
@@ -109,7 +134,7 @@ type Payments {
   planEndDate: Timestamp!
 
   """Example filed (placeholder)"""
-  paymentMode: String!
+  paymentMode: PaymentModel!
 
   """Example filed (placeholder)"""
   confirmationToken: String!
@@ -122,6 +147,19 @@ type Payments {
 
   """Example filed (placeholder)"""
   paymentPlan: Paymentplan!
+
+  """Example field (1)"""
+  user: User!
+}
+
+enum PlanType {
+  subscription
+  buy
+}
+
+enum PaymentModel {
+  PayPal
+  MoPay
 }
 
 type Pack {
@@ -144,20 +182,6 @@ type Pack {
 enum PacketType {
   FREE
   PAID
-}
-
-type Rave {
-  """Example field (placeholder)"""
-  followerId: Int!
-
-  """Example field (placeholder)"""
-  followingId: Int!
-
-  """Example field (placeholder)"""
-  follower: User!
-
-  """Example field (placeholder)"""
-  following: User!
 }
 
 type User {
@@ -192,15 +216,10 @@ type User {
   followings: [User!]!
 
   """Example field (1)"""
-  paymentPlan: Paymentplan!
+  payments: Payment!
 }
 
 type Review {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-type Wishlist {
   """Example field (placeholder)"""
   exampleField: Int!
 }
@@ -214,8 +233,8 @@ type Query {
   pack(id: Int!): Pack!
   paymentPlans: [Paymentplan!]!
   paymentPlan(id: Int!): Paymentplan!
-  payments: [Payments!]!
-  payment(id: Int!): Payments!
+  payments: [Payment!]!
+  payment(id: Int!): Payment!
   rave(id: Int!): Rave!
   jobs: [Job!]!
   job(id: Int!): Job!
@@ -237,9 +256,9 @@ type Mutation {
   createPaymentPlan(createPaymentPlanInput: CreatePaymentPlanInput!): Paymentplan!
   updatePaymentPlan(updatePaymentPlanInput: UpdatePaymentPlanInput!): Paymentplan!
   removePaymentPlan(id: Int!): Paymentplan!
-  createPayment(createPaymentInput: CreatePaymentInput!): Payments!
-  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payments!
-  removePayment(id: Int!): Payments!
+  createPayment(createPaymentInput: CreatePaymentInput!): Payment!
+  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
+  removePayment(id: Int!): Payment!
   createRave(createRaveInput: CreateRaveInput!): Rave!
   updateRave(updateRaveInput: UpdateRaveInput!): Rave!
   removeRave(id: Int!): Rave!
