@@ -1,0 +1,363 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Job {
+  """Example field (placeholder)"""
+  id: ID!
+
+  """Example field (placeholder)"""
+  title: String!
+
+  """Example field (placeholder)"""
+  description: String!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  expirationDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
+
+  """Example field (placeholder)"""
+  postedBy: User!
+}
+
+"""
+`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.
+"""
+scalar Timestamp
+
+type Audio {
+  """Example field (placeholder)"""
+  id: ID!
+
+  """Example field (placeholder)"""
+  name: String!
+
+  """Example field (placeholder)"""
+  packId: Int!
+
+  """Example field (placeholder)"""
+  genre: String!
+
+  """Example field (placeholder)"""
+  bpm: Int!
+
+  """Example field (placeholder)"""
+  path: String!
+
+  """Example field (placeholder)"""
+  audioType: String!
+
+  """Example field (placeholder)"""
+  key: String!
+
+  """Example field (placeholder)"""
+  tempo: Int!
+
+  """Example field (placeholder)"""
+  pack: Pack!
+}
+
+type Paymentplan {
+  """Example field (placeholder)"""
+  id: ID!
+
+  """Example field (placeholder)"""
+  title: String!
+
+  """Example field (placeholder)"""
+  description: String!
+
+  """Example field (placeholder)"""
+  amount: Float!
+
+  """Example field (placeholder)"""
+  month: Int!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
+
+  """Example field (placeholder)"""
+  postedBy: Int!
+
+  """Example field (placeholder)"""
+  payments: [Payments!]!
+  users: [User!]!
+}
+
+type Payments {
+  """Example field (placeholder)"""
+  id: ID!
+
+  """Example field (placeholder)"""
+  type: String!
+
+  """Example filed (placeholder)"""
+  price: Int!
+
+  """Example filed (placeholder)"""
+  date: Timestamp!
+
+  """Example filed (placeholder)"""
+  planStartDate: Timestamp!
+
+  """Example filed (placeholder)"""
+  planEndDate: Timestamp!
+
+  """Example filed (placeholder)"""
+  paymentMode: String!
+
+  """Example filed (placeholder)"""
+  confirmationToken: String!
+
+  """Example filed (placeholder)"""
+  isActive: Int!
+
+  """Example filed (placeholder)"""
+  paymentPlanId: Int!
+
+  """Example filed (placeholder)"""
+  packId: Int!
+
+  """Example filed (placeholder)"""
+  pack: Pack!
+
+  """Example filed (placeholder)"""
+  paymentPlan: Paymentplan!
+}
+
+type Pack {
+  """Example field (placeholder)"""
+  id: ID!
+
+  """Example field (placeholder)"""
+  name: String!
+
+  """Example field (placeholder)"""
+  authorId: Int!
+
+  """Example field (placeholder)"""
+  price: Float!
+
+  """Example field (placeholder)"""
+  type: PacketType!
+
+  """Example field (placeholder)"""
+  audio: [Audio!]!
+}
+
+enum PacketType {
+  FREE
+  PAID
+}
+
+type Rave {
+  """Example field (placeholder)"""
+  followerId: Int!
+
+  """Example field (placeholder)"""
+  followingId: Int!
+
+  """Example field (placeholder)"""
+  follower: User!
+
+  """Example field (placeholder)"""
+  following: User!
+}
+
+type User {
+  """Example field (1)"""
+  id: Int!
+
+  """Example field (1)"""
+  email: Int!
+
+  """Example field (1)"""
+  emailVerified: Int!
+
+  """Example field (1)"""
+  image: Int!
+
+  """Example field (1)"""
+  name: Int!
+
+  """Example field (1)"""
+  about: Int!
+
+  """Example field (1)"""
+  paymentPlanId: Int!
+
+  """Example field (1)"""
+  jobs: [Job!]!
+
+  """Example field (1)"""
+  packs: Int!
+
+  """Example field (1)"""
+  followers: [User!]!
+
+  """Example field (1)"""
+  followings: [User!]!
+}
+
+type Review {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Wishlist {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  audios: [Audio!]!
+  audio(id: Int!): Audio!
+  users: [User!]!
+  user(id: Int!): User!
+  packs: [Pack!]!
+  pack(id: Int!): Pack!
+  paymentPlans: [Paymentplan!]!
+  paymentPlan(id: Int!): Paymentplan!
+  payments: [Payments!]!
+  payment(id: Int!): Payments!
+  rave(id: Int!): Rave!
+  jobs: [Job!]!
+  job(id: Int!): Job!
+  reviews: [Review!]!
+  review(id: Int!): Review!
+  wishlist(id: Int!): Wishlist!
+}
+
+type Mutation {
+  createAudio(createAudioInput: CreateAudioInput!): Audio!
+  updateAudio(updateAudioInput: UpdateAudioInput!): Audio!
+  removeAudio(id: Int!): Audio!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createPack(createPackInput: CreatePackInput!): Pack!
+  updatePack(updatePackInput: UpdatePackInput!): Pack!
+  removePack(id: Int!): Pack!
+  createPaymentPlan(createPaymentPlanInput: CreatePaymentPlanInput!): Paymentplan!
+  updatePaymentPlan(updatePaymentPlanInput: UpdatePaymentPlanInput!): Paymentplan!
+  removePaymentPlan(id: Int!): Paymentplan!
+  createPayment(createPaymentInput: CreatePaymentInput!): Payments!
+  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payments!
+  removePayment(id: Int!): Payments!
+  createRave(createRaveInput: CreateRaveInput!): Rave!
+  updateRave(updateRaveInput: UpdateRaveInput!): Rave!
+  removeRave(id: Int!): Rave!
+  createJob(createJobInput: CreateJobInput!): Job!
+  updateJob(updateJobInput: UpdateJobInput!): Job!
+  removeJob(id: Int!): Job!
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  updateReview(updateReviewInput: UpdateReviewInput!): Review!
+  removeReview(id: Int!): Review!
+  createWishlist(createWishlistInput: CreateWishlistInput!): Wishlist!
+  updateWishlist(updateWishlistInput: UpdateWishlistInput!): Wishlist!
+  removeWishlist(id: Int!): Wishlist!
+}
+
+input CreateAudioInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateAudioInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUserInput {
+  id: Int!
+}
+
+input UpdateUserInput {
+  id: Int!
+}
+
+input CreatePackInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePackInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreatePaymentPlanInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePaymentPlanInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreatePaymentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePaymentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateRaveInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateRaveInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateJobInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateJobInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateReviewInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateReviewInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateWishlistInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateWishlistInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
