@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { RaveService } from './rave.service';
-import { Rave } from './entities/rave.entity';
+import { Rave } from '../_entities/rave.entity';
 import { CreateRaveInput } from './dto/create-rave.input';
 import { UpdateRaveInput } from './dto/update-rave.input';
 

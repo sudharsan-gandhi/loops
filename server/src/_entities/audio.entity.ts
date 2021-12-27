@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { ObjectType, Field, Int, ID, registerEnumType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -7,7 +7,14 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pack } from 'src/packs/entities/pack.entity';
+import { Pack } from 'src/_entities/pack.entity';
+
+export enum AudioType {
+  oneshot='oneshot',
+  loop='loop'
+}
+
+registerEnumType(AudioType, {name: 'AudioType'});
 
 @ObjectType()
 @Index('Audio_packId_fkey', ['packId'], {})
@@ -21,10 +28,6 @@ export class Audio {
   @Column('varchar', { name: 'name', length: 191 })
   name: string;
 
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  @Column('int', { name: 'packId' })
-  packId: number;
-
   @Field(() => String, { description: 'Example field (placeholder)' })
   @Column('varchar', { name: 'genre', length: 191 })
   genre: string;
@@ -37,9 +40,9 @@ export class Audio {
   @Column('varchar', { name: 'path', length: 191 })
   path: string;
 
-  @Field(() => String, { description: 'Example field (placeholder)' })
+  @Field(() => AudioType, { description: 'Example field (placeholder)' })
   @Column('enum', { name: 'audioType', enum: ['oneshot', 'loop'] })
-  audioType: 'oneshot' | 'loop';
+  audioType: AudioType;
 
   @Field(() => String, { description: 'Example field (placeholder)' })
   @Column('char', { name: 'key', length: 2 })
@@ -52,7 +55,7 @@ export class Audio {
   @Field(() => Pack, { description: 'Example field (placeholder)' })
   @ManyToOne(() => Pack, (pack) => pack.audio, {
     onDelete: 'NO ACTION',
-    onUpdate: 'CASCADE',
+    onUpdate: 'NO ACTION',
   })
   @JoinColumn([{ name: 'packId', referencedColumnName: 'id' }])
   pack: Pack;

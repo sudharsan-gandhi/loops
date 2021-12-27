@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { PaymentsService } from './payments.service';
-import { Payments as Payment } from './entities/payment.entity';
+import { Payments as Payment } from '../_entities/payment.entity';
 import { CreatePaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
 

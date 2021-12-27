@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { PacksService } from './packs.service';
-import { Pack } from './entities/pack.entity';
+import { Pack } from '../_entities/pack.entity';
 import { CreatePackInput } from './dto/create-pack.input';
 import { UpdatePackInput } from './dto/update-pack.input';
 

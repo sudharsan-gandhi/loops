@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { JobsService } from './jobs.service';
-import { Job } from './entities/job.entity';
+import { Job } from '../_entities/job.entity';
 import { CreateJobInput } from './dto/create-job.input';
 import { UpdateJobInput } from './dto/update-job.input';
 

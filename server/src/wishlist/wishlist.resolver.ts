@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { WishlistService } from './wishlist.service';
-import { Wishlist } from './entities/wishlist.entity';
+import { Wishlist } from '../_entities/wishlist.entity';
 import { CreateWishlistInput } from './dto/create-wishlist.input';
 import { UpdateWishlistInput } from './dto/update-wishlist.input';
 

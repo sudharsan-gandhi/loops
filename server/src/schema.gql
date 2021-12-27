@@ -38,9 +38,6 @@ type Audio {
   name: String!
 
   """Example field (placeholder)"""
-  packId: Int!
-
-  """Example field (placeholder)"""
   genre: String!
 
   """Example field (placeholder)"""
@@ -85,7 +82,7 @@ type Paymentplan {
   updatedAt: Timestamp!
 
   """Example field (placeholder)"""
-  postedBy: Int!
+  postedBy: User!
 
   """Example field (placeholder)"""
   payments: [Payments!]!
@@ -121,12 +118,6 @@ type Payments {
   isActive: Int!
 
   """Example filed (placeholder)"""
-  paymentPlanId: Int!
-
-  """Example filed (placeholder)"""
-  packId: Int!
-
-  """Example filed (placeholder)"""
   pack: Pack!
 
   """Example filed (placeholder)"""
@@ -139,9 +130,6 @@ type Pack {
 
   """Example field (placeholder)"""
   name: String!
-
-  """Example field (placeholder)"""
-  authorId: Int!
 
   """Example field (placeholder)"""
   price: Float!
@@ -192,9 +180,6 @@ type User {
   about: Int!
 
   """Example field (1)"""
-  paymentPlanId: Int!
-
-  """Example field (1)"""
   jobs: [Job!]!
 
   """Example field (1)"""
@@ -205,6 +190,9 @@ type User {
 
   """Example field (1)"""
   followings: [User!]!
+
+  """Example field (1)"""
+  paymentPlan: Paymentplan!
 }
 
 type Review {

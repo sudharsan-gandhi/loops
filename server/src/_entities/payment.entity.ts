@@ -1,4 +1,11 @@
-import { ObjectType, Field, Int, ID, GraphQLTimestamp } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  Int,
+  ID,
+  GraphQLTimestamp,
+  registerEnumType,
+} from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -7,9 +14,20 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pack } from 'src/packs/entities/pack.entity';
-import { Paymentplan } from 'src/payment-plans/entities/payment-plan.entity';
-import { GraphQLID } from 'graphql';
+import { Pack } from 'src/_entities/pack.entity';
+import { Paymentplan } from 'src/_entities/payment-plan.entity';
+
+export enum PaymentModel {
+  PayPal = 'PayPal',
+  MoPay = 'MoPay',
+}
+
+export enum PlanType {
+  subscription = 'subscription',
+  buy = 'buy',
+}
+
+registerEnumType(PaymentModel, { name: 'PaymentModel' });
 
 @ObjectType()
 @Index('Payments_packId_fkey', ['packId'], {})
@@ -20,9 +38,9 @@ export class Payments {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Field(() => String, { description: 'Example field (placeholder)' })
+  @Field(() => PlanType, { description: 'Example field (placeholder)' })
   @Column('enum', { name: 'type', enum: ['subscription', 'buy'] })
-  type: 'subscription' | 'buy';
+  type: PlanType;
 
   @Field(() => Int, { description: 'Example filed (placeholder)' })
   @Column('int', { name: 'price' })
@@ -40,9 +58,9 @@ export class Payments {
   @Column('datetime', { name: 'planEndDate' })
   planEndDate: Date;
 
-  @Field(() => String, { description: 'Example filed (placeholder)' })
+  @Field(() => PaymentModel, { description: 'Example filed (placeholder)' })
   @Column('enum', { name: 'paymentMode', enum: ['PayPal', 'MoPay'] })
-  paymentMode: 'PayPal' | 'MoPay';
+  paymentMode: PaymentModel;
 
   @Field({ description: 'Example filed (placeholder)' })
   @Column('varchar', { name: 'confirmationToken', length: 191 })
@@ -52,27 +70,18 @@ export class Payments {
   @Column('tinyint', { name: 'isActive', width: 1 })
   isActive: boolean;
 
-  @Field(() => Int, { description: 'Example filed (placeholder)' })
-  @Column('int', { name: 'paymentPlanId', nullable: true })
-  paymentPlanId: number | null;
-
-  @Field(() => Int, { description: 'Example filed (placeholder)' })
-  @Column('int', { name: 'packId', nullable: true })
-  packId: number | null;
-
   @Field(() => Pack, { description: 'Example filed (placeholder)' })
   @ManyToOne(() => Pack, (pack) => pack.payments, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
   })
   @JoinColumn([{ name: 'packId', referencedColumnName: 'id' }])
   pack: Pack;
 
-
   @Field(() => Paymentplan, { description: 'Example filed (placeholder)' })
   @ManyToOne(() => Paymentplan, (paymentplan) => paymentplan.payments, {
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
   })
   @JoinColumn([{ name: 'paymentPlanId', referencedColumnName: 'id' }])
   paymentPlan: Paymentplan;

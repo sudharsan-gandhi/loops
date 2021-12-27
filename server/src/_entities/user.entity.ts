@@ -1,8 +1,8 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Job } from 'src/jobs/entities/job.entity';
-import { Pack } from 'src/packs/entities/pack.entity';
-import { Paymentplan } from 'src/payment-plans/entities/payment-plan.entity';
-import { Rave } from 'src/rave/entities/rave.entity';
+import { Job } from 'src/_entities/job.entity';
+import { Pack } from 'src/_entities/pack.entity';
+import { Paymentplan } from 'src/_entities/payment-plan.entity';
+import { Rave } from 'src/_entities/rave.entity';
 import {
   BaseEntity,
   Column,
@@ -12,9 +12,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
-
-
+} from 'typeorm';
 
 @ObjectType()
 @Index('User_email_key', ['email'], { unique: true })
@@ -50,10 +48,6 @@ export class User extends BaseEntity {
   @Field(() => Int, { description: 'Example field (1)' })
   about: string | null;
 
-  @Column('int', { name: 'paymentPlanId' })
-  @Field(() => Int, { description: 'Example field (1)' })
-  paymentPlanId: number;
-
   // @OneToMany(() => Account, (account) => account.user)
   // @Field(() => Int, { description: 'Example field (1)' })
   // accounts: Account[];
@@ -74,9 +68,10 @@ export class User extends BaseEntity {
   @Field(() => [User], { description: 'Example field (1)' })
   followings: Rave[];
 
+  @Field(() => Paymentplan, { description: 'Example field (1)' })
   @ManyToOne(() => Paymentplan, (paymentplan) => paymentplan.users, {
-    onDelete: 'RESTRICT',
-    onUpdate: 'CASCADE',
+    onDelete: 'NO ACTION',
+    onUpdate: 'NO ACTION',
   })
   @JoinColumn([{ name: 'paymentPlanId', referencedColumnName: 'id' }])
   paymentPlan: Paymentplan;

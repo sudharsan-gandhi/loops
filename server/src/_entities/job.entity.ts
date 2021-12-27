@@ -1,13 +1,13 @@
-import { ObjectType, Field, Int, ID, GraphQLTimestamp } from '@nestjs/graphql';
+import { Field, GraphQLTimestamp, ID, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/_entities/user.entity';
 import {
   Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
 
 @ObjectType()
 @Index('Job_postedBy_fkey', ['postedBy'], {})

@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { AudiosService } from './audios.service';
-import { Audio } from './entities/audio.entity';
+import { Audio } from '../_entities/audio.entity';
 import { CreateAudioInput } from './dto/create-audio.input';
 import { UpdateAudioInput } from './dto/update-audio.input';
 

@@ -1,12 +1,14 @@
 import {
-  ObjectType,
   Field,
-  Int,
-  ID,
   Float,
+  ID,
+  Int,
+  ObjectType,
   registerEnumType,
-  ResolveProperty,
 } from '@nestjs/graphql';
+import { Audio } from 'src/_entities/audio.entity';
+import { Payments } from 'src/_entities/payment.entity';
+import { User } from 'src/_entities/user.entity';
 import {
   Column,
   Entity,
@@ -16,9 +18,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Audio } from 'src/audios/entities/audio.entity';
-import { User } from 'src/users/entities/user.entity';
-import { Payments } from 'src/payments/entities/payment.entity';
 
 export enum PacketType {
   FREE,
@@ -39,17 +38,13 @@ export class Pack {
   @Column('varchar', { name: 'name', nullable: true, length: 191 })
   name: string | null;
 
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  @Column('int', { name: 'authorId' })
-  authorId: number;
-
   @Field(() => Float, { description: 'Example field (placeholder)' })
   @Column('int', { name: 'price' })
   price: number;
 
   @Field(() => PacketType, { description: 'Example field (placeholder)' })
   @Column('enum', { name: 'type', enum: ['FREE', 'PAID'] })
-  type: 'FREE' | 'PAID';
+  type: PacketType;
 
   @Field(() => [Audio], { description: 'Example field (placeholder)' })
   @OneToMany(() => Audio, (audio) => audio.pack)

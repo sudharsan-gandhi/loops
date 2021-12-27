@@ -1,7 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
-import { User } from 'src/users/entities/user.entity';
+import { User } from 'src/_entities/user.entity';
 
 
 @ObjectType()
@@ -21,16 +21,16 @@ export class Rave {
 
   @Field(() => User, { description: 'Example field (placeholder)' })
   @ManyToOne(() => User, (user) => user.followers, {
-    onDelete: "RESTRICT",
-    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "followerId", referencedColumnName: "id" }])
   follower: User;
 
   @Field(() => User, { description: 'Example field (placeholder)' })
   @ManyToOne(() => User, (user) => user.followings, {
-    onDelete: "RESTRICT",
-    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
+    onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "followingId", referencedColumnName: "id" }])
   following: User;

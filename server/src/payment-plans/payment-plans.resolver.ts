@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { PaymentPlansService } from './payment-plans.service';
-import { Paymentplan as PaymentPlan } from './entities/payment-plan.entity';
+import { Paymentplan as PaymentPlan } from '../_entities/payment-plan.entity';
 import { CreatePaymentPlanInput } from './dto/create-payment-plan.input';
 import { UpdatePaymentPlanInput } from './dto/update-payment-plan.input';
 
