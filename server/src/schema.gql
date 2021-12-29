@@ -2,7 +2,7 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Job {
+type job {
   """Example field (placeholder)"""
   id: ID!
 
@@ -20,9 +20,8 @@ type Job {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp!
-
-  """Example field (placeholder)"""
-  postedBy: User!
+  postedById: ID!
+  postedBy: user!
 }
 
 """
@@ -30,41 +29,304 @@ type Job {
 """
 scalar Timestamp
 
-type Audio {
-  """Example field (placeholder)"""
+type rave {
   id: ID!
 
   """Example field (placeholder)"""
+  followerId: Int!
+
+  """Example field (placeholder)"""
+  followingId: Int!
+  follower: user!
+  following: user!
+}
+
+type user {
+  id: ID!
+  email: String!
+  password: String!
+  emailVerified: Timestamp!
+  image: String!
   name: String!
+  about: String!
+  jobs(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
 
-  """Example field (placeholder)"""
-  genre: String!
+    """Specify to filter the records returned."""
+    filter: jobFilter = {}
 
-  """Example field (placeholder)"""
-  bpm: Int!
+    """Specify to sort results."""
+    sorting: [jobSort!] = []
+  ): UserJobsConnection!
+  packs(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
 
-  """Example field (placeholder)"""
-  path: String!
+    """Specify to filter the records returned."""
+    filter: packFilter = {}
 
-  """Example field (placeholder)"""
-  audioType: AudioType!
+    """Specify to sort results."""
+    sorting: [packSort!] = []
+  ): UserPacksConnection!
+  followers(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
 
-  """Example field (placeholder)"""
-  key: String!
+    """Specify to filter the records returned."""
+    filter: raveFilter = {}
 
-  """Example field (placeholder)"""
-  tempo: Int!
+    """Specify to sort results."""
+    sorting: [raveSort!] = []
+  ): UserFollowersConnection!
+  followings(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
 
-  """Example field (placeholder)"""
-  pack: Pack!
+    """Specify to filter the records returned."""
+    filter: raveFilter = {}
+
+    """Specify to sort results."""
+    sorting: [raveSort!] = []
+  ): UserFollowingsConnection!
+  payments(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: paymentFilter = {}
+
+    """Specify to sort results."""
+    sorting: [paymentSort!] = []
+  ): UserPaymentsConnection!
 }
 
-enum AudioType {
-  oneshot
-  loop
+input CursorPaging {
+  """Paginate before opaque cursor"""
+  before: ConnectionCursor
+
+  """Paginate after opaque cursor"""
+  after: ConnectionCursor
+
+  """Paginate first"""
+  first: Int
+
+  """Paginate last"""
+  last: Int
 }
 
-type Paymentplan {
+"""Cursor for paging through collections"""
+scalar ConnectionCursor
+
+input jobFilter {
+  and: [jobFilter!]
+  or: [jobFilter!]
+  id: IDFilterComparison
+  title: StringFieldComparison
+  postDate: TimestampFieldComparison
+  expirationDate: TimestampFieldComparison
+  postedById: IDFilterComparison
+}
+
+input IDFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: ID
+  neq: ID
+  gt: ID
+  gte: ID
+  lt: ID
+  lte: ID
+  like: ID
+  notLike: ID
+  iLike: ID
+  notILike: ID
+  in: [ID!]
+  notIn: [ID!]
+}
+
+input StringFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: String
+  neq: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  like: String
+  notLike: String
+  iLike: String
+  notILike: String
+  in: [String!]
+  notIn: [String!]
+}
+
+input TimestampFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Timestamp
+  neq: Timestamp
+  gt: Timestamp
+  gte: Timestamp
+  lt: Timestamp
+  lte: Timestamp
+  in: [Timestamp!]
+  notIn: [Timestamp!]
+  between: TimestampFieldComparisonBetween
+  notBetween: TimestampFieldComparisonBetween
+}
+
+input TimestampFieldComparisonBetween {
+  lower: Timestamp!
+  upper: Timestamp!
+}
+
+input jobSort {
+  field: jobSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum jobSortFields {
+  id
+  title
+  postDate
+  expirationDate
+  postedById
+}
+
+"""Sort Directions"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Sort Nulls Options"""
+enum SortNulls {
+  NULLS_FIRST
+  NULLS_LAST
+}
+
+input packFilter {
+  and: [packFilter!]
+  or: [packFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  price: FloatFieldComparison
+  authorId: IDFilterComparison
+}
+
+input FloatFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Float
+  neq: Float
+  gt: Float
+  gte: Float
+  lt: Float
+  lte: Float
+  in: [Float!]
+  notIn: [Float!]
+  between: FloatFieldComparisonBetween
+  notBetween: FloatFieldComparisonBetween
+}
+
+input FloatFieldComparisonBetween {
+  lower: Float!
+  upper: Float!
+}
+
+input packSort {
+  field: packSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum packSortFields {
+  id
+  name
+  price
+  authorId
+}
+
+input raveFilter {
+  and: [raveFilter!]
+  or: [raveFilter!]
+  id: IDFilterComparison
+  followerId: IntFieldComparison
+  followingId: IntFieldComparison
+}
+
+input IntFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Int
+  neq: Int
+  gt: Int
+  gte: Int
+  lt: Int
+  lte: Int
+  in: [Int!]
+  notIn: [Int!]
+  between: IntFieldComparisonBetween
+  notBetween: IntFieldComparisonBetween
+}
+
+input IntFieldComparisonBetween {
+  lower: Int!
+  upper: Int!
+}
+
+input raveSort {
+  field: raveSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum raveSortFields {
+  id
+  followerId
+  followingId
+}
+
+input paymentFilter {
+  and: [paymentFilter!]
+  or: [paymentFilter!]
+  id: IDFilterComparison
+  price: IntFieldComparison
+  date: TimestampFieldComparison
+  planStartDate: TimestampFieldComparison
+  planEndDate: TimestampFieldComparison
+  isActive: PaymentIsActiveFilterComparison
+  packId: IDFilterComparison
+  paymentPlanId: IDFilterComparison
+  userId: IDFilterComparison
+}
+
+input PaymentIsActiveFilterComparison {
+  eq: Int
+}
+
+input paymentSort {
+  field: paymentSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum paymentSortFields {
+  id
+  price
+  date
+  planStartDate
+  planEndDate
+  isActive
+  packId
+  paymentPlanId
+  userId
+}
+
+type paymentplan {
   """Example field (placeholder)"""
   id: ID!
 
@@ -85,36 +347,21 @@ type Paymentplan {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp!
+  postedById: ID!
+  postedBy: user!
+  payments(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
 
-  """Example field (placeholder)"""
-  postedBy: User!
+    """Specify to filter the records returned."""
+    filter: paymentFilter = {}
 
-  """Example field (placeholder)"""
-  payments: [Payment!]!
+    """Specify to sort results."""
+    sorting: [paymentSort!] = []
+  ): PaymentplanPaymentsConnection!
 }
 
-type Rave {
-  id: ID!
-
-  """Example field (placeholder)"""
-  followerId: Int!
-
-  """Example field (placeholder)"""
-  followingId: Int!
-
-  """Example field (placeholder)"""
-  follower: User!
-
-  """Example field (placeholder)"""
-  following: User!
-}
-
-type Wishlist {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-type Payment {
+type payment {
   """Example field (placeholder)"""
   id: ID!
 
@@ -141,15 +388,12 @@ type Payment {
 
   """Example filed (placeholder)"""
   isActive: Int!
-
-  """Example filed (placeholder)"""
-  pack: Pack!
-
-  """Example filed (placeholder)"""
-  paymentPlan: Paymentplan!
-
-  """Example field (1)"""
-  user: User!
+  packId: ID!
+  paymentPlanId: ID!
+  userId: ID!
+  pack: pack!
+  paymentPlan: paymentplan!
+  user: user!
 }
 
 enum PlanType {
@@ -162,7 +406,7 @@ enum PaymentModel {
   MoPay
 }
 
-type Pack {
+type pack {
   """Example field (placeholder)"""
   id: ID!
 
@@ -174,9 +418,28 @@ type Pack {
 
   """Example field (placeholder)"""
   type: PacketType!
+  authorId: ID!
+  author: user!
+  audio(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
 
-  """Example field (placeholder)"""
-  audio: [Audio!]!
+    """Specify to filter the records returned."""
+    filter: audioFilter = {}
+
+    """Specify to sort results."""
+    sorting: [audioSort!] = []
+  ): PackAudioConnection!
+  payments(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: paymentFilter = {}
+
+    """Specify to sort results."""
+    sorting: [paymentSort!] = []
+  ): PackPaymentsConnection!
 }
 
 enum PacketType {
@@ -184,187 +447,1749 @@ enum PacketType {
   PAID
 }
 
-type User {
-  """Example field (1)"""
-  id: Int!
-
-  """Example field (1)"""
-  email: Int!
-
-  """Example field (1)"""
-  emailVerified: Int!
-
-  """Example field (1)"""
-  image: Int!
-
-  """Example field (1)"""
-  name: Int!
-
-  """Example field (1)"""
-  about: Int!
-
-  """Example field (1)"""
-  jobs: [Job!]!
-
-  """Example field (1)"""
-  packs: Int!
-
-  """Example field (1)"""
-  followers: [User!]!
-
-  """Example field (1)"""
-  followings: [User!]!
-
-  """Example field (1)"""
-  payments: Payment!
+input audioFilter {
+  and: [audioFilter!]
+  or: [audioFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  genre: StringFieldComparison
+  bpm: IntFieldComparison
+  key: StringFieldComparison
+  tempo: IntFieldComparison
+  packId: IDFilterComparison
 }
 
-type Review {
+input audioSort {
+  field: audioSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum audioSortFields {
+  id
+  name
+  genre
+  bpm
+  key
+  tempo
+  packId
+}
+
+type audio {
   """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+
+  """Example field (placeholder)"""
+  name: String!
+
+  """Example field (placeholder)"""
+  genre: String!
+
+  """Example field (placeholder)"""
+  bpm: Int!
+
+  """Example field (placeholder)"""
+  path: String!
+
+  """Example field (placeholder)"""
+  audioType: AudioType!
+
+  """Example field (placeholder)"""
+  key: String!
+
+  """Example field (placeholder)"""
+  tempo: Int!
+  packId: ID!
+  pack: pack!
+}
+
+enum AudioType {
+  oneshot
+  loop
+}
+
+type DeleteManyResponse {
+  """The number of records deleted."""
+  deletedCount: Int!
+}
+
+type AudioDeleteResponse {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  name: String
+
+  """Example field (placeholder)"""
+  genre: String
+
+  """Example field (placeholder)"""
+  bpm: Int
+
+  """Example field (placeholder)"""
+  path: String
+
+  """Example field (placeholder)"""
+  audioType: AudioType
+
+  """Example field (placeholder)"""
+  key: String
+
+  """Example field (placeholder)"""
+  tempo: Int
+  packId: ID
+}
+
+type UpdateManyResponse {
+  """The number of records updated."""
+  updatedCount: Int!
+}
+
+type audioEdge {
+  """The node containing the audio"""
+  node: audio!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type PageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+
+  """The cursor of the first returned record."""
+  startCursor: ConnectionCursor
+
+  """The cursor of the last returned record."""
+  endCursor: ConnectionCursor
+}
+
+type AudioConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [audioEdge!]!
+}
+
+type audioAggregateGroupBy {
+  id: ID
+  name: String
+  genre: String
+  bpm: Int
+  key: String
+  tempo: Int
+  packId: ID
+}
+
+type audioCountAggregate {
+  id: Int
+  name: Int
+  genre: Int
+  bpm: Int
+  key: Int
+  tempo: Int
+  packId: Int
+}
+
+type audioSumAggregate {
+  id: Float
+  bpm: Float
+  tempo: Float
+  packId: Float
+}
+
+type audioAvgAggregate {
+  id: Float
+  bpm: Float
+  tempo: Float
+  packId: Float
+}
+
+type audioMinAggregate {
+  id: ID
+  name: String
+  genre: String
+  bpm: Int
+  key: String
+  tempo: Int
+  packId: ID
+}
+
+type audioMaxAggregate {
+  id: ID
+  name: String
+  genre: String
+  bpm: Int
+  key: String
+  tempo: Int
+  packId: ID
+}
+
+type JobDeleteResponse {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  title: String
+
+  """Example field (placeholder)"""
+  description: String
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  expirationDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+type jobEdge {
+  """The node containing the job"""
+  node: job!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type JobConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [jobEdge!]!
+}
+
+type jobAggregateGroupBy {
+  id: ID
+  title: String
+  postDate: Timestamp
+  expirationDate: Timestamp
+  postedById: ID
+}
+
+type jobCountAggregate {
+  id: Int
+  title: Int
+  postDate: Int
+  expirationDate: Int
+  postedById: Int
+}
+
+type jobSumAggregate {
+  id: Float
+  postedById: Float
+}
+
+type jobAvgAggregate {
+  id: Float
+  postedById: Float
+}
+
+type jobMinAggregate {
+  id: ID
+  title: String
+  postDate: Timestamp
+  expirationDate: Timestamp
+  postedById: ID
+}
+
+type jobMaxAggregate {
+  id: ID
+  title: String
+  postDate: Timestamp
+  expirationDate: Timestamp
+  postedById: ID
+}
+
+type PackDeleteResponse {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  name: String
+
+  """Example field (placeholder)"""
+  price: Float
+
+  """Example field (placeholder)"""
+  type: PacketType
+  authorId: ID
+}
+
+type packEdge {
+  """The node containing the pack"""
+  node: pack!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type PackConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [packEdge!]!
+}
+
+type packAggregateGroupBy {
+  id: ID
+  name: String
+  price: Float
+  authorId: ID
+}
+
+type packCountAggregate {
+  id: Int
+  name: Int
+  price: Int
+  authorId: Int
+}
+
+type packSumAggregate {
+  id: Float
+  price: Float
+  authorId: Float
+}
+
+type packAvgAggregate {
+  id: Float
+  price: Float
+  authorId: Float
+}
+
+type packMinAggregate {
+  id: ID
+  name: String
+  price: Float
+  authorId: ID
+}
+
+type packMaxAggregate {
+  id: ID
+  name: String
+  price: Float
+  authorId: ID
+}
+
+type paymentEdge {
+  """The node containing the payment"""
+  node: payment!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type PackPaymentsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [paymentEdge!]!
+}
+
+type PackAudioConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [audioEdge!]!
+}
+
+type PaymentplanDeleteResponse {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  title: String
+
+  """Example field (placeholder)"""
+  description: String
+
+  """Example field (placeholder)"""
+  amount: Float
+
+  """Example field (placeholder)"""
+  month: Int
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+type paymentplanEdge {
+  """The node containing the paymentplan"""
+  node: paymentplan!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type PaymentplanConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [paymentplanEdge!]!
+}
+
+type paymentplanAggregateGroupBy {
+  id: ID
+  amount: Float
+  postedById: ID
+}
+
+type paymentplanCountAggregate {
+  id: Int
+  amount: Int
+  postedById: Int
+}
+
+type paymentplanSumAggregate {
+  id: Float
+  amount: Float
+  postedById: Float
+}
+
+type paymentplanAvgAggregate {
+  id: Float
+  amount: Float
+  postedById: Float
+}
+
+type paymentplanMinAggregate {
+  id: ID
+  amount: Float
+  postedById: ID
+}
+
+type paymentplanMaxAggregate {
+  id: ID
+  amount: Float
+  postedById: ID
+}
+
+type PaymentplanPaymentsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [paymentEdge!]!
+}
+
+type PaymentDeleteResponse {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  type: PlanType
+
+  """Example filed (placeholder)"""
+  price: Int
+
+  """Example filed (placeholder)"""
+  date: Timestamp
+
+  """Example filed (placeholder)"""
+  planStartDate: Timestamp
+
+  """Example filed (placeholder)"""
+  planEndDate: Timestamp
+
+  """Example filed (placeholder)"""
+  paymentMode: PaymentModel
+
+  """Example filed (placeholder)"""
+  confirmationToken: String
+
+  """Example filed (placeholder)"""
+  isActive: Int
+  packId: ID
+  paymentPlanId: ID
+  userId: ID
+}
+
+type PaymentConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [paymentEdge!]!
+}
+
+type paymentAggregateGroupBy {
+  id: ID
+  price: Int
+  date: Timestamp
+  planStartDate: Timestamp
+  planEndDate: Timestamp
+  isActive: Int
+  packId: ID
+  paymentPlanId: ID
+  userId: ID
+}
+
+type paymentCountAggregate {
+  id: Int
+  price: Int
+  date: Int
+  planStartDate: Int
+  planEndDate: Int
+  isActive: Int
+  packId: Int
+  paymentPlanId: Int
+  userId: Int
+}
+
+type paymentSumAggregate {
+  id: Float
+  price: Float
+  packId: Float
+  paymentPlanId: Float
+  userId: Float
+}
+
+type paymentAvgAggregate {
+  id: Float
+  price: Float
+  packId: Float
+  paymentPlanId: Float
+  userId: Float
+}
+
+type paymentMinAggregate {
+  id: ID
+  price: Int
+  date: Timestamp
+  planStartDate: Timestamp
+  planEndDate: Timestamp
+  packId: ID
+  paymentPlanId: ID
+  userId: ID
+}
+
+type paymentMaxAggregate {
+  id: ID
+  price: Int
+  date: Timestamp
+  planStartDate: Timestamp
+  planEndDate: Timestamp
+  packId: ID
+  paymentPlanId: ID
+  userId: ID
+}
+
+type RaveDeleteResponse {
+  id: ID
+
+  """Example field (placeholder)"""
+  followerId: Int
+
+  """Example field (placeholder)"""
+  followingId: Int
+}
+
+type raveEdge {
+  """The node containing the rave"""
+  node: rave!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type RaveConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [raveEdge!]!
+}
+
+type raveAggregateGroupBy {
+  id: ID
+  followerId: Int
+  followingId: Int
+}
+
+type raveCountAggregate {
+  id: Int
+  followerId: Int
+  followingId: Int
+}
+
+type raveSumAggregate {
+  id: Float
+  followerId: Float
+  followingId: Float
+}
+
+type raveAvgAggregate {
+  id: Float
+  followerId: Float
+  followingId: Float
+}
+
+type raveMinAggregate {
+  id: ID
+  followerId: Int
+  followingId: Int
+}
+
+type raveMaxAggregate {
+  id: ID
+  followerId: Int
+  followingId: Int
+}
+
+type UserDeleteResponse {
+  id: ID
+  email: String
+  password: String
+  emailVerified: Timestamp
+  image: String
+  name: String
+  about: String
+}
+
+type userEdge {
+  """The node containing the user"""
+  node: user!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type UserConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [userEdge!]!
+}
+
+type userAggregateGroupBy {
+  id: ID
+  email: String
+  name: String
+}
+
+type userCountAggregate {
+  id: Int
+  email: Int
+  name: Int
+}
+
+type userSumAggregate {
+  id: Float
+}
+
+type userAvgAggregate {
+  id: Float
+}
+
+type userMinAggregate {
+  id: ID
+  email: String
+  name: String
+}
+
+type userMaxAggregate {
+  id: ID
+  email: String
+  name: String
+}
+
+type UserPaymentsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [paymentEdge!]!
+}
+
+type UserFollowingsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [raveEdge!]!
+}
+
+type UserFollowersConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [raveEdge!]!
+}
+
+type UserPacksConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [packEdge!]!
+}
+
+type UserJobsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [jobEdge!]!
 }
 
 type Query {
-  audios: [Audio!]!
-  audio(id: Int!): Audio!
-  users: [User!]!
-  user(id: Int!): User!
-  packs: [Pack!]!
-  pack(id: Int!): Pack!
-  paymentPlans: [Paymentplan!]!
-  paymentPlan(id: Int!): Paymentplan!
-  payments: [Payment!]!
-  payment(id: Int!): Payment!
-  rave(id: Int!): Rave!
-  jobs: [Job!]!
-  job(id: Int!): Job!
-  reviews: [Review!]!
-  review(id: Int!): Review!
-  wishlist(id: Int!): Wishlist!
+  audio(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: audioFilter = {}
+
+    """Specify to sort results."""
+    sorting: [audioSort!] = []
+  ): AudioConnection!
+  job(
+    """The id of the record to find."""
+    id: ID!
+  ): job
+  jobs(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: jobFilter = {}
+
+    """Specify to sort results."""
+    sorting: [jobSort!] = []
+  ): JobConnection!
+  pack(
+    """The id of the record to find."""
+    id: ID!
+  ): pack
+  packs(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: packFilter = {}
+
+    """Specify to sort results."""
+    sorting: [packSort!] = []
+  ): PackConnection!
+  paymentplan(
+    """The id of the record to find."""
+    id: ID!
+  ): paymentplan
+  paymentplans(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: paymentplanFilter = {}
+
+    """Specify to sort results."""
+    sorting: [paymentplanSort!] = []
+  ): PaymentplanConnection!
+  payment(
+    """The id of the record to find."""
+    id: ID!
+  ): payment
+  payments(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: paymentFilter = {}
+
+    """Specify to sort results."""
+    sorting: [paymentSort!] = []
+  ): PaymentConnection!
+  rave(
+    """The id of the record to find."""
+    id: ID!
+  ): rave
+  raves(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: raveFilter = {}
+
+    """Specify to sort results."""
+    sorting: [raveSort!] = []
+  ): RaveConnection!
+  user(
+    """The id of the record to find."""
+    id: ID!
+  ): user
+  users(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: userFilter = {}
+
+    """Specify to sort results."""
+    sorting: [userSort!] = []
+  ): UserConnection!
+}
+
+input paymentplanFilter {
+  and: [paymentplanFilter!]
+  or: [paymentplanFilter!]
+  id: IDFilterComparison
+  amount: FloatFieldComparison
+  postedById: IDFilterComparison
+}
+
+input paymentplanSort {
+  field: paymentplanSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum paymentplanSortFields {
+  id
+  amount
+  postedById
+}
+
+input userFilter {
+  and: [userFilter!]
+  or: [userFilter!]
+  id: IDFilterComparison
+  email: StringFieldComparison
+  name: StringFieldComparison
+}
+
+input userSort {
+  field: userSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum userSortFields {
+  id
+  email
+  name
 }
 
 type Mutation {
-  createAudio(createAudioInput: CreateAudioInput!): Audio!
-  updateAudio(updateAudioInput: UpdateAudioInput!): Audio!
-  removeAudio(id: Int!): Audio!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
-  createPack(createPackInput: CreatePackInput!): Pack!
-  updatePack(updatePackInput: UpdatePackInput!): Pack!
-  removePack(id: Int!): Pack!
-  createPaymentPlan(createPaymentPlanInput: CreatePaymentPlanInput!): Paymentplan!
-  updatePaymentPlan(updatePaymentPlanInput: UpdatePaymentPlanInput!): Paymentplan!
-  removePaymentPlan(id: Int!): Paymentplan!
-  createPayment(createPaymentInput: CreatePaymentInput!): Payment!
-  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
-  removePayment(id: Int!): Payment!
-  createRave(createRaveInput: CreateRaveInput!): Rave!
-  updateRave(updateRaveInput: UpdateRaveInput!): Rave!
-  removeRave(id: Int!): Rave!
-  createJob(createJobInput: CreateJobInput!): Job!
-  updateJob(updateJobInput: UpdateJobInput!): Job!
-  removeJob(id: Int!): Job!
-  createReview(createReviewInput: CreateReviewInput!): Review!
-  updateReview(updateReviewInput: UpdateReviewInput!): Review!
-  removeReview(id: Int!): Review!
-  createWishlist(createWishlistInput: CreateWishlistInput!): Wishlist!
-  updateWishlist(updateWishlistInput: UpdateWishlistInput!): Wishlist!
-  removeWishlist(id: Int!): Wishlist!
+  setPackOnAudio(input: SetPackOnAudioInput!): audio!
+  createOneAudio(input: CreateOneAudioInput!): audio!
+  createManyAudio(input: CreateManyAudioInput!): [audio!]!
+  updateOneAudio(input: UpdateOneAudioInput!): audio!
+  updateManyAudio(input: UpdateManyAudioInput!): UpdateManyResponse!
+  deleteOneAudio(input: DeleteOneAudioInput!): AudioDeleteResponse!
+  deleteManyAudio(input: DeleteManyAudioInput!): DeleteManyResponse!
+  setPostedByOnJob(input: SetPostedByOnJobInput!): job!
+  createOneJob(input: CreateOneJobInput!): job!
+  createManyJobs(input: CreateManyJobsInput!): [job!]!
+  updateOneJob(input: UpdateOneJobInput!): job!
+  updateManyJobs(input: UpdateManyJobsInput!): UpdateManyResponse!
+  deleteOneJob(input: DeleteOneJobInput!): JobDeleteResponse!
+  deleteManyJobs(input: DeleteManyJobsInput!): DeleteManyResponse!
+  setAuthorOnPack(input: SetAuthorOnPackInput!): pack!
+  addAudioToPack(input: AddAudioToPackInput!): pack!
+  setAudioOnPack(input: SetAudioOnPackInput!): pack!
+  addPaymentsToPack(input: AddPaymentsToPackInput!): pack!
+  setPaymentsOnPack(input: SetPaymentsOnPackInput!): pack!
+  createOnePack(input: CreateOnePackInput!): pack!
+  createManyPacks(input: CreateManyPacksInput!): [pack!]!
+  updateOnePack(input: UpdateOnePackInput!): pack!
+  updateManyPacks(input: UpdateManyPacksInput!): UpdateManyResponse!
+  deleteOnePack(input: DeleteOnePackInput!): PackDeleteResponse!
+  deleteManyPacks(input: DeleteManyPacksInput!): DeleteManyResponse!
+  setPostedByOnPaymentplan(input: SetPostedByOnPaymentplanInput!): paymentplan!
+  addPaymentsToPaymentplan(input: AddPaymentsToPaymentplanInput!): paymentplan!
+  setPaymentsOnPaymentplan(input: SetPaymentsOnPaymentplanInput!): paymentplan!
+  createOnePaymentplan(input: CreateOnePaymentplanInput!): paymentplan!
+  createManyPaymentplans(input: CreateManyPaymentplansInput!): [paymentplan!]!
+  updateOnePaymentplan(input: UpdateOnePaymentplanInput!): paymentplan!
+  updateManyPaymentplans(input: UpdateManyPaymentplansInput!): UpdateManyResponse!
+  deleteOnePaymentplan(input: DeleteOnePaymentplanInput!): PaymentplanDeleteResponse!
+  deleteManyPaymentplans(input: DeleteManyPaymentplansInput!): DeleteManyResponse!
+  setPackOnPayment(input: SetPackOnPaymentInput!): payment!
+  setPaymentPlanOnPayment(input: SetPaymentPlanOnPaymentInput!): payment!
+  setUserOnPayment(input: SetUserOnPaymentInput!): payment!
+  createOnePayment(input: CreateOnePaymentInput!): payment!
+  createManyPayments(input: CreateManyPaymentsInput!): [payment!]!
+  updateOnePayment(input: UpdateOnePaymentInput!): payment!
+  updateManyPayments(input: UpdateManyPaymentsInput!): UpdateManyResponse!
+  deleteOnePayment(input: DeleteOnePaymentInput!): PaymentDeleteResponse!
+  deleteManyPayments(input: DeleteManyPaymentsInput!): DeleteManyResponse!
+  setFollowerOnRave(input: SetFollowerOnRaveInput!): rave!
+  setFollowingOnRave(input: SetFollowingOnRaveInput!): rave!
+  createOneRave(input: CreateOneRaveInput!): rave!
+  createManyRaves(input: CreateManyRavesInput!): [rave!]!
+  updateOneRave(input: UpdateOneRaveInput!): rave!
+  updateManyRaves(input: UpdateManyRavesInput!): UpdateManyResponse!
+  deleteOneRave(input: DeleteOneRaveInput!): RaveDeleteResponse!
+  deleteManyRaves(input: DeleteManyRavesInput!): DeleteManyResponse!
+  addJobsToUser(input: AddJobsToUserInput!): user!
+  setJobsOnUser(input: SetJobsOnUserInput!): user!
+  addPacksToUser(input: AddPacksToUserInput!): user!
+  setPacksOnUser(input: SetPacksOnUserInput!): user!
+  addFollowersToUser(input: AddFollowersToUserInput!): user!
+  setFollowersOnUser(input: SetFollowersOnUserInput!): user!
+  addFollowingsToUser(input: AddFollowingsToUserInput!): user!
+  setFollowingsOnUser(input: SetFollowingsOnUserInput!): user!
+  addPaymentsToUser(input: AddPaymentsToUserInput!): user!
+  setPaymentsOnUser(input: SetPaymentsOnUserInput!): user!
+  createOneUser(input: CreateOneUserInput!): user!
+  createManyUsers(input: CreateManyUsersInput!): [user!]!
+  updateOneUser(input: UpdateOneUserInput!): user!
+  updateManyUsers(input: UpdateManyUsersInput!): UpdateManyResponse!
+  deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
+  deleteManyUsers(input: DeleteManyUsersInput!): DeleteManyResponse!
 }
 
-input CreateAudioInput {
+input SetPackOnAudioInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input CreateOneAudioInput {
+  """The record to create"""
+  audio: AudioInputDTO!
+}
+
+input AudioInputDTO {
   """Example field (placeholder)"""
-  exampleField: Int!
-}
+  name: String!
 
-input UpdateAudioInput {
   """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
+  genre: String!
 
-input CreateUserInput {
-  id: Int!
-}
-
-input UpdateUserInput {
-  id: Int!
-}
-
-input CreatePackInput {
   """Example field (placeholder)"""
-  exampleField: Int!
+  bpm: Int!
+
+  """Example field (placeholder)"""
+  path: String!
+
+  """Example field (placeholder)"""
+  audioType: AudioType!
+
+  """Example field (placeholder)"""
+  key: String!
+
+  """Example field (placeholder)"""
+  tempo: Int!
+  packId: ID!
 }
 
-input UpdatePackInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input CreateManyAudioInput {
+  """Array of records to create"""
+  audio: [AudioInputDTO!]!
 }
 
-input CreatePaymentPlanInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input UpdateOneAudioInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: AudioInputDTO!
 }
 
-input UpdatePaymentPlanInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input UpdateManyAudioInput {
+  """Filter used to find fields to update"""
+  filter: audioUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: AudioInputDTO!
 }
 
-input CreatePaymentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input audioUpdateFilter {
+  and: [audioUpdateFilter!]
+  or: [audioUpdateFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  genre: StringFieldComparison
+  bpm: IntFieldComparison
+  key: StringFieldComparison
+  tempo: IntFieldComparison
+  packId: IDFilterComparison
 }
 
-input UpdatePaymentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input DeleteOneAudioInput {
+  """The id of the record to delete."""
+  id: ID!
 }
 
-input CreateRaveInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input DeleteManyAudioInput {
+  """Filter to find records to delete"""
+  filter: audioDeleteFilter!
 }
 
-input UpdateRaveInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input audioDeleteFilter {
+  and: [audioDeleteFilter!]
+  or: [audioDeleteFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  genre: StringFieldComparison
+  bpm: IntFieldComparison
+  key: StringFieldComparison
+  tempo: IntFieldComparison
+  packId: IDFilterComparison
 }
 
-input CreateJobInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input SetPostedByOnJobInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
 }
 
-input UpdateJobInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input CreateOneJobInput {
+  """The record to create"""
+  job: CreateJob!
 }
 
-input CreateReviewInput {
+input CreateJob {
   """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID
+
+  """Example field (placeholder)"""
+  title: String
+
+  """Example field (placeholder)"""
+  description: String
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  expirationDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  postedById: ID
 }
 
-input UpdateReviewInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input CreateManyJobsInput {
+  """Array of records to create"""
+  jobs: [CreateJob!]!
 }
 
-input CreateWishlistInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input UpdateOneJobInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateJob!
 }
 
-input UpdateWishlistInput {
+input UpdateJob {
   """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  id: ID
+
+  """Example field (placeholder)"""
+  title: String
+
+  """Example field (placeholder)"""
+  description: String
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  expirationDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+input UpdateManyJobsInput {
+  """Filter used to find fields to update"""
+  filter: jobUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateJob!
+}
+
+input jobUpdateFilter {
+  and: [jobUpdateFilter!]
+  or: [jobUpdateFilter!]
+  id: IDFilterComparison
+  title: StringFieldComparison
+  postDate: TimestampFieldComparison
+  expirationDate: TimestampFieldComparison
+  postedById: IDFilterComparison
+}
+
+input DeleteOneJobInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyJobsInput {
+  """Filter to find records to delete"""
+  filter: jobDeleteFilter!
+}
+
+input jobDeleteFilter {
+  and: [jobDeleteFilter!]
+  or: [jobDeleteFilter!]
+  id: IDFilterComparison
+  title: StringFieldComparison
+  postDate: TimestampFieldComparison
+  expirationDate: TimestampFieldComparison
+  postedById: IDFilterComparison
+}
+
+input SetAuthorOnPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input AddAudioToPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetAudioOnPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input AddPaymentsToPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetPaymentsOnPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input CreateOnePackInput {
+  """The record to create"""
+  pack: CreatePack!
+}
+
+input CreatePack {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  name: String
+
+  """Example field (placeholder)"""
+  price: Float
+
+  """Example field (placeholder)"""
+  type: PacketType
+  authorId: ID
+}
+
+input CreateManyPacksInput {
+  """Array of records to create"""
+  packs: [CreatePack!]!
+}
+
+input UpdateOnePackInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdatePack!
+}
+
+input UpdatePack {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  name: String
+
+  """Example field (placeholder)"""
+  price: Float
+
+  """Example field (placeholder)"""
+  type: PacketType
+  authorId: ID
+}
+
+input UpdateManyPacksInput {
+  """Filter used to find fields to update"""
+  filter: packUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdatePack!
+}
+
+input packUpdateFilter {
+  and: [packUpdateFilter!]
+  or: [packUpdateFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  price: FloatFieldComparison
+  authorId: IDFilterComparison
+}
+
+input DeleteOnePackInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyPacksInput {
+  """Filter to find records to delete"""
+  filter: packDeleteFilter!
+}
+
+input packDeleteFilter {
+  and: [packDeleteFilter!]
+  or: [packDeleteFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  price: FloatFieldComparison
+  authorId: IDFilterComparison
+}
+
+input SetPostedByOnPaymentplanInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input AddPaymentsToPaymentplanInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetPaymentsOnPaymentplanInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input CreateOnePaymentplanInput {
+  """The record to create"""
+  paymentplan: CreatePaymentplan!
+}
+
+input CreatePaymentplan {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  title: String
+
+  """Example field (placeholder)"""
+  description: String
+
+  """Example field (placeholder)"""
+  amount: Float
+
+  """Example field (placeholder)"""
+  month: Int
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+input CreateManyPaymentplansInput {
+  """Array of records to create"""
+  paymentplans: [CreatePaymentplan!]!
+}
+
+input UpdateOnePaymentplanInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdatePaymentplan!
+}
+
+input UpdatePaymentplan {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  title: String
+
+  """Example field (placeholder)"""
+  description: String
+
+  """Example field (placeholder)"""
+  amount: Float
+
+  """Example field (placeholder)"""
+  month: Int
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+input UpdateManyPaymentplansInput {
+  """Filter used to find fields to update"""
+  filter: paymentplanUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdatePaymentplan!
+}
+
+input paymentplanUpdateFilter {
+  and: [paymentplanUpdateFilter!]
+  or: [paymentplanUpdateFilter!]
+  id: IDFilterComparison
+  amount: FloatFieldComparison
+  postedById: IDFilterComparison
+}
+
+input DeleteOnePaymentplanInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyPaymentplansInput {
+  """Filter to find records to delete"""
+  filter: paymentplanDeleteFilter!
+}
+
+input paymentplanDeleteFilter {
+  and: [paymentplanDeleteFilter!]
+  or: [paymentplanDeleteFilter!]
+  id: IDFilterComparison
+  amount: FloatFieldComparison
+  postedById: IDFilterComparison
+}
+
+input SetPackOnPaymentInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input SetPaymentPlanOnPaymentInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input SetUserOnPaymentInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input CreateOnePaymentInput {
+  """The record to create"""
+  payment: CreatePayment!
+}
+
+input CreatePayment {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  type: PlanType
+
+  """Example filed (placeholder)"""
+  price: Int
+
+  """Example filed (placeholder)"""
+  date: Timestamp
+
+  """Example filed (placeholder)"""
+  planStartDate: Timestamp
+
+  """Example filed (placeholder)"""
+  planEndDate: Timestamp
+
+  """Example filed (placeholder)"""
+  paymentMode: PaymentModel
+
+  """Example filed (placeholder)"""
+  confirmationToken: String
+
+  """Example filed (placeholder)"""
+  isActive: Int
+  packId: ID
+  paymentPlanId: ID
+  userId: ID
+}
+
+input CreateManyPaymentsInput {
+  """Array of records to create"""
+  payments: [CreatePayment!]!
+}
+
+input UpdateOnePaymentInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdatePayment!
+}
+
+input UpdatePayment {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  type: PlanType
+
+  """Example filed (placeholder)"""
+  price: Int
+
+  """Example filed (placeholder)"""
+  date: Timestamp
+
+  """Example filed (placeholder)"""
+  planStartDate: Timestamp
+
+  """Example filed (placeholder)"""
+  planEndDate: Timestamp
+
+  """Example filed (placeholder)"""
+  paymentMode: PaymentModel
+
+  """Example filed (placeholder)"""
+  confirmationToken: String
+
+  """Example filed (placeholder)"""
+  isActive: Int
+  packId: ID
+  paymentPlanId: ID
+  userId: ID
+}
+
+input UpdateManyPaymentsInput {
+  """Filter used to find fields to update"""
+  filter: paymentUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdatePayment!
+}
+
+input paymentUpdateFilter {
+  and: [paymentUpdateFilter!]
+  or: [paymentUpdateFilter!]
+  id: IDFilterComparison
+  price: IntFieldComparison
+  date: TimestampFieldComparison
+  planStartDate: TimestampFieldComparison
+  planEndDate: TimestampFieldComparison
+  isActive: PaymentIsActiveFilterComparison
+  packId: IDFilterComparison
+  paymentPlanId: IDFilterComparison
+  userId: IDFilterComparison
+}
+
+input DeleteOnePaymentInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyPaymentsInput {
+  """Filter to find records to delete"""
+  filter: paymentDeleteFilter!
+}
+
+input paymentDeleteFilter {
+  and: [paymentDeleteFilter!]
+  or: [paymentDeleteFilter!]
+  id: IDFilterComparison
+  price: IntFieldComparison
+  date: TimestampFieldComparison
+  planStartDate: TimestampFieldComparison
+  planEndDate: TimestampFieldComparison
+  isActive: PaymentIsActiveFilterComparison
+  packId: IDFilterComparison
+  paymentPlanId: IDFilterComparison
+  userId: IDFilterComparison
+}
+
+input SetFollowerOnRaveInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input SetFollowingOnRaveInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input CreateOneRaveInput {
+  """The record to create"""
+  rave: CreateRave!
+}
+
+input CreateRave {
+  id: ID
+
+  """Example field (placeholder)"""
+  followerId: Int
+
+  """Example field (placeholder)"""
+  followingId: Int
+}
+
+input CreateManyRavesInput {
+  """Array of records to create"""
+  raves: [CreateRave!]!
+}
+
+input UpdateOneRaveInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateRave!
+}
+
+input UpdateRave {
+  id: ID
+
+  """Example field (placeholder)"""
+  followerId: Int
+
+  """Example field (placeholder)"""
+  followingId: Int
+}
+
+input UpdateManyRavesInput {
+  """Filter used to find fields to update"""
+  filter: raveUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateRave!
+}
+
+input raveUpdateFilter {
+  and: [raveUpdateFilter!]
+  or: [raveUpdateFilter!]
+  id: IDFilterComparison
+  followerId: IntFieldComparison
+  followingId: IntFieldComparison
+}
+
+input DeleteOneRaveInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyRavesInput {
+  """Filter to find records to delete"""
+  filter: raveDeleteFilter!
+}
+
+input raveDeleteFilter {
+  and: [raveDeleteFilter!]
+  or: [raveDeleteFilter!]
+  id: IDFilterComparison
+  followerId: IntFieldComparison
+  followingId: IntFieldComparison
+}
+
+input AddJobsToUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetJobsOnUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input AddPacksToUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetPacksOnUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input AddFollowersToUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetFollowersOnUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input AddFollowingsToUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetFollowingsOnUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input AddPaymentsToUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetPaymentsOnUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input CreateOneUserInput {
+  """The record to create"""
+  user: CreateUser!
+}
+
+input CreateUser {
+  id: ID
+  email: String
+  password: String
+  emailVerified: Timestamp
+  image: String
+  name: String
+  about: String
+}
+
+input CreateManyUsersInput {
+  """Array of records to create"""
+  users: [CreateUser!]!
+}
+
+input UpdateOneUserInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateUser!
+}
+
+input UpdateUser {
+  id: ID
+  email: String
+  password: String
+  emailVerified: Timestamp
+  image: String
+  name: String
+  about: String
+}
+
+input UpdateManyUsersInput {
+  """Filter used to find fields to update"""
+  filter: userUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateUser!
+}
+
+input userUpdateFilter {
+  and: [userUpdateFilter!]
+  or: [userUpdateFilter!]
+  id: IDFilterComparison
+  email: StringFieldComparison
+  name: StringFieldComparison
+}
+
+input DeleteOneUserInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyUsersInput {
+  """Filter to find records to delete"""
+  filter: userDeleteFilter!
+}
+
+input userDeleteFilter {
+  and: [userDeleteFilter!]
+  or: [userDeleteFilter!]
+  id: IDFilterComparison
+  email: StringFieldComparison
+  name: StringFieldComparison
 }

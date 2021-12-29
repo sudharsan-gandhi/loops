@@ -1,4 +1,9 @@
 import {
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
+import {
   Field,
   GraphQLTimestamp,
   ID,
@@ -31,35 +36,48 @@ export enum PlanType {
 registerEnumType(PaymentModel, { name: 'PaymentModel' });
 registerEnumType(PlanType, { name: 'PlanType' });
 
-@ObjectType()
+@ObjectType('payment')
 @Entity('payment')
+@Relation('pack', () => Pack, { disableRemove: true })
+@Relation('paymentPlan', () => Paymentplan, { disableRemove: true })
+@Relation('user', () => User, { disableRemove: true })
 export class Payment extends BaseEntity {
-  @Field(() => ID, { description: 'Example field (placeholder)' })
+  @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Field(() => PlanType, { description: 'Example field (placeholder)' })
+  @Field(() => PlanType, {
+    description: 'Example field (placeholder)',
+  })
   @Column('enum', { name: 'PlanType', enum: PlanType })
   type: PlanType;
 
-  @Field(() => Int, { description: 'Example filed (placeholder)' })
+  @FilterableField(() => Int, { description: 'Example filed (placeholder)' })
   @Column('int', { name: 'price' })
   price: number;
 
-  @Field(() => GraphQLTimestamp, { description: 'Example filed (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example filed (placeholder)',
+  })
   @Column('datetime', { name: 'date' })
   @CreateDateColumn()
   date: Date;
 
-  @Field(() => GraphQLTimestamp, { description: 'Example filed (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example filed (placeholder)',
+  })
   @Column('datetime', { name: 'planStartDate' })
   planStartDate: Date;
 
-  @Field(() => GraphQLTimestamp, { description: 'Example filed (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example filed (placeholder)',
+  })
   @Column('datetime', { name: 'planEndDate' })
   planEndDate: Date;
 
-  @Field(() => PaymentModel, { description: 'Example filed (placeholder)' })
+  @Field(() => PaymentModel, {
+    description: 'Example filed (placeholder)',
+  })
   @Column('enum', { name: 'paymentMode', enum: PaymentModel })
   paymentMode: PaymentModel;
 
@@ -67,25 +85,37 @@ export class Payment extends BaseEntity {
   @Column('varchar', { name: 'confirmationToken', length: 191 })
   confirmationToken: string;
 
-  @Field(() => Int, { description: 'Example filed (placeholder)' })
+  @FilterableField(() => Int, {
+    description: 'Example filed (placeholder)',
+    allowedComparisons: ['eq'],
+  })
   @Column('tinyint', { name: 'isActive', width: 1 })
   isActive: boolean;
 
-  @Field(() => Pack, { description: 'Example filed (placeholder)' })
+  @FilterableField(() => ID)
+  @Column('int')
+  packId: number;
+
+  @FilterableField(() => ID)
+  @Column('int')
+  paymentPlanId: number;
+
+  @FilterableField(() => ID)
+  @Column('int')
+  userId: number;
+
   @ManyToOne(() => Pack, (pack) => pack.payments, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })
   pack: Pack;
 
-  @Field(() => Paymentplan, { description: 'Example filed (placeholder)' })
   @ManyToOne(() => Paymentplan, (paymentplan) => paymentplan.payments, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
   })
   paymentPlan: Paymentplan;
 
-  @Field(() => User, { description: 'Example field (1)' })
   @ManyToOne(() => User, (user) => user.payments, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',

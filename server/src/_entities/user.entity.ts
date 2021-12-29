@@ -1,9 +1,9 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Job } from 'src/_entities/job.entity';
 import { Pack } from 'src/_entities/pack.entity';
 import { Rave } from 'src/_entities/rave.entity';
 import {
   BaseEntity,
+  BeforeInsert,
   Column,
   Entity,
   Index,
@@ -11,61 +11,78 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Payment } from '.';
+import {
+  CursorConnection,
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
+import { Field, GraphQLTimestamp, ID, ObjectType } from '@nestjs/graphql';
+import { hash } from 'bcrypt';
 
-@ObjectType()
 @Index('User_email_key', ['email'], { unique: true })
 @Entity('user')
+@ObjectType('user')
+@CursorConnection('jobs', () => Job, { disableRemove: true })
+@CursorConnection('packs', () => Pack, { disableRemove: true })
+@CursorConnection('followers', () => Rave, { disableRemove: true })
+@CursorConnection('followings', () => Rave, { disableRemove: true })
+@CursorConnection('payments', () => Payment, { disableRemove: true })
 export class User extends BaseEntity {
+  @IDField(() => ID)
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
-  @Field(() => Int, { description: 'Example field (1)' })
   id: number;
 
   @Column('varchar', {
     name: 'email',
-    nullable: true,
+    nullable: false,
     unique: true,
     length: 191,
   })
-  @Field(() => Int, { description: 'Example field (1)' })
+  @FilterableField()
   email: string | null;
 
+  @Column('varchar', { name: 'password', nullable: false })
+  @Field()
+  password: string | null;
+
   @Column('datetime', { name: 'emailVerified', nullable: true })
-  @Field(() => Int, { description: 'Example field (1)' })
+  @Field(() => GraphQLTimestamp)
   emailVerified: Date | null;
 
   @Column('varchar', { name: 'image', nullable: true, length: 191 })
-  @Field(() => Int, { description: 'Example field (1)' })
+  @Field()
   image: string | null;
 
   @Column('varchar', { name: 'name', nullable: true, length: 191 })
-  @Field(() => Int, { description: 'Example field (1)' })
+  @FilterableField()
   name: string | null;
 
   @Column('mediumtext', { name: 'about', nullable: true })
-  @Field(() => Int, { description: 'Example field (1)' })
+  @Field()
   about: string | null;
 
   // @OneToMany(() => Account, (account) => account.user)
-  // @Field(() => Int, { description: 'Example field (1)' })
+
   // accounts: Account[];
 
   @OneToMany(() => Job, (job) => job.postedBy)
-  @Field(() => [Job], { description: 'Example field (1)' })
   jobs: Job[];
 
   @OneToMany(() => Pack, (pack) => pack.author)
-  @Field(() => Int, { description: 'Example field (1)' })
   packs: Pack[];
 
   @OneToMany(() => Rave, (rave) => rave.follower)
-  @Field(() => [User], { description: 'Example field (1)' })
   followers: Rave[];
 
   @OneToMany(() => Rave, (rave) => rave.following)
-  @Field(() => [User], { description: 'Example field (1)' })
   followings: Rave[];
 
-  @Field(() => Payment, { description: 'Example field (1)' })
   @OneToMany(() => Payment, (Payment) => Payment.user)
   payments: Payment[];
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await hash(this.password, 10);
+  }
 }

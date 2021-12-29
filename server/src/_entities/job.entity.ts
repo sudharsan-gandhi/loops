@@ -1,3 +1,8 @@
+import {
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
 import { Field, GraphQLTimestamp, ID, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/_entities/user.entity';
 import {
@@ -11,14 +16,15 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@ObjectType()
+@ObjectType('job')
 @Entity('job')
+@Relation('postedBy', () => User, { disableRemove: true })
 export class Job extends BaseEntity {
-  @Field(() => ID, { description: 'Example field (placeholder)' })
+  @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Field({ description: 'Example field (placeholder)' })
+  @FilterableField({ description: 'Example field (placeholder)' })
   @Column('varchar', { name: 'title', length: 191 })
   title: string;
 
@@ -26,14 +32,18 @@ export class Job extends BaseEntity {
   @Column('mediumtext', { name: 'description' })
   description: string;
 
-  @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
   @Column('datetime', {
     name: 'postDate',
   })
   @CreateDateColumn()
   postDate: Date;
 
-  @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
   @Column('datetime', { name: 'expirationDate' })
   expirationDate: Date;
 
@@ -42,7 +52,10 @@ export class Job extends BaseEntity {
   @Column('datetime', { name: 'updatedAt' })
   updatedAt: Date;
 
-  @Field(() => User, { description: 'Example field (placeholder)' })
+  @FilterableField(() => ID)
+  @Column('int')
+  postedById: number;
+
   @ManyToOne(() => User, (user) => user.jobs, {
     onDelete: 'NO ACTION',
     onUpdate: 'CASCADE',

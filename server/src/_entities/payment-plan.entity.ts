@@ -1,6 +1,16 @@
 import {
-  Field, Float,
-  GraphQLTimestamp, ID, Int, ObjectType
+  CursorConnection,
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
+import {
+  Field,
+  Float,
+  GraphQLTimestamp,
+  ID,
+  Int,
+  ObjectType,
 } from '@nestjs/graphql';
 import { Payment } from 'src/_entities/payment.entity';
 import { User } from 'src/_entities/user.entity';
@@ -8,14 +18,19 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
-  Entity, ManyToOne,
-  OneToMany, PrimaryGeneratedColumn, UpdateDateColumn
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
-@ObjectType()
+@ObjectType('paymentplan')
 @Entity('paymentplan')
+@CursorConnection('payments', () => Payment, { disableRemove: true })
+@Relation('postedBy', () => User, { disableRemove: true })
 export class Paymentplan extends BaseEntity {
-  @Field(() => ID, { description: 'Example field (placeholder)' })
+  @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -27,7 +42,7 @@ export class Paymentplan extends BaseEntity {
   @Column('varchar', { name: 'description', length: 191 })
   description: string;
 
-  @Field(() => Float, { description: 'Example field (placeholder)' })
+  @FilterableField(() => Float, { description: 'Example field (placeholder)' })
   @Column('int', { name: 'amount' })
   amount: number;
 
@@ -47,11 +62,13 @@ export class Paymentplan extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Field(() => User, { description: 'Example field (placeholder)' })
+  @FilterableField(() => ID)
+  @Column('int')
+  postedById: number;
+
   @ManyToOne(() => User)
   postedBy: User;
 
-  @Field(() => [Payment], { description: 'Example field (placeholder)' })
   @OneToMany(() => Payment, (payment) => payment.paymentPlan)
   payments: Payment[];
 }

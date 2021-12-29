@@ -1,39 +1,27 @@
+import { AdminModule } from '@adminjs/nestjs';
+import { Database, Resource } from '@adminjs/typeorm';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import AdminJS from 'adminjs';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
-import { AudiosModule } from './audios/audios.module';
-import { PacksModule } from './packs/packs.module';
-import { PaymentPlansModule } from './payment-plans/payment-plans.module';
-import { PaymentsModule } from './payments/payments.module';
-import { RaveModule } from './rave/rave.module';
-import { JobsModule } from './jobs/jobs.module';
-import { ReviewsModule } from './reviews/reviews.module';
-import { WishlistModule } from './wishlist/wishlist.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { ResolverModule } from './resolver/resolver.module';
 import {
   Audio,
   Job,
-  Pack,
-  Paymentplan,
-  Payment,
-  Rave,
-  User,
+  Pack, Payment, Paymentplan, Rave,
+  User
 } from './_entities';
+
+AdminJS.registerAdapter({ Database, Resource });
+
+
 const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User];
-const GRAPHQL_MODULES = [
-  AudiosModule,
-  UsersModule,
-  PacksModule,
-  PaymentPlansModule,
-  PaymentsModule,
-  RaveModule,
-  JobsModule,
-  ReviewsModule,
-  WishlistModule,
-];
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -50,11 +38,26 @@ const GRAPHQL_MODULES = [
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       debug: true,
       playground: true,
-      include: GRAPHQL_MODULES,
     }),
-    ...GRAPHQL_MODULES,
+    AdminModule.createAdmin({
+      adminJsOptions: {
+        branding: {
+          companyName: 'Kabaflow',
+          softwareBrothers: false,
+          logo: false,
+        },
+        rootPath: '/admin',
+        resources: [...ENTITIES],
+      },
+    }),
+    ResolverModule,
+    AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+}

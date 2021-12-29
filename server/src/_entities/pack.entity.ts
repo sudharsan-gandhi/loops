@@ -1,4 +1,10 @@
 import {
+  CursorConnection,
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
+import {
   Field,
   Float,
   ID,
@@ -24,28 +30,37 @@ export enum PacketType {
 
 registerEnumType(PacketType, { name: 'PacketType' });
 
-@ObjectType()
+@ObjectType('pack')
 @Entity('pack')
+@Relation('author', () => User, { disableRemove: true })
+@CursorConnection('audio', () => Audio, { disableRemove: true })
+@CursorConnection('payments', () => Payment, { disableRemove: true })
 export class Pack extends BaseEntity {
-  @Field(() => ID, { description: 'Example field (placeholder)' })
+  @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Field(() => String, { description: 'Example field (placeholder)' })
+  @FilterableField(() => String, { description: 'Example field (placeholder)' })
   @Column('varchar', { name: 'name', nullable: true, length: 191 })
   name: string | null;
 
-  @Field(() => Float, { description: 'Example field (placeholder)' })
+  @FilterableField(() => Float, { description: 'Example field (placeholder)' })
   @Column('int', { name: 'price' })
   price: number;
 
-  @Field(() => PacketType, { description: 'Example field (placeholder)' })
-  @Column('enum', { name: 'PacketType', enum: PacketType })
+  @Field(() => PacketType, {
+    description: 'Example field (placeholder)',
+  })
+  @Column('enum', { name: 'packetType', enum: PacketType })
   type: PacketType;
 
-  @Field(() => [Audio], { description: 'Example field (placeholder)' })
+
   @OneToMany(() => Audio, (audio) => audio.pack)
   audio: Audio[];
+
+  @FilterableField(() => ID)
+  @Column('int')
+  authorId: number;
 
   @ManyToOne(() => User, (user) => user.packs, {
     onDelete: 'NO ACTION',

@@ -7,6 +7,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import {
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
 
 export enum AudioType {
   oneshot = 'oneshot',
@@ -15,42 +20,48 @@ export enum AudioType {
 
 registerEnumType(AudioType, { name: 'AudioType' });
 
-@ObjectType()
+@ObjectType('audio')
 @Entity('audio')
+@Relation('pack', () => Pack, { disableRemove: true })
 export class Audio extends BaseEntity {
-  @Field(() => ID, { description: 'Example field (placeholder)' })
+  @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Field(() => String, { description: 'Example field (placeholder)' })
+  @FilterableField({ description: 'Example field (placeholder)' })
   @Column('varchar', { name: 'name', length: 191 })
   name: string;
 
-  @Field(() => String, { description: 'Example field (placeholder)' })
+  @FilterableField({ description: 'Example field (placeholder)' })
   @Column('varchar', { name: 'genre', length: 191 })
   genre: string;
 
-  @Field(() => Int, { description: 'Example field (placeholder)' })
+  @FilterableField(() => Int, { description: 'Example field (placeholder)' })
   @Column('int', { name: 'bpm' })
   bpm: number;
 
-  @Field(() => String, { description: 'Example field (placeholder)' })
+  @Field({ description: 'Example field (placeholder)' })
   @Column('varchar', { name: 'path', length: 191 })
   path: string;
 
-  @Field(() => AudioType, { description: 'Example field (placeholder)' })
+  @Field(() => AudioType, {
+    description: 'Example field (placeholder)',
+  })
   @Column('enum', { name: 'audioType', enum: ['oneshot', 'loop'] })
   audioType: AudioType;
 
-  @Field(() => String, { description: 'Example field (placeholder)' })
+  @FilterableField({ description: 'Example field (placeholder)' })
   @Column('char', { name: 'key', length: 2 })
   key: string;
 
-  @Field(() => Int, { description: 'Example field (placeholder)' })
+  @FilterableField(() => Int, { description: 'Example field (placeholder)'})
   @Column('int', { name: 'tempo' })
   tempo: number;
 
-  @Field(() => Pack, { description: 'Example field (placeholder)' })
+  @FilterableField(() => ID)
+  @Column('int')
+  packId: number;
+
   @ManyToOne(() => Pack, (pack) => pack.audio, {
     onDelete: 'NO ACTION',
     onUpdate: 'NO ACTION',
