@@ -18,6 +18,7 @@ import {
   Rave,
   User,
 } from 'src/_entities';
+import { Review } from 'src/_entities/review.entity';
 
 const ENTITY_MODDULES = [
   NestjsQueryTypeOrmModule.forFeature([Audio]),
@@ -27,6 +28,7 @@ const ENTITY_MODDULES = [
   NestjsQueryTypeOrmModule.forFeature([Payment]),
   NestjsQueryTypeOrmModule.forFeature([Rave]),
   NestjsQueryTypeOrmModule.forFeature([User]),
+  NestjsQueryTypeOrmModule.forFeature([Review]),
 ];
 
 const DEFAULT_RESOLVERS: AutoResolverOpts<
@@ -50,6 +52,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   { DTOClass: Payment, EntityClass: Payment },
   { DTOClass: Rave, EntityClass: Rave },
   { DTOClass: User, EntityClass: User, guards: [GqlJwtGuard] },
+  { DTOClass: Review, EntityClass: Review, guards: [GqlJwtGuard] },
 ];
 @Module({
   imports: [

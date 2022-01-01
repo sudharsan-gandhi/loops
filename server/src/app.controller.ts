@@ -30,4 +30,24 @@ export class AppController {
   test(@Req() req) {
     return req.user;
   }
+
+  @Get('/auth/google')
+  @UseGuards(AuthGuard('google'))
+  google(@Req() req) {}
+
+  @Get('/auth/google/callback')
+  @UseGuards(AuthGuard('google'))
+  googleRedirect(@Req() req) {
+    return req.user;
+  }
+
+  @Get('/auth/facebook')
+  @UseGuards(AuthGuard('facebook'))
+  facebook(@Req() req) {}
+
+  @Get('/auth/facebook/callback')
+  @UseGuards(AuthGuard('facebook'))
+  facebookRedirect(@Req() req) {
+    return req.user;
+  }
 }

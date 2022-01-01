@@ -41,14 +41,24 @@ type rave {
   following: user!
 }
 
+type Review {
+  id: ID!
+  review: String!
+  userId: ID!
+  packId: ID!
+  user: user!
+  pack: pack!
+}
+
 type user {
   id: ID!
   email: String!
   password: String!
-  emailVerified: Timestamp!
+  emailVerified: Boolean
   image: String!
   name: String!
   about: String!
+  authorizer: Authorizer!
   jobs(
     """Limit or page results."""
     paging: CursorPaging = {first: 10}
@@ -99,6 +109,22 @@ type user {
     """Specify to sort results."""
     sorting: [paymentSort!] = []
   ): UserPaymentsConnection!
+  reviews(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: ReviewFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ReviewSort!] = []
+  ): UserReviewsConnection!
+}
+
+enum Authorizer {
+  GOOGLE
+  FACEBOOK
+  LOCAL
 }
 
 input CursorPaging {
@@ -215,6 +241,7 @@ input packFilter {
   name: StringFieldComparison
   price: FloatFieldComparison
   authorId: IDFilterComparison
+  reviewId: IDFilterComparison
 }
 
 input FloatFieldComparison {
@@ -248,6 +275,7 @@ enum packSortFields {
   name
   price
   authorId
+  reviewId
 }
 
 input raveFilter {
@@ -324,6 +352,26 @@ enum paymentSortFields {
   packId
   paymentPlanId
   userId
+}
+
+input ReviewFilter {
+  and: [ReviewFilter!]
+  or: [ReviewFilter!]
+  id: IDFilterComparison
+  userId: IDFilterComparison
+  packId: IDFilterComparison
+}
+
+input ReviewSort {
+  field: ReviewSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum ReviewSortFields {
+  id
+  userId
+  packId
 }
 
 type paymentplan {
@@ -419,6 +467,7 @@ type pack {
   """Example field (placeholder)"""
   type: PacketType!
   authorId: ID!
+  reviewId: ID!
   author: user!
   audio(
     """Limit or page results."""
@@ -440,6 +489,16 @@ type pack {
     """Specify to sort results."""
     sorting: [paymentSort!] = []
   ): PackPaymentsConnection!
+  reviews(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: paymentFilter = {}
+
+    """Specify to sort results."""
+    sorting: [paymentSort!] = []
+  ): PackReviewsConnection!
 }
 
 enum PacketType {
@@ -721,6 +780,7 @@ type PackDeleteResponse {
   """Example field (placeholder)"""
   type: PacketType
   authorId: ID
+  reviewId: ID
 }
 
 type packEdge {
@@ -744,6 +804,7 @@ type packAggregateGroupBy {
   name: String
   price: Float
   authorId: ID
+  reviewId: ID
 }
 
 type packCountAggregate {
@@ -751,18 +812,21 @@ type packCountAggregate {
   name: Int
   price: Int
   authorId: Int
+  reviewId: Int
 }
 
 type packSumAggregate {
   id: Float
   price: Float
   authorId: Float
+  reviewId: Float
 }
 
 type packAvgAggregate {
   id: Float
   price: Float
   authorId: Float
+  reviewId: Float
 }
 
 type packMinAggregate {
@@ -770,6 +834,7 @@ type packMinAggregate {
   name: String
   price: Float
   authorId: ID
+  reviewId: ID
 }
 
 type packMaxAggregate {
@@ -777,6 +842,7 @@ type packMaxAggregate {
   name: String
   price: Float
   authorId: ID
+  reviewId: ID
 }
 
 type paymentEdge {
@@ -785,6 +851,14 @@ type paymentEdge {
 
   """Cursor for this node."""
   cursor: ConnectionCursor!
+}
+
+type PackReviewsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [paymentEdge!]!
 }
 
 type PackPaymentsConnection {
@@ -1055,10 +1129,11 @@ type UserDeleteResponse {
   id: ID
   email: String
   password: String
-  emailVerified: Timestamp
+  emailVerified: Boolean
   image: String
   name: String
   about: String
+  authorizer: Authorizer
 }
 
 type userEdge {
@@ -1109,6 +1184,22 @@ type userMaxAggregate {
   name: String
 }
 
+type ReviewEdge {
+  """The node containing the Review"""
+  node: Review!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type UserReviewsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [ReviewEdge!]!
+}
+
 type UserPaymentsConnection {
   """Paging information"""
   pageInfo: PageInfo!
@@ -1147,6 +1238,57 @@ type UserJobsConnection {
 
   """Array of edges."""
   edges: [jobEdge!]!
+}
+
+type ReviewDeleteResponse {
+  id: ID
+  review: String
+  userId: ID
+  packId: ID
+}
+
+type ReviewConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [ReviewEdge!]!
+}
+
+type ReviewAggregateGroupBy {
+  id: ID
+  userId: ID
+  packId: ID
+}
+
+type ReviewCountAggregate {
+  id: Int
+  userId: Int
+  packId: Int
+}
+
+type ReviewSumAggregate {
+  id: Float
+  userId: Float
+  packId: Float
+}
+
+type ReviewAvgAggregate {
+  id: Float
+  userId: Float
+  packId: Float
+}
+
+type ReviewMinAggregate {
+  id: ID
+  userId: ID
+  packId: ID
+}
+
+type ReviewMaxAggregate {
+  id: ID
+  userId: ID
+  packId: ID
 }
 
 type Query {
@@ -1244,6 +1386,20 @@ type Query {
     """Specify to sort results."""
     sorting: [userSort!] = []
   ): UserConnection!
+  review(
+    """The id of the record to find."""
+    id: ID!
+  ): Review
+  reviews(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: ReviewFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ReviewSort!] = []
+  ): ReviewConnection!
 }
 
 input paymentplanFilter {
@@ -1306,6 +1462,8 @@ type Mutation {
   setAudioOnPack(input: SetAudioOnPackInput!): pack!
   addPaymentsToPack(input: AddPaymentsToPackInput!): pack!
   setPaymentsOnPack(input: SetPaymentsOnPackInput!): pack!
+  addReviewsToPack(input: AddReviewsToPackInput!): pack!
+  setReviewsOnPack(input: SetReviewsOnPackInput!): pack!
   createOnePack(input: CreateOnePackInput!): pack!
   createManyPacks(input: CreateManyPacksInput!): [pack!]!
   updateOnePack(input: UpdateOnePackInput!): pack!
@@ -1348,12 +1506,22 @@ type Mutation {
   setFollowingsOnUser(input: SetFollowingsOnUserInput!): user!
   addPaymentsToUser(input: AddPaymentsToUserInput!): user!
   setPaymentsOnUser(input: SetPaymentsOnUserInput!): user!
+  addReviewsToUser(input: AddReviewsToUserInput!): user!
+  setReviewsOnUser(input: SetReviewsOnUserInput!): user!
   createOneUser(input: CreateOneUserInput!): user!
   createManyUsers(input: CreateManyUsersInput!): [user!]!
   updateOneUser(input: UpdateOneUserInput!): user!
   updateManyUsers(input: UpdateManyUsersInput!): UpdateManyResponse!
   deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
   deleteManyUsers(input: DeleteManyUsersInput!): DeleteManyResponse!
+  setUserOnReview(input: SetUserOnReviewInput!): Review!
+  setPackOnReview(input: SetPackOnReviewInput!): Review!
+  createOneReview(input: CreateOneReviewInput!): Review!
+  createManyReviews(input: CreateManyReviewsInput!): [Review!]!
+  updateOneReview(input: UpdateOneReviewInput!): Review!
+  updateManyReviews(input: UpdateManyReviewsInput!): UpdateManyResponse!
+  deleteOneReview(input: DeleteOneReviewInput!): ReviewDeleteResponse!
+  deleteManyReviews(input: DeleteManyReviewsInput!): DeleteManyResponse!
 }
 
 input SetPackOnAudioInput {
@@ -1594,6 +1762,22 @@ input SetPaymentsOnPackInput {
   relationIds: [ID!]!
 }
 
+input AddReviewsToPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetReviewsOnPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
 input CreateOnePackInput {
   """The record to create"""
   pack: CreatePack!
@@ -1612,6 +1796,7 @@ input CreatePack {
   """Example field (placeholder)"""
   type: PacketType
   authorId: ID
+  reviewId: ID
 }
 
 input CreateManyPacksInput {
@@ -1640,6 +1825,7 @@ input UpdatePack {
   """Example field (placeholder)"""
   type: PacketType
   authorId: ID
+  reviewId: ID
 }
 
 input UpdateManyPacksInput {
@@ -1657,6 +1843,7 @@ input packUpdateFilter {
   name: StringFieldComparison
   price: FloatFieldComparison
   authorId: IDFilterComparison
+  reviewId: IDFilterComparison
 }
 
 input DeleteOnePackInput {
@@ -1676,6 +1863,7 @@ input packDeleteFilter {
   name: StringFieldComparison
   price: FloatFieldComparison
   authorId: IDFilterComparison
+  reviewId: IDFilterComparison
 }
 
 input SetPostedByOnPaymentplanInput {
@@ -2122,6 +2310,22 @@ input SetPaymentsOnUserInput {
   relationIds: [ID!]!
 }
 
+input AddReviewsToUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetReviewsOnUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
 input CreateOneUserInput {
   """The record to create"""
   user: CreateUser!
@@ -2131,10 +2335,11 @@ input CreateUser {
   id: ID
   email: String
   password: String
-  emailVerified: Timestamp
+  emailVerified: Boolean
   image: String
   name: String
   about: String
+  authorizer: Authorizer
 }
 
 input CreateManyUsersInput {
@@ -2154,10 +2359,11 @@ input UpdateUser {
   id: ID
   email: String
   password: String
-  emailVerified: Timestamp
+  emailVerified: Boolean
   image: String
   name: String
   about: String
+  authorizer: Authorizer
 }
 
 input UpdateManyUsersInput {
@@ -2192,4 +2398,86 @@ input userDeleteFilter {
   id: IDFilterComparison
   email: StringFieldComparison
   name: StringFieldComparison
+}
+
+input SetUserOnReviewInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input SetPackOnReviewInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input CreateOneReviewInput {
+  """The record to create"""
+  review: CreateReview!
+}
+
+input CreateReview {
+  id: ID
+  review: String
+  userId: ID
+  packId: ID
+}
+
+input CreateManyReviewsInput {
+  """Array of records to create"""
+  reviews: [CreateReview!]!
+}
+
+input UpdateOneReviewInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateReview!
+}
+
+input UpdateReview {
+  id: ID
+  review: String
+  userId: ID
+  packId: ID
+}
+
+input UpdateManyReviewsInput {
+  """Filter used to find fields to update"""
+  filter: ReviewUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateReview!
+}
+
+input ReviewUpdateFilter {
+  and: [ReviewUpdateFilter!]
+  or: [ReviewUpdateFilter!]
+  id: IDFilterComparison
+  userId: IDFilterComparison
+  packId: IDFilterComparison
+}
+
+input DeleteOneReviewInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyReviewsInput {
+  """Filter to find records to delete"""
+  filter: ReviewDeleteFilter!
+}
+
+input ReviewDeleteFilter {
+  and: [ReviewDeleteFilter!]
+  or: [ReviewDeleteFilter!]
+  id: IDFilterComparison
+  userId: IDFilterComparison
+  packId: IDFilterComparison
 }

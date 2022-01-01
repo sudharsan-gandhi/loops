@@ -6,7 +6,7 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService, private jwt: JwtService) {
+  constructor(private authService: AuthService) {
     super({
       usernameField: 'email',
     });
@@ -17,6 +17,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!user) {
       throw new UnauthorizedException('Email or Password doesnt match');
     }
-    return { token: this.jwt.sign(user) };
+    return this.authService.signUser(user);
   }
 }

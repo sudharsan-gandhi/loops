@@ -14,13 +14,13 @@ import {
   Audio,
   Job,
   Pack, Payment, Paymentplan, Rave,
-  User
+  User, Review
 } from './_entities';
 
 AdminJS.registerAdapter({ Database, Resource });
 
 
-const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User];
+const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
 
 @Module({
   imports: [

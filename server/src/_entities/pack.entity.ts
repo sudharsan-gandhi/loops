@@ -22,6 +22,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Review } from './review.entity';
 
 export enum PacketType {
   FREE = 'FREE',
@@ -35,6 +36,7 @@ registerEnumType(PacketType, { name: 'PacketType' });
 @Relation('author', () => User, { disableRemove: true })
 @CursorConnection('audio', () => Audio, { disableRemove: true })
 @CursorConnection('payments', () => Payment, { disableRemove: true })
+@CursorConnection('reviews', () => Payment, { disableRemove: true })
 export class Pack extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
@@ -54,7 +56,6 @@ export class Pack extends BaseEntity {
   @Column('enum', { name: 'packetType', enum: PacketType })
   type: PacketType;
 
-
   @OneToMany(() => Audio, (audio) => audio.pack)
   audio: Audio[];
 
@@ -70,4 +71,11 @@ export class Pack extends BaseEntity {
 
   @OneToMany(() => Payment, (payment) => payment.pack)
   payments: Payment[];
+
+  @FilterableField(() => ID)
+  @Column('int')
+  reviewId: number;
+
+  @OneToMany(() => Review, (review) => review.pack)
+  reviews: Review[];
 }

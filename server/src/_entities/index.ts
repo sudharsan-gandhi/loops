@@ -6,4 +6,4 @@ export * from './payment.entity';
 export * from './rave.entity';
 export * from './user.entity';
 export * from './wishlist.entity';
-
+export * from './review.entity';
