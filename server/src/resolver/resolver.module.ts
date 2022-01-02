@@ -7,7 +7,8 @@ import {
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { Module } from '@nestjs/common';
 import { AuthModule } from 'src/auth/auth.module';
-import { GqlJwtGuard } from 'src/auth/gql-jwt.guard';
+import { GqlJwtGuard } from 'src/auth/guards/gql-jwt.guard';
+import { GqlRolesGuard } from 'src/auth/guards/gql-roles.guard';
 import { AudioInputDTO } from 'src/_dto';
 import {
   Audio,
@@ -51,7 +52,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   { DTOClass: Paymentplan, EntityClass: Paymentplan },
   { DTOClass: Payment, EntityClass: Payment },
   { DTOClass: Rave, EntityClass: Rave },
-  { DTOClass: User, EntityClass: User, guards: [GqlJwtGuard] },
+  { DTOClass: User, EntityClass: User, guards: [GqlJwtGuard, GqlRolesGuard] },
   { DTOClass: Review, EntityClass: Review, guards: [GqlJwtGuard] },
 ];
 @Module({

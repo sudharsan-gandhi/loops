@@ -59,6 +59,7 @@ type user {
   name: String!
   about: String!
   authorizer: Authorizer!
+  role: String!
   jobs(
     """Limit or page results."""
     paging: CursorPaging = {first: 10}
@@ -1134,6 +1135,7 @@ type UserDeleteResponse {
   name: String
   about: String
   authorizer: Authorizer
+  role: String
 }
 
 type userEdge {
@@ -2340,6 +2342,7 @@ input CreateUser {
   name: String
   about: String
   authorizer: Authorizer
+  role: String
 }
 
 input CreateManyUsersInput {
@@ -2364,6 +2367,7 @@ input UpdateUser {
   name: String
   about: String
   authorizer: Authorizer
+  role: String
 }
 
 input UpdateManyUsersInput {

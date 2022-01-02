@@ -6,6 +6,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { FacebookStrategy } from './strategy/facebook.strategy';
+import { GqlRolesGuard } from './guards/gql-roles.guard';
+import { GqlJwtGuard } from './guards/gql-jwt.guard';
+import { AccessControlService } from './service/access-control.service';
 
 @Module({
   imports: [
@@ -17,6 +20,17 @@ import { FacebookStrategy } from './strategy/facebook.strategy';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService, GoogleStrategy, FacebookStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    ConfigService,
+    GoogleStrategy,
+    FacebookStrategy,
+    GqlJwtGuard,
+    GqlRolesGuard,
+    AccessControlService,
+  ],
+  exports: [GqlRolesGuard, GqlJwtGuard, AccessControlService],
 })
 export class AuthModule {}

@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { Payment } from '.';
 import {
+  Authorize,
   CursorConnection,
   FilterableField,
   IDField,
@@ -27,6 +28,7 @@ import {
 import { hash } from 'bcrypt';
 import { GraphQLBoolean } from 'graphql';
 import { Review } from './review.entity';
+import { Roles } from 'src/auth/decorator/roles.decorator';
 
 export enum Authorizer {
   GOOGLE = 'GOOGLE',
@@ -87,6 +89,13 @@ export class User extends BaseEntity {
   })
   @Field(() => Authorizer)
   authorizer: Authorizer;
+
+  @Column('varchar', {
+    name: 'role',
+    default: 'user',
+  })
+  @Field()
+  role: string;
 
   // @OneToMany(() => Account, (account) => account.user)
 

@@ -37,6 +37,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
     "@nestjsx/util": "^5.0.0-alpha.3",
+    "accesscontrol": "^2.2.1",
     "adminjs": "^5.3.3",
     "apollo-server-express": "^3.5.0",
     "bcrypt": "^5.0.1",
