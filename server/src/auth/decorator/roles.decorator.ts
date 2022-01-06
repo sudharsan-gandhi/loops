@@ -1,5 +1,6 @@
+import { OperationGroup } from '@nestjs-query/query-graphql';
 import { SetMetadata } from '@nestjs/common';
-import { AuthAction, AuthPossesion } from '../service/access-control.service';
+import { AuthPossesion } from '../service/access-control.service';
 
 export const ROLES_KEY = 'roles';
 
@@ -9,6 +10,6 @@ export const Roles = (args: AuthorizationObject) =>
 export type AuthorizationObject = {
   resource: string;
   possession: AuthPossesion;
-  action: AuthAction;
+  action: OperationGroup;
   ownerKey: string;
 };

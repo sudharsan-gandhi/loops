@@ -242,7 +242,6 @@ input packFilter {
   name: StringFieldComparison
   price: FloatFieldComparison
   authorId: IDFilterComparison
-  reviewId: IDFilterComparison
 }
 
 input FloatFieldComparison {
@@ -276,7 +275,6 @@ enum packSortFields {
   name
   price
   authorId
-  reviewId
 }
 
 input raveFilter {
@@ -468,7 +466,6 @@ type pack {
   """Example field (placeholder)"""
   type: PacketType!
   authorId: ID!
-  reviewId: ID!
   author: user!
   audio(
     """Limit or page results."""
@@ -781,7 +778,6 @@ type PackDeleteResponse {
   """Example field (placeholder)"""
   type: PacketType
   authorId: ID
-  reviewId: ID
 }
 
 type packEdge {
@@ -805,7 +801,6 @@ type packAggregateGroupBy {
   name: String
   price: Float
   authorId: ID
-  reviewId: ID
 }
 
 type packCountAggregate {
@@ -813,21 +808,18 @@ type packCountAggregate {
   name: Int
   price: Int
   authorId: Int
-  reviewId: Int
 }
 
 type packSumAggregate {
   id: Float
   price: Float
   authorId: Float
-  reviewId: Float
 }
 
 type packAvgAggregate {
   id: Float
   price: Float
   authorId: Float
-  reviewId: Float
 }
 
 type packMinAggregate {
@@ -835,7 +827,6 @@ type packMinAggregate {
   name: String
   price: Float
   authorId: ID
-  reviewId: ID
 }
 
 type packMaxAggregate {
@@ -843,7 +834,6 @@ type packMaxAggregate {
   name: String
   price: Float
   authorId: ID
-  reviewId: ID
 }
 
 type paymentEdge {
@@ -1628,33 +1618,24 @@ input SetPostedByOnJobInput {
 
 input CreateOneJobInput {
   """The record to create"""
-  job: CreateJob!
+  job: JobInputDTO!
 }
 
-input CreateJob {
+input JobInputDTO {
   """Example field (placeholder)"""
-  id: ID
+  title: String!
 
   """Example field (placeholder)"""
-  title: String
+  description: String!
 
   """Example field (placeholder)"""
-  description: String
-
-  """Example field (placeholder)"""
-  postDate: Timestamp
-
-  """Example field (placeholder)"""
-  expirationDate: Timestamp
-
-  """Example field (placeholder)"""
-  updatedAt: Timestamp
-  postedById: ID
+  expirationDate: Timestamp!
+  postedById: ID!
 }
 
 input CreateManyJobsInput {
   """Array of records to create"""
-  jobs: [CreateJob!]!
+  jobs: [JobInputDTO!]!
 }
 
 input UpdateOneJobInput {
@@ -1662,28 +1643,7 @@ input UpdateOneJobInput {
   id: ID!
 
   """The update to apply."""
-  update: UpdateJob!
-}
-
-input UpdateJob {
-  """Example field (placeholder)"""
-  id: ID
-
-  """Example field (placeholder)"""
-  title: String
-
-  """Example field (placeholder)"""
-  description: String
-
-  """Example field (placeholder)"""
-  postDate: Timestamp
-
-  """Example field (placeholder)"""
-  expirationDate: Timestamp
-
-  """Example field (placeholder)"""
-  updatedAt: Timestamp
-  postedById: ID
+  update: JobInputDTO!
 }
 
 input UpdateManyJobsInput {
@@ -1691,7 +1651,7 @@ input UpdateManyJobsInput {
   filter: jobUpdateFilter!
 
   """The update to apply to all records found using the filter"""
-  update: UpdateJob!
+  update: JobInputDTO!
 }
 
 input jobUpdateFilter {
@@ -1782,28 +1742,24 @@ input SetReviewsOnPackInput {
 
 input CreateOnePackInput {
   """The record to create"""
-  pack: CreatePack!
+  pack: PackInputDTO!
 }
 
-input CreatePack {
+input PackInputDTO {
   """Example field (placeholder)"""
-  id: ID
+  name: String!
 
   """Example field (placeholder)"""
-  name: String
+  price: Float!
 
   """Example field (placeholder)"""
-  price: Float
-
-  """Example field (placeholder)"""
-  type: PacketType
-  authorId: ID
-  reviewId: ID
+  type: PacketType!
+  authorId: ID!
 }
 
 input CreateManyPacksInput {
   """Array of records to create"""
-  packs: [CreatePack!]!
+  packs: [PackInputDTO!]!
 }
 
 input UpdateOnePackInput {
@@ -1811,23 +1767,7 @@ input UpdateOnePackInput {
   id: ID!
 
   """The update to apply."""
-  update: UpdatePack!
-}
-
-input UpdatePack {
-  """Example field (placeholder)"""
-  id: ID
-
-  """Example field (placeholder)"""
-  name: String
-
-  """Example field (placeholder)"""
-  price: Float
-
-  """Example field (placeholder)"""
-  type: PacketType
-  authorId: ID
-  reviewId: ID
+  update: PackInputDTO!
 }
 
 input UpdateManyPacksInput {
@@ -1835,7 +1775,7 @@ input UpdateManyPacksInput {
   filter: packUpdateFilter!
 
   """The update to apply to all records found using the filter"""
-  update: UpdatePack!
+  update: PackInputDTO!
 }
 
 input packUpdateFilter {
@@ -1845,7 +1785,6 @@ input packUpdateFilter {
   name: StringFieldComparison
   price: FloatFieldComparison
   authorId: IDFilterComparison
-  reviewId: IDFilterComparison
 }
 
 input DeleteOnePackInput {
@@ -1865,7 +1804,6 @@ input packDeleteFilter {
   name: StringFieldComparison
   price: FloatFieldComparison
   authorId: IDFilterComparison
-  reviewId: IDFilterComparison
 }
 
 input SetPostedByOnPaymentplanInput {
@@ -1894,36 +1832,27 @@ input SetPaymentsOnPaymentplanInput {
 
 input CreateOnePaymentplanInput {
   """The record to create"""
-  paymentplan: CreatePaymentplan!
+  paymentplan: PaymentplanInputDTO!
 }
 
-input CreatePaymentplan {
+input PaymentplanInputDTO {
   """Example field (placeholder)"""
-  id: ID
+  title: String!
 
   """Example field (placeholder)"""
-  title: String
+  description: String!
 
   """Example field (placeholder)"""
-  description: String
+  amount: Float!
 
   """Example field (placeholder)"""
-  amount: Float
-
-  """Example field (placeholder)"""
-  month: Int
-
-  """Example field (placeholder)"""
-  postDate: Timestamp
-
-  """Example field (placeholder)"""
-  updatedAt: Timestamp
-  postedById: ID
+  month: Int!
+  postedById: ID!
 }
 
 input CreateManyPaymentplansInput {
   """Array of records to create"""
-  paymentplans: [CreatePaymentplan!]!
+  paymentplans: [PaymentplanInputDTO!]!
 }
 
 input UpdateOnePaymentplanInput {
@@ -1931,31 +1860,7 @@ input UpdateOnePaymentplanInput {
   id: ID!
 
   """The update to apply."""
-  update: UpdatePaymentplan!
-}
-
-input UpdatePaymentplan {
-  """Example field (placeholder)"""
-  id: ID
-
-  """Example field (placeholder)"""
-  title: String
-
-  """Example field (placeholder)"""
-  description: String
-
-  """Example field (placeholder)"""
-  amount: Float
-
-  """Example field (placeholder)"""
-  month: Int
-
-  """Example field (placeholder)"""
-  postDate: Timestamp
-
-  """Example field (placeholder)"""
-  updatedAt: Timestamp
-  postedById: ID
+  update: PaymentplanInputDTO!
 }
 
 input UpdateManyPaymentplansInput {
@@ -1963,7 +1868,7 @@ input UpdateManyPaymentplansInput {
   filter: paymentplanUpdateFilter!
 
   """The update to apply to all records found using the filter"""
-  update: UpdatePaymentplan!
+  update: PaymentplanInputDTO!
 }
 
 input paymentplanUpdateFilter {
@@ -2018,44 +1923,38 @@ input SetUserOnPaymentInput {
 
 input CreateOnePaymentInput {
   """The record to create"""
-  payment: CreatePayment!
+  payment: PaymentInputDTO!
 }
 
-input CreatePayment {
+input PaymentInputDTO {
   """Example field (placeholder)"""
-  id: ID
-
-  """Example field (placeholder)"""
-  type: PlanType
+  type: PlanType!
 
   """Example filed (placeholder)"""
-  price: Int
+  price: Int!
 
   """Example filed (placeholder)"""
-  date: Timestamp
+  planStartDate: Timestamp!
 
   """Example filed (placeholder)"""
-  planStartDate: Timestamp
+  planEndDate: Timestamp!
+
+  """possible values are (MoPay) and (PayPal)"""
+  paymentMode: PaymentModel!
 
   """Example filed (placeholder)"""
-  planEndDate: Timestamp
+  confirmationToken: String!
 
   """Example filed (placeholder)"""
-  paymentMode: PaymentModel
-
-  """Example filed (placeholder)"""
-  confirmationToken: String
-
-  """Example filed (placeholder)"""
-  isActive: Int
-  packId: ID
-  paymentPlanId: ID
-  userId: ID
+  isActive: Int!
+  packId: ID!
+  paymentPlanId: ID!
+  userId: ID!
 }
 
 input CreateManyPaymentsInput {
   """Array of records to create"""
-  payments: [CreatePayment!]!
+  payments: [PaymentInputDTO!]!
 }
 
 input UpdateOnePaymentInput {
@@ -2063,39 +1962,7 @@ input UpdateOnePaymentInput {
   id: ID!
 
   """The update to apply."""
-  update: UpdatePayment!
-}
-
-input UpdatePayment {
-  """Example field (placeholder)"""
-  id: ID
-
-  """Example field (placeholder)"""
-  type: PlanType
-
-  """Example filed (placeholder)"""
-  price: Int
-
-  """Example filed (placeholder)"""
-  date: Timestamp
-
-  """Example filed (placeholder)"""
-  planStartDate: Timestamp
-
-  """Example filed (placeholder)"""
-  planEndDate: Timestamp
-
-  """Example filed (placeholder)"""
-  paymentMode: PaymentModel
-
-  """Example filed (placeholder)"""
-  confirmationToken: String
-
-  """Example filed (placeholder)"""
-  isActive: Int
-  packId: ID
-  paymentPlanId: ID
-  userId: ID
+  update: PaymentInputDTO!
 }
 
 input UpdateManyPaymentsInput {
@@ -2103,7 +1970,7 @@ input UpdateManyPaymentsInput {
   filter: paymentUpdateFilter!
 
   """The update to apply to all records found using the filter"""
-  update: UpdatePayment!
+  update: PaymentInputDTO!
 }
 
 input paymentUpdateFilter {
@@ -2162,22 +2029,20 @@ input SetFollowingOnRaveInput {
 
 input CreateOneRaveInput {
   """The record to create"""
-  rave: CreateRave!
+  rave: RaveInputDTO!
 }
 
-input CreateRave {
-  id: ID
+input RaveInputDTO {
+  """Example field (placeholder)"""
+  followerId: Int!
 
   """Example field (placeholder)"""
-  followerId: Int
-
-  """Example field (placeholder)"""
-  followingId: Int
+  followingId: Int!
 }
 
 input CreateManyRavesInput {
   """Array of records to create"""
-  raves: [CreateRave!]!
+  raves: [RaveInputDTO!]!
 }
 
 input UpdateOneRaveInput {
@@ -2185,17 +2050,7 @@ input UpdateOneRaveInput {
   id: ID!
 
   """The update to apply."""
-  update: UpdateRave!
-}
-
-input UpdateRave {
-  id: ID
-
-  """Example field (placeholder)"""
-  followerId: Int
-
-  """Example field (placeholder)"""
-  followingId: Int
+  update: RaveInputDTO!
 }
 
 input UpdateManyRavesInput {
@@ -2203,7 +2058,7 @@ input UpdateManyRavesInput {
   filter: raveUpdateFilter!
 
   """The update to apply to all records found using the filter"""
-  update: UpdateRave!
+  update: RaveInputDTO!
 }
 
 input raveUpdateFilter {
@@ -2330,24 +2185,22 @@ input SetReviewsOnUserInput {
 
 input CreateOneUserInput {
   """The record to create"""
-  user: CreateUser!
+  user: UserInputDTO!
 }
 
-input CreateUser {
-  id: ID
-  email: String
-  password: String
+input UserInputDTO {
+  email: String!
+  password: String!
   emailVerified: Boolean
-  image: String
-  name: String
-  about: String
-  authorizer: Authorizer
-  role: String
+  image: String!
+  name: String!
+  about: String!
+  role: String!
 }
 
 input CreateManyUsersInput {
   """Array of records to create"""
-  users: [CreateUser!]!
+  users: [UserInputDTO!]!
 }
 
 input UpdateOneUserInput {
@@ -2355,19 +2208,16 @@ input UpdateOneUserInput {
   id: ID!
 
   """The update to apply."""
-  update: UpdateUser!
+  update: UserUpdateDTO!
 }
 
-input UpdateUser {
-  id: ID
+input UserUpdateDTO {
   email: String
   password: String
   emailVerified: Boolean
   image: String
   name: String
   about: String
-  authorizer: Authorizer
-  role: String
 }
 
 input UpdateManyUsersInput {
@@ -2375,7 +2225,7 @@ input UpdateManyUsersInput {
   filter: userUpdateFilter!
 
   """The update to apply to all records found using the filter"""
-  update: UpdateUser!
+  update: UserUpdateDTO!
 }
 
 input userUpdateFilter {
@@ -2422,19 +2272,12 @@ input SetPackOnReviewInput {
 
 input CreateOneReviewInput {
   """The record to create"""
-  review: CreateReview!
-}
-
-input CreateReview {
-  id: ID
-  review: String
-  userId: ID
-  packId: ID
+  review: JobInputDTO!
 }
 
 input CreateManyReviewsInput {
   """Array of records to create"""
-  reviews: [CreateReview!]!
+  reviews: [JobInputDTO!]!
 }
 
 input UpdateOneReviewInput {
@@ -2442,14 +2285,7 @@ input UpdateOneReviewInput {
   id: ID!
 
   """The update to apply."""
-  update: UpdateReview!
-}
-
-input UpdateReview {
-  id: ID
-  review: String
-  userId: ID
-  packId: ID
+  update: JobInputDTO!
 }
 
 input UpdateManyReviewsInput {
@@ -2457,7 +2293,7 @@ input UpdateManyReviewsInput {
   filter: ReviewUpdateFilter!
 
   """The update to apply to all records found using the filter"""
-  update: UpdateReview!
+  update: JobInputDTO!
 }
 
 input ReviewUpdateFilter {

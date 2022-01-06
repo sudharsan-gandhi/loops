@@ -1,4 +1,17 @@
+import { Pack } from 'src/_entities/pack.entity';
+import { Paymentplan } from 'src/_entities/payment-plan.entity';
+import { PaymentAuthorizer } from 'src/resolver/authorizer';
 import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import {
+  Authorize,
   FilterableField,
   IDField,
   Relation,
@@ -11,17 +24,8 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { Pack } from 'src/_entities/pack.entity';
-import { Paymentplan } from 'src/_entities/payment-plan.entity';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { User } from '.';
+
+import { User } from './';
 
 export enum PaymentModel {
   PayPal = 'PayPal',
@@ -41,6 +45,7 @@ registerEnumType(PlanType, { name: 'PlanType' });
 @Relation('pack', () => Pack, { disableRemove: true })
 @Relation('paymentPlan', () => Paymentplan, { disableRemove: true })
 @Relation('user', () => User, { disableRemove: true })
+@Authorize(PaymentAuthorizer)
 export class Payment extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })

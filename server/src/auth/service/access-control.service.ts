@@ -1,3 +1,4 @@
+import { OperationGroup } from '@nestjs-query/query-graphql';
 import { Injectable } from '@nestjs/common';
 import { AccessControl, Permission } from 'accesscontrol';
 import { grants } from '../config/grants';
@@ -10,10 +11,11 @@ export class AccessControlService {
     this.authorizer = new AccessControl(grants);
   }
 
+  
   allowed(
     role: string,
     resource: string,
-    action: AuthAction,
+    action: OperationGroup,
     possesion: AuthPossesion,
   ) {
     const method = action + possesion;

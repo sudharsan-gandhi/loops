@@ -1,10 +1,5 @@
-import {
-  FilterableField,
-  IDField,
-  Relation,
-} from '@nestjs-query/query-graphql';
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/_entities/user.entity';
+import { RaveAuthorizer } from 'src/resolver/authorizer';
 import {
   BaseEntity,
   Column,
@@ -15,6 +10,18 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import {
+  Authorize,
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
+import {
+  ID,
+  Int,
+  ObjectType,
+} from '@nestjs/graphql';
+
 @ObjectType('rave')
 @Index('Rave_followerId_followingId_key', ['followerId', 'followingId'], {
   unique: true,
@@ -23,6 +30,7 @@ import {
 @Entity('rave', { schema: 'testing' })
 @Relation('follower', () => User, { disableRemove: true })
 @Relation('following', () => User, { disableRemove: true })
+@Authorize(RaveAuthorizer)
 export class Rave extends BaseEntity {
   @IDField(() => ID)
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })

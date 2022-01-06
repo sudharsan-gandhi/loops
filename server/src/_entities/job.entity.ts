@@ -1,24 +1,32 @@
-import {
-  FilterableField,
-  IDField,
-  Relation,
-} from '@nestjs-query/query-graphql';
-import { Field, GraphQLTimestamp, ID, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/_entities/user.entity';
+import { JobAuthorizer } from 'src/resolver/authorizer';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+import {
+  Authorize,
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
+import {
+  Field,
+  GraphQLTimestamp,
+  ID,
+  ObjectType,
+} from '@nestjs/graphql';
+
 @ObjectType('job')
 @Entity('job')
 @Relation('postedBy', () => User, { disableRemove: true })
+@Authorize(JobAuthorizer)
 export class Job extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })

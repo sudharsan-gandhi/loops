@@ -1,4 +1,18 @@
+import { Audio } from 'src/_entities/audio.entity';
+import { Payment } from 'src/_entities/payment.entity';
+import { User } from 'src/_entities/user.entity';
+import { PackAuthorizer } from 'src/resolver/authorizer';
 import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import {
+  Authorize,
   CursorConnection,
   FilterableField,
   IDField,
@@ -11,17 +25,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { Audio } from 'src/_entities/audio.entity';
-import { Payment } from 'src/_entities/payment.entity';
-import { User } from 'src/_entities/user.entity';
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+
 import { Review } from './review.entity';
 
 export enum PacketType {
@@ -37,6 +41,7 @@ registerEnumType(PacketType, { name: 'PacketType' });
 @CursorConnection('audio', () => Audio, { disableRemove: true })
 @CursorConnection('payments', () => Payment, { disableRemove: true })
 @CursorConnection('reviews', () => Payment, { disableRemove: true })
+@Authorize(PackAuthorizer)
 export class Pack extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
@@ -71,10 +76,6 @@ export class Pack extends BaseEntity {
 
   @OneToMany(() => Payment, (payment) => payment.pack)
   payments: Payment[];
-
-  @FilterableField(() => ID)
-  @Column('int')
-  reviewId: number;
 
   @OneToMany(() => Review, (review) => review.pack)
   reviews: Review[];

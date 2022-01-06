@@ -9,7 +9,16 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from 'src/auth/auth.module';
 import { GqlJwtGuard } from 'src/auth/guards/gql-jwt.guard';
 import { GqlRolesGuard } from 'src/auth/guards/gql-roles.guard';
-import { AudioInputDTO } from 'src/_dto';
+import {
+  AudioInputDTO,
+  JobInputDTO,
+  PackInputDTO,
+  PaymentInputDTO,
+  PaymentplanInputDTO,
+  RaveInputDTO,
+  UserInputDTO,
+  UserUpdateDTO
+} from 'src/_dto';
 import {
   Audio,
   Job,
@@ -47,13 +56,50 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
     UpdateDTOClass: AudioInputDTO,
     guards: [GqlJwtGuard],
   },
-  { DTOClass: Job, EntityClass: Job },
-  { DTOClass: Pack, EntityClass: Pack },
-  { DTOClass: Paymentplan, EntityClass: Paymentplan },
-  { DTOClass: Payment, EntityClass: Payment },
-  { DTOClass: Rave, EntityClass: Rave },
-  { DTOClass: User, EntityClass: User, guards: [GqlJwtGuard, GqlRolesGuard] },
-  { DTOClass: Review, EntityClass: Review, guards: [GqlJwtGuard] },
+  {
+    DTOClass: Job,
+    EntityClass: Job,
+    CreateDTOClass: JobInputDTO,
+    UpdateDTOClass: JobInputDTO,
+  },
+  {
+    DTOClass: Pack,
+    EntityClass: Pack,
+    CreateDTOClass: PackInputDTO,
+    UpdateDTOClass: PackInputDTO,
+  },
+  {
+    DTOClass: Paymentplan,
+    EntityClass: Paymentplan,
+    CreateDTOClass: PaymentplanInputDTO,
+    UpdateDTOClass: PaymentplanInputDTO,
+  },
+  {
+    DTOClass: Payment,
+    EntityClass: Payment,
+    CreateDTOClass: PaymentInputDTO,
+    UpdateDTOClass: PaymentInputDTO,
+  },
+  {
+    DTOClass: Rave,
+    EntityClass: Rave,
+    CreateDTOClass: RaveInputDTO,
+    UpdateDTOClass: RaveInputDTO,
+  },
+  {
+    DTOClass: User,
+    EntityClass: User,
+    CreateDTOClass: UserInputDTO,
+    UpdateDTOClass: UserUpdateDTO,
+    guards: [GqlJwtGuard, GqlRolesGuard],
+  },
+  {
+    DTOClass: Review,
+    EntityClass: Review,
+    CreateDTOClass: JobInputDTO,
+    UpdateDTOClass: JobInputDTO,
+    guards: [GqlJwtGuard],
+  },
 ];
 @Module({
   imports: [

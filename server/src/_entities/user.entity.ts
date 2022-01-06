@@ -1,3 +1,17 @@
+import {
+  Authorize,
+  CursorConnection,
+  FilterableField,
+  IDField
+} from '@nestjs-query/query-graphql';
+import {
+  Field, ID,
+  ObjectType,
+  registerEnumType
+} from '@nestjs/graphql';
+import { hash } from 'bcrypt';
+import { GraphQLBoolean } from 'graphql';
+import { UserAuthorizer } from 'src/resolver/authorizer/user.authorizer';
 import { Job } from 'src/_entities/job.entity';
 import { Pack } from 'src/_entities/pack.entity';
 import { Rave } from 'src/_entities/rave.entity';
@@ -8,27 +22,10 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Payment } from '.';
-import {
-  Authorize,
-  CursorConnection,
-  FilterableField,
-  IDField,
-  Relation,
-} from '@nestjs-query/query-graphql';
-import {
-  Field,
-  GraphQLTimestamp,
-  ID,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql';
-import { hash } from 'bcrypt';
-import { GraphQLBoolean } from 'graphql';
 import { Review } from './review.entity';
-import { Roles } from 'src/auth/decorator/roles.decorator';
 
 export enum Authorizer {
   GOOGLE = 'GOOGLE',
@@ -47,6 +44,7 @@ registerEnumType(Authorizer, { name: 'Authorizer' });
 @CursorConnection('followings', () => Rave, { disableRemove: true })
 @CursorConnection('payments', () => Payment, { disableRemove: true })
 @CursorConnection('reviews', () => Review, { disableRemove: true })
+@Authorize(UserAuthorizer)
 export class User extends BaseEntity {
   @IDField(() => ID)
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })

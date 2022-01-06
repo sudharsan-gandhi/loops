@@ -1,9 +1,9 @@
 import { AdminModule } from '@adminjs/nestjs';
 import { Database, Resource } from '@adminjs/typeorm';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import AdminJS from 'adminjs';
 import { join } from 'path';
 import { AppController } from './app.controller';
@@ -13,26 +13,32 @@ import { ResolverModule } from './resolver/resolver.module';
 import {
   Audio,
   Job,
-  Pack, Payment, Paymentplan, Rave,
-  User, Review
+  Pack,
+  Payment,
+  Paymentplan,
+  Rave,
+  User,
+  Review,
 } from './_entities';
 
 AdminJS.registerAdapter({ Database, Resource });
-
 
 const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      database: 'kabaflow',
-      port: 3306,
-      username: 'root',
-      password: 'Password@123',
-      entities: ENTITIES,
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: async (config: ConfigService) => ({
+        type: 'mysql',
+        host: config.get<string>('DB_HOST'),
+        database: config.get<string>('DB_NAME'),
+        port: config.get<string>('DB_PORT'),
+        username: config.get<string>('DB_USERNAME'),
+        password: config.get<string>('DB_PASSWORD'),
+        entities: ENTITIES,
+        synchronize: true,
+      } as TypeOrmModuleAsyncOptions),
+      inject: [ConfigService],
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -59,5 +65,4 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

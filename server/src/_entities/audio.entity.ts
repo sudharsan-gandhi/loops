@@ -8,10 +8,12 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import {
+  Authorize,
   FilterableField,
   IDField,
   Relation,
 } from '@nestjs-query/query-graphql';
+import { AudioAuthorizer } from 'src/resolver/authorizer/audio.authorizer';
 
 export enum AudioType {
   oneshot = 'oneshot',
@@ -23,6 +25,7 @@ registerEnumType(AudioType, { name: 'AudioType' });
 @ObjectType('audio')
 @Entity('audio')
 @Relation('pack', () => Pack, { disableRemove: true })
+@Authorize(AudioAuthorizer)
 export class Audio extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })

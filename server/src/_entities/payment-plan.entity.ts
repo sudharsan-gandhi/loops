@@ -1,4 +1,19 @@
+import { Payment } from 'src/_entities/payment.entity';
+import { User } from 'src/_entities/user.entity';
+import { PaymentPlanAuthorizer } from 'src/resolver/authorizer';
 import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
+import {
+  Authorize,
   CursorConnection,
   FilterableField,
   IDField,
@@ -12,23 +27,12 @@ import {
   Int,
   ObjectType,
 } from '@nestjs/graphql';
-import { Payment } from 'src/_entities/payment.entity';
-import { User } from 'src/_entities/user.entity';
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
 
 @ObjectType('paymentplan')
 @Entity('paymentplan')
 @CursorConnection('payments', () => Payment, { disableRemove: true })
 @Relation('postedBy', () => User, { disableRemove: true })
+@Authorize(PaymentPlanAuthorizer)
 export class Paymentplan extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })

@@ -1,12 +1,34 @@
-import { FilterableField, IDField, Relation } from '@nestjs-query/query-graphql';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Pack, User } from '.';
+import { ReviewAuthorizer } from 'src/resolver/authorizer';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import {
+  Authorize,
+  FilterableField,
+  IDField,
+  Relation,
+} from '@nestjs-query/query-graphql';
+import {
+  Field,
+  ID,
+  ObjectType,
+} from '@nestjs/graphql';
+
+import {
+  Pack,
+  User,
+} from './';
 
 @ObjectType()
 @Entity('review')
 @Relation('user', () => User, { disableRemove: true })
 @Relation('pack', () => Pack, { disableRemove: true })
+@Authorize(ReviewAuthorizer)
 export class Review extends BaseEntity {
   @IDField(() => ID)
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
