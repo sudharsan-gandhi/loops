@@ -1,5 +1,5 @@
-import { Field, ID, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Pack } from 'src/_entities/pack.entity';
+import { AudioAuthorizer } from 'src/resolver/authorizer/audio.authorizer';
 import {
   BaseEntity,
   Column,
@@ -7,13 +7,20 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
 import {
   Authorize,
   FilterableField,
   IDField,
   Relation,
 } from '@nestjs-query/query-graphql';
-import { AudioAuthorizer } from 'src/resolver/authorizer/audio.authorizer';
+import {
+  Field,
+  ID,
+  Int,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 
 export enum AudioType {
   oneshot = 'oneshot',
@@ -22,7 +29,7 @@ export enum AudioType {
 
 registerEnumType(AudioType, { name: 'AudioType' });
 
-@ObjectType('audio')
+@ObjectType('loop')
 @Entity('audio')
 @Relation('pack', () => Pack, { disableRemove: true })
 @Authorize(AudioAuthorizer)

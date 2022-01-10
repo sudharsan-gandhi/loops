@@ -33,7 +33,7 @@ export class JobAuthorizer implements CustomAuthorizer<JobInputDTO> {
     // check first global access
     const action = authorizationContext.operationGroup;
     let allowed = this.acl.allowed(
-      user.role,
+      user?.role || 'user',
       this.NAME,
       action,
       AuthPossesion.ANY,

@@ -1,20 +1,9 @@
-import {
-  Authorize,
-  CursorConnection,
-  FilterableField,
-  IDField
-} from '@nestjs-query/query-graphql';
-import {
-  Field, ID,
-  ObjectType,
-  registerEnumType
-} from '@nestjs/graphql';
 import { hash } from 'bcrypt';
 import { GraphQLBoolean } from 'graphql';
-import { UserAuthorizer } from 'src/resolver/authorizer/user.authorizer';
 import { Job } from 'src/_entities/job.entity';
 import { Pack } from 'src/_entities/pack.entity';
 import { Rave } from 'src/_entities/rave.entity';
+import { UserAuthorizer } from 'src/resolver/authorizer/user.authorizer';
 import {
   BaseEntity,
   BeforeInsert,
@@ -22,9 +11,23 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Payment } from '.';
+
+import {
+  Authorize,
+  CursorConnection,
+  FilterableField,
+  IDField,
+} from '@nestjs-query/query-graphql';
+import {
+  Field,
+  ID,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
+
+import { Payment } from './';
 import { Review } from './review.entity';
 
 export enum Authorizer {
@@ -68,7 +71,7 @@ export class User extends BaseEntity {
   emailVerified: boolean | null;
 
   @Column('varchar', { name: 'image', nullable: true, length: 191 })
-  @Field()
+  @Field({nullable: true})
   image: string | null;
 
   @Column('varchar', { name: 'name', nullable: true, length: 191 })

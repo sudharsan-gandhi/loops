@@ -1,23 +1,13 @@
 import {
-  AutoResolverOpts,
-  NestjsQueryGraphQLModule,
-  PagingStrategies,
-  ReadResolverOpts,
-} from '@nestjs-query/query-graphql';
-import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
-import { Module } from '@nestjs/common';
-import { AuthModule } from 'src/auth/auth.module';
-import { GqlJwtGuard } from 'src/auth/guards/gql-jwt.guard';
-import { GqlRolesGuard } from 'src/auth/guards/gql-roles.guard';
-import {
   AudioInputDTO,
   JobInputDTO,
   PackInputDTO,
   PaymentInputDTO,
   PaymentplanInputDTO,
   RaveInputDTO,
+  ReviewInputDTO,
   UserInputDTO,
-  UserUpdateDTO
+  UserUpdateDTO,
 } from 'src/_dto';
 import {
   Audio,
@@ -29,6 +19,18 @@ import {
   User,
 } from 'src/_entities';
 import { Review } from 'src/_entities/review.entity';
+import { AuthModule } from 'src/auth/auth.module';
+import { GqlJwtGuard } from 'src/auth/guards/gql-jwt.guard';
+import { GqlRolesGuard } from 'src/auth/guards/gql-roles.guard';
+
+import {
+  AutoResolverOpts,
+  NestjsQueryGraphQLModule,
+  PagingStrategies,
+  ReadResolverOpts,
+} from '@nestjs-query/query-graphql';
+import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
+import { Module } from '@nestjs/common';
 
 const ENTITY_MODDULES = [
   NestjsQueryTypeOrmModule.forFeature([Audio]),
@@ -55,50 +57,74 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
     CreateDTOClass: AudioInputDTO,
     UpdateDTOClass: AudioInputDTO,
     guards: [GqlJwtGuard],
+    create: {many: {disabled: true}},
+    update: {many: {disabled:true}},
+    delete: {many: {disabled:true}}
   },
   {
     DTOClass: Job,
     EntityClass: Job,
     CreateDTOClass: JobInputDTO,
     UpdateDTOClass: JobInputDTO,
+    create: {many: {disabled: true}},
+    update: {many: {disabled:true}},
+    delete: {many: {disabled:true}}
   },
   {
     DTOClass: Pack,
     EntityClass: Pack,
     CreateDTOClass: PackInputDTO,
     UpdateDTOClass: PackInputDTO,
+    create: {many: {disabled: true}},
+    update: {many: {disabled:true}},
+    delete: {many: {disabled:true}}
   },
   {
     DTOClass: Paymentplan,
     EntityClass: Paymentplan,
     CreateDTOClass: PaymentplanInputDTO,
     UpdateDTOClass: PaymentplanInputDTO,
+    create: {many: {disabled: true}},
+    update: {many: {disabled:true}},
+    delete: {many: {disabled:true}}
   },
   {
     DTOClass: Payment,
     EntityClass: Payment,
     CreateDTOClass: PaymentInputDTO,
     UpdateDTOClass: PaymentInputDTO,
+    create: {many: {disabled: true}},
+    update: {many: {disabled:true}},
+    delete: {many: {disabled:true}}
   },
   {
     DTOClass: Rave,
     EntityClass: Rave,
     CreateDTOClass: RaveInputDTO,
     UpdateDTOClass: RaveInputDTO,
+    create: {many: {disabled: true}},
+    update: {many: {disabled:true}},
+    delete: {many: {disabled:true}}
   },
   {
     DTOClass: User,
     EntityClass: User,
     CreateDTOClass: UserInputDTO,
     UpdateDTOClass: UserUpdateDTO,
-    guards: [GqlJwtGuard, GqlRolesGuard],
+    // pagingStrategy: PagingStrategies.OFFSET,
+    create: {many: {disabled: true}},
+    update: { guards: [GqlJwtGuard], many: {disabled:true} },
+    delete: { guards: [GqlJwtGuard], many: {disabled:true} },
   },
   {
     DTOClass: Review,
     EntityClass: Review,
-    CreateDTOClass: JobInputDTO,
-    UpdateDTOClass: JobInputDTO,
-    guards: [GqlJwtGuard],
+    CreateDTOClass: ReviewInputDTO,
+    UpdateDTOClass: ReviewInputDTO,
+    guards: [GqlRolesGuard],
+    create: {many: {disabled: true}},
+    update: {many: {disabled:true}},
+    delete: {many: {disabled:true}}
   },
 ];
 @Module({

@@ -55,7 +55,7 @@ type user {
   email: String!
   password: String!
   emailVerified: Boolean
-  image: String!
+  image: String
   name: String!
   about: String!
   authorizer: Authorizer!
@@ -472,10 +472,10 @@ type pack {
     paging: CursorPaging = {first: 10}
 
     """Specify to filter the records returned."""
-    filter: audioFilter = {}
+    filter: loopFilter = {}
 
     """Specify to sort results."""
-    sorting: [audioSort!] = []
+    sorting: [loopSort!] = []
   ): PackAudioConnection!
   payments(
     """Limit or page results."""
@@ -504,9 +504,9 @@ enum PacketType {
   PAID
 }
 
-input audioFilter {
-  and: [audioFilter!]
-  or: [audioFilter!]
+input loopFilter {
+  and: [loopFilter!]
+  or: [loopFilter!]
   id: IDFilterComparison
   name: StringFieldComparison
   genre: StringFieldComparison
@@ -516,13 +516,13 @@ input audioFilter {
   packId: IDFilterComparison
 }
 
-input audioSort {
-  field: audioSortFields!
+input loopSort {
+  field: loopSortFields!
   direction: SortDirection!
   nulls: SortNulls
 }
 
-enum audioSortFields {
+enum loopSortFields {
   id
   name
   genre
@@ -532,7 +532,7 @@ enum audioSortFields {
   packId
 }
 
-type audio {
+type loop {
   """Example field (placeholder)"""
   id: ID!
 
@@ -565,12 +565,7 @@ enum AudioType {
   loop
 }
 
-type DeleteManyResponse {
-  """The number of records deleted."""
-  deletedCount: Int!
-}
-
-type AudioDeleteResponse {
+type LoopDeleteResponse {
   """Example field (placeholder)"""
   id: ID
 
@@ -597,14 +592,9 @@ type AudioDeleteResponse {
   packId: ID
 }
 
-type UpdateManyResponse {
-  """The number of records updated."""
-  updatedCount: Int!
-}
-
-type audioEdge {
-  """The node containing the audio"""
-  node: audio!
+type loopEdge {
+  """The node containing the loop"""
+  node: loop!
 
   """Cursor for this node."""
   cursor: ConnectionCursor!
@@ -624,15 +614,15 @@ type PageInfo {
   endCursor: ConnectionCursor
 }
 
-type AudioConnection {
+type LoopConnection {
   """Paging information"""
   pageInfo: PageInfo!
 
   """Array of edges."""
-  edges: [audioEdge!]!
+  edges: [loopEdge!]!
 }
 
-type audioAggregateGroupBy {
+type loopAggregateGroupBy {
   id: ID
   name: String
   genre: String
@@ -642,7 +632,7 @@ type audioAggregateGroupBy {
   packId: ID
 }
 
-type audioCountAggregate {
+type loopCountAggregate {
   id: Int
   name: Int
   genre: Int
@@ -652,21 +642,21 @@ type audioCountAggregate {
   packId: Int
 }
 
-type audioSumAggregate {
+type loopSumAggregate {
   id: Float
   bpm: Float
   tempo: Float
   packId: Float
 }
 
-type audioAvgAggregate {
+type loopAvgAggregate {
   id: Float
   bpm: Float
   tempo: Float
   packId: Float
 }
 
-type audioMinAggregate {
+type loopMinAggregate {
   id: ID
   name: String
   genre: String
@@ -676,7 +666,7 @@ type audioMinAggregate {
   packId: ID
 }
 
-type audioMaxAggregate {
+type loopMaxAggregate {
   id: ID
   name: String
   genre: String
@@ -865,7 +855,7 @@ type PackAudioConnection {
   pageInfo: PageInfo!
 
   """Array of edges."""
-  edges: [audioEdge!]!
+  edges: [loopEdge!]!
 }
 
 type PaymentplanDeleteResponse {
@@ -1284,16 +1274,20 @@ type ReviewMaxAggregate {
 }
 
 type Query {
-  audio(
+  loop(
+    """The id of the record to find."""
+    id: ID!
+  ): loop
+  loops(
     """Limit or page results."""
     paging: CursorPaging = {first: 10}
 
     """Specify to filter the records returned."""
-    filter: audioFilter = {}
+    filter: loopFilter = {}
 
     """Specify to sort results."""
-    sorting: [audioSort!] = []
-  ): AudioConnection!
+    sorting: [loopSort!] = []
+  ): LoopConnection!
   job(
     """The id of the record to find."""
     id: ID!
@@ -1435,20 +1429,14 @@ enum userSortFields {
 }
 
 type Mutation {
-  setPackOnAudio(input: SetPackOnAudioInput!): audio!
-  createOneAudio(input: CreateOneAudioInput!): audio!
-  createManyAudio(input: CreateManyAudioInput!): [audio!]!
-  updateOneAudio(input: UpdateOneAudioInput!): audio!
-  updateManyAudio(input: UpdateManyAudioInput!): UpdateManyResponse!
-  deleteOneAudio(input: DeleteOneAudioInput!): AudioDeleteResponse!
-  deleteManyAudio(input: DeleteManyAudioInput!): DeleteManyResponse!
+  setPackOnLoop(input: SetPackOnLoopInput!): loop!
+  createOneLoop(input: CreateOneLoopInput!): loop!
+  updateOneLoop(input: UpdateOneLoopInput!): loop!
+  deleteOneLoop(input: DeleteOneLoopInput!): LoopDeleteResponse!
   setPostedByOnJob(input: SetPostedByOnJobInput!): job!
   createOneJob(input: CreateOneJobInput!): job!
-  createManyJobs(input: CreateManyJobsInput!): [job!]!
   updateOneJob(input: UpdateOneJobInput!): job!
-  updateManyJobs(input: UpdateManyJobsInput!): UpdateManyResponse!
   deleteOneJob(input: DeleteOneJobInput!): JobDeleteResponse!
-  deleteManyJobs(input: DeleteManyJobsInput!): DeleteManyResponse!
   setAuthorOnPack(input: SetAuthorOnPackInput!): pack!
   addAudioToPack(input: AddAudioToPackInput!): pack!
   setAudioOnPack(input: SetAudioOnPackInput!): pack!
@@ -1457,37 +1445,25 @@ type Mutation {
   addReviewsToPack(input: AddReviewsToPackInput!): pack!
   setReviewsOnPack(input: SetReviewsOnPackInput!): pack!
   createOnePack(input: CreateOnePackInput!): pack!
-  createManyPacks(input: CreateManyPacksInput!): [pack!]!
   updateOnePack(input: UpdateOnePackInput!): pack!
-  updateManyPacks(input: UpdateManyPacksInput!): UpdateManyResponse!
   deleteOnePack(input: DeleteOnePackInput!): PackDeleteResponse!
-  deleteManyPacks(input: DeleteManyPacksInput!): DeleteManyResponse!
   setPostedByOnPaymentplan(input: SetPostedByOnPaymentplanInput!): paymentplan!
   addPaymentsToPaymentplan(input: AddPaymentsToPaymentplanInput!): paymentplan!
   setPaymentsOnPaymentplan(input: SetPaymentsOnPaymentplanInput!): paymentplan!
   createOnePaymentplan(input: CreateOnePaymentplanInput!): paymentplan!
-  createManyPaymentplans(input: CreateManyPaymentplansInput!): [paymentplan!]!
   updateOnePaymentplan(input: UpdateOnePaymentplanInput!): paymentplan!
-  updateManyPaymentplans(input: UpdateManyPaymentplansInput!): UpdateManyResponse!
   deleteOnePaymentplan(input: DeleteOnePaymentplanInput!): PaymentplanDeleteResponse!
-  deleteManyPaymentplans(input: DeleteManyPaymentplansInput!): DeleteManyResponse!
   setPackOnPayment(input: SetPackOnPaymentInput!): payment!
   setPaymentPlanOnPayment(input: SetPaymentPlanOnPaymentInput!): payment!
   setUserOnPayment(input: SetUserOnPaymentInput!): payment!
   createOnePayment(input: CreateOnePaymentInput!): payment!
-  createManyPayments(input: CreateManyPaymentsInput!): [payment!]!
   updateOnePayment(input: UpdateOnePaymentInput!): payment!
-  updateManyPayments(input: UpdateManyPaymentsInput!): UpdateManyResponse!
   deleteOnePayment(input: DeleteOnePaymentInput!): PaymentDeleteResponse!
-  deleteManyPayments(input: DeleteManyPaymentsInput!): DeleteManyResponse!
   setFollowerOnRave(input: SetFollowerOnRaveInput!): rave!
   setFollowingOnRave(input: SetFollowingOnRaveInput!): rave!
   createOneRave(input: CreateOneRaveInput!): rave!
-  createManyRaves(input: CreateManyRavesInput!): [rave!]!
   updateOneRave(input: UpdateOneRaveInput!): rave!
-  updateManyRaves(input: UpdateManyRavesInput!): UpdateManyResponse!
   deleteOneRave(input: DeleteOneRaveInput!): RaveDeleteResponse!
-  deleteManyRaves(input: DeleteManyRavesInput!): DeleteManyResponse!
   addJobsToUser(input: AddJobsToUserInput!): user!
   setJobsOnUser(input: SetJobsOnUserInput!): user!
   addPacksToUser(input: AddPacksToUserInput!): user!
@@ -1501,22 +1477,16 @@ type Mutation {
   addReviewsToUser(input: AddReviewsToUserInput!): user!
   setReviewsOnUser(input: SetReviewsOnUserInput!): user!
   createOneUser(input: CreateOneUserInput!): user!
-  createManyUsers(input: CreateManyUsersInput!): [user!]!
   updateOneUser(input: UpdateOneUserInput!): user!
-  updateManyUsers(input: UpdateManyUsersInput!): UpdateManyResponse!
   deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
-  deleteManyUsers(input: DeleteManyUsersInput!): DeleteManyResponse!
   setUserOnReview(input: SetUserOnReviewInput!): Review!
   setPackOnReview(input: SetPackOnReviewInput!): Review!
   createOneReview(input: CreateOneReviewInput!): Review!
-  createManyReviews(input: CreateManyReviewsInput!): [Review!]!
   updateOneReview(input: UpdateOneReviewInput!): Review!
-  updateManyReviews(input: UpdateManyReviewsInput!): UpdateManyResponse!
   deleteOneReview(input: DeleteOneReviewInput!): ReviewDeleteResponse!
-  deleteManyReviews(input: DeleteManyReviewsInput!): DeleteManyResponse!
 }
 
-input SetPackOnAudioInput {
+input SetPackOnLoopInput {
   """The id of the record."""
   id: ID!
 
@@ -1524,9 +1494,9 @@ input SetPackOnAudioInput {
   relationId: ID!
 }
 
-input CreateOneAudioInput {
+input CreateOneLoopInput {
   """The record to create"""
-  audio: AudioInputDTO!
+  loop: AudioInputDTO!
 }
 
 input AudioInputDTO {
@@ -1553,12 +1523,7 @@ input AudioInputDTO {
   packId: ID!
 }
 
-input CreateManyAudioInput {
-  """Array of records to create"""
-  audio: [AudioInputDTO!]!
-}
-
-input UpdateOneAudioInput {
+input UpdateOneLoopInput {
   """The id of the record to update"""
   id: ID!
 
@@ -1566,46 +1531,9 @@ input UpdateOneAudioInput {
   update: AudioInputDTO!
 }
 
-input UpdateManyAudioInput {
-  """Filter used to find fields to update"""
-  filter: audioUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: AudioInputDTO!
-}
-
-input audioUpdateFilter {
-  and: [audioUpdateFilter!]
-  or: [audioUpdateFilter!]
-  id: IDFilterComparison
-  name: StringFieldComparison
-  genre: StringFieldComparison
-  bpm: IntFieldComparison
-  key: StringFieldComparison
-  tempo: IntFieldComparison
-  packId: IDFilterComparison
-}
-
-input DeleteOneAudioInput {
+input DeleteOneLoopInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyAudioInput {
-  """Filter to find records to delete"""
-  filter: audioDeleteFilter!
-}
-
-input audioDeleteFilter {
-  and: [audioDeleteFilter!]
-  or: [audioDeleteFilter!]
-  id: IDFilterComparison
-  name: StringFieldComparison
-  genre: StringFieldComparison
-  bpm: IntFieldComparison
-  key: StringFieldComparison
-  tempo: IntFieldComparison
-  packId: IDFilterComparison
 }
 
 input SetPostedByOnJobInput {
@@ -1633,11 +1561,6 @@ input JobInputDTO {
   postedById: ID!
 }
 
-input CreateManyJobsInput {
-  """Array of records to create"""
-  jobs: [JobInputDTO!]!
-}
-
 input UpdateOneJobInput {
   """The id of the record to update"""
   id: ID!
@@ -1646,42 +1569,9 @@ input UpdateOneJobInput {
   update: JobInputDTO!
 }
 
-input UpdateManyJobsInput {
-  """Filter used to find fields to update"""
-  filter: jobUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: JobInputDTO!
-}
-
-input jobUpdateFilter {
-  and: [jobUpdateFilter!]
-  or: [jobUpdateFilter!]
-  id: IDFilterComparison
-  title: StringFieldComparison
-  postDate: TimestampFieldComparison
-  expirationDate: TimestampFieldComparison
-  postedById: IDFilterComparison
-}
-
 input DeleteOneJobInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyJobsInput {
-  """Filter to find records to delete"""
-  filter: jobDeleteFilter!
-}
-
-input jobDeleteFilter {
-  and: [jobDeleteFilter!]
-  or: [jobDeleteFilter!]
-  id: IDFilterComparison
-  title: StringFieldComparison
-  postDate: TimestampFieldComparison
-  expirationDate: TimestampFieldComparison
-  postedById: IDFilterComparison
 }
 
 input SetAuthorOnPackInput {
@@ -1757,11 +1647,6 @@ input PackInputDTO {
   authorId: ID!
 }
 
-input CreateManyPacksInput {
-  """Array of records to create"""
-  packs: [PackInputDTO!]!
-}
-
 input UpdateOnePackInput {
   """The id of the record to update"""
   id: ID!
@@ -1770,40 +1655,9 @@ input UpdateOnePackInput {
   update: PackInputDTO!
 }
 
-input UpdateManyPacksInput {
-  """Filter used to find fields to update"""
-  filter: packUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: PackInputDTO!
-}
-
-input packUpdateFilter {
-  and: [packUpdateFilter!]
-  or: [packUpdateFilter!]
-  id: IDFilterComparison
-  name: StringFieldComparison
-  price: FloatFieldComparison
-  authorId: IDFilterComparison
-}
-
 input DeleteOnePackInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyPacksInput {
-  """Filter to find records to delete"""
-  filter: packDeleteFilter!
-}
-
-input packDeleteFilter {
-  and: [packDeleteFilter!]
-  or: [packDeleteFilter!]
-  id: IDFilterComparison
-  name: StringFieldComparison
-  price: FloatFieldComparison
-  authorId: IDFilterComparison
 }
 
 input SetPostedByOnPaymentplanInput {
@@ -1850,11 +1704,6 @@ input PaymentplanInputDTO {
   postedById: ID!
 }
 
-input CreateManyPaymentplansInput {
-  """Array of records to create"""
-  paymentplans: [PaymentplanInputDTO!]!
-}
-
 input UpdateOnePaymentplanInput {
   """The id of the record to update"""
   id: ID!
@@ -1863,38 +1712,9 @@ input UpdateOnePaymentplanInput {
   update: PaymentplanInputDTO!
 }
 
-input UpdateManyPaymentplansInput {
-  """Filter used to find fields to update"""
-  filter: paymentplanUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: PaymentplanInputDTO!
-}
-
-input paymentplanUpdateFilter {
-  and: [paymentplanUpdateFilter!]
-  or: [paymentplanUpdateFilter!]
-  id: IDFilterComparison
-  amount: FloatFieldComparison
-  postedById: IDFilterComparison
-}
-
 input DeleteOnePaymentplanInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyPaymentplansInput {
-  """Filter to find records to delete"""
-  filter: paymentplanDeleteFilter!
-}
-
-input paymentplanDeleteFilter {
-  and: [paymentplanDeleteFilter!]
-  or: [paymentplanDeleteFilter!]
-  id: IDFilterComparison
-  amount: FloatFieldComparison
-  postedById: IDFilterComparison
 }
 
 input SetPackOnPaymentInput {
@@ -1952,11 +1772,6 @@ input PaymentInputDTO {
   userId: ID!
 }
 
-input CreateManyPaymentsInput {
-  """Array of records to create"""
-  payments: [PaymentInputDTO!]!
-}
-
 input UpdateOnePaymentInput {
   """The id of the record to update"""
   id: ID!
@@ -1965,50 +1780,9 @@ input UpdateOnePaymentInput {
   update: PaymentInputDTO!
 }
 
-input UpdateManyPaymentsInput {
-  """Filter used to find fields to update"""
-  filter: paymentUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: PaymentInputDTO!
-}
-
-input paymentUpdateFilter {
-  and: [paymentUpdateFilter!]
-  or: [paymentUpdateFilter!]
-  id: IDFilterComparison
-  price: IntFieldComparison
-  date: TimestampFieldComparison
-  planStartDate: TimestampFieldComparison
-  planEndDate: TimestampFieldComparison
-  isActive: PaymentIsActiveFilterComparison
-  packId: IDFilterComparison
-  paymentPlanId: IDFilterComparison
-  userId: IDFilterComparison
-}
-
 input DeleteOnePaymentInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyPaymentsInput {
-  """Filter to find records to delete"""
-  filter: paymentDeleteFilter!
-}
-
-input paymentDeleteFilter {
-  and: [paymentDeleteFilter!]
-  or: [paymentDeleteFilter!]
-  id: IDFilterComparison
-  price: IntFieldComparison
-  date: TimestampFieldComparison
-  planStartDate: TimestampFieldComparison
-  planEndDate: TimestampFieldComparison
-  isActive: PaymentIsActiveFilterComparison
-  packId: IDFilterComparison
-  paymentPlanId: IDFilterComparison
-  userId: IDFilterComparison
 }
 
 input SetFollowerOnRaveInput {
@@ -2040,11 +1814,6 @@ input RaveInputDTO {
   followingId: Int!
 }
 
-input CreateManyRavesInput {
-  """Array of records to create"""
-  raves: [RaveInputDTO!]!
-}
-
 input UpdateOneRaveInput {
   """The id of the record to update"""
   id: ID!
@@ -2053,38 +1822,9 @@ input UpdateOneRaveInput {
   update: RaveInputDTO!
 }
 
-input UpdateManyRavesInput {
-  """Filter used to find fields to update"""
-  filter: raveUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: RaveInputDTO!
-}
-
-input raveUpdateFilter {
-  and: [raveUpdateFilter!]
-  or: [raveUpdateFilter!]
-  id: IDFilterComparison
-  followerId: IntFieldComparison
-  followingId: IntFieldComparison
-}
-
 input DeleteOneRaveInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyRavesInput {
-  """Filter to find records to delete"""
-  filter: raveDeleteFilter!
-}
-
-input raveDeleteFilter {
-  and: [raveDeleteFilter!]
-  or: [raveDeleteFilter!]
-  id: IDFilterComparison
-  followerId: IntFieldComparison
-  followingId: IntFieldComparison
 }
 
 input AddJobsToUserInput {
@@ -2192,15 +1932,9 @@ input UserInputDTO {
   email: String!
   password: String!
   emailVerified: Boolean
-  image: String!
+  image: String
   name: String!
-  about: String!
-  role: String!
-}
-
-input CreateManyUsersInput {
-  """Array of records to create"""
-  users: [UserInputDTO!]!
+  about: String
 }
 
 input UpdateOneUserInput {
@@ -2220,38 +1954,9 @@ input UserUpdateDTO {
   about: String
 }
 
-input UpdateManyUsersInput {
-  """Filter used to find fields to update"""
-  filter: userUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: UserUpdateDTO!
-}
-
-input userUpdateFilter {
-  and: [userUpdateFilter!]
-  or: [userUpdateFilter!]
-  id: IDFilterComparison
-  email: StringFieldComparison
-  name: StringFieldComparison
-}
-
 input DeleteOneUserInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyUsersInput {
-  """Filter to find records to delete"""
-  filter: userDeleteFilter!
-}
-
-input userDeleteFilter {
-  and: [userDeleteFilter!]
-  or: [userDeleteFilter!]
-  id: IDFilterComparison
-  email: StringFieldComparison
-  name: StringFieldComparison
 }
 
 input SetUserOnReviewInput {
@@ -2272,12 +1977,13 @@ input SetPackOnReviewInput {
 
 input CreateOneReviewInput {
   """The record to create"""
-  review: JobInputDTO!
+  review: ReviewInputDTO!
 }
 
-input CreateManyReviewsInput {
-  """Array of records to create"""
-  reviews: [JobInputDTO!]!
+input ReviewInputDTO {
+  review: String!
+  userId: ID!
+  packId: ID!
 }
 
 input UpdateOneReviewInput {
@@ -2285,39 +1991,10 @@ input UpdateOneReviewInput {
   id: ID!
 
   """The update to apply."""
-  update: JobInputDTO!
-}
-
-input UpdateManyReviewsInput {
-  """Filter used to find fields to update"""
-  filter: ReviewUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: JobInputDTO!
-}
-
-input ReviewUpdateFilter {
-  and: [ReviewUpdateFilter!]
-  or: [ReviewUpdateFilter!]
-  id: IDFilterComparison
-  userId: IDFilterComparison
-  packId: IDFilterComparison
+  update: ReviewInputDTO!
 }
 
 input DeleteOneReviewInput {
   """The id of the record to delete."""
   id: ID!
-}
-
-input DeleteManyReviewsInput {
-  """Filter to find records to delete"""
-  filter: ReviewDeleteFilter!
-}
-
-input ReviewDeleteFilter {
-  and: [ReviewDeleteFilter!]
-  or: [ReviewDeleteFilter!]
-  id: IDFilterComparison
-  userId: IDFilterComparison
-  packId: IDFilterComparison
 }

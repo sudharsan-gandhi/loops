@@ -33,7 +33,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
     const resourceId = context.req?.body?.variables?.input?.id;
     const action = authorizationContext.operationGroup;
     let allowed = this.acl.allowed(
-      user.role,
+      user?.role || 'user',
       this.NAME,
       action,
       AuthPossesion.ANY,

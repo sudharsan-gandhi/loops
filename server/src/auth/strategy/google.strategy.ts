@@ -1,12 +1,20 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PassportStrategy } from '@nestjs/passport';
 import {
+  AuthenticateOptionsGoogle,
   Strategy,
-  StrategyOptions,
   VerifyCallback,
 } from 'passport-google-oauth20';
-import { Authorizer, User } from 'src/_entities';
+import {
+  Authorizer,
+  User,
+} from 'src/_entities';
+
+import {
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+
 import { AuthService } from '../auth.service';
 
 @Injectable()
@@ -16,9 +24,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       clientID: config.get<string>('GOOGLE_CLIENT_ID'),
       clientSecret: config.get<string>('GOOGLE_CLIENT_SECRET'),
       callbackURL: 'http://localhost:3000/auth/google/callback',
+      successRedirect: 'http://locahost:3001',
       scope: ['profile', 'email'],
       failureRedirect: '/',
-    });
+    } as AuthenticateOptionsGoogle);
   }
 
   async validate(

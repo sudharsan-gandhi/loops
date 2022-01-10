@@ -1,7 +1,10 @@
-import { FilterableField } from '@nestjs-query/query-graphql';
-import { Field, InputType } from '@nestjs/graphql';
 import { GraphQLBoolean } from 'graphql';
-import { Authorizer } from 'src/_entities';
+
+import { FilterableField } from '@nestjs-query/query-graphql';
+import {
+  Field,
+  InputType,
+} from '@nestjs/graphql';
 
 @InputType()
 export class UserInputDTO {
@@ -14,17 +17,15 @@ export class UserInputDTO {
   @Field(() => GraphQLBoolean, { nullable: true })
   emailVerified: boolean | null;
 
-  @Field()
+  @Field({nullable: true})
   image: string | null;
 
   @FilterableField()
   name: string | null;
 
-  @Field()
+  @Field({nullable: true})
   about?: string | null;
 
-  @Field()
-  role: string;
 }
 
 @InputType()
