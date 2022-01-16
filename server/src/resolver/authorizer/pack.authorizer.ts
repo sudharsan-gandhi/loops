@@ -48,6 +48,7 @@ export class PackAuthorizer implements CustomAuthorizer<PackInputDTO> {
       const resource = await Pack.findOne(resourceId);
       const ownerId = resource[this.OWNERKEY];
       if (user[this.OWNERKEY] == ownerId) {
+        resource[this.OWNERKEY] = ownerId;
         return {};
       }
     }

@@ -1,6 +1,14 @@
-import { FilterableField } from '@nestjs-query/query-graphql';
-import { Field, Float, ID, InputType } from '@nestjs/graphql';
 import { PacketType } from 'src/_entities';
+
+import { FilterableField } from '@nestjs-query/query-graphql';
+import {
+  Field,
+  Float,
+  ID,
+  InputType,
+} from '@nestjs/graphql';
+
+import { AudioInputDTO } from './';
 
 @InputType()
 export class PackInputDTO {
@@ -17,4 +25,7 @@ export class PackInputDTO {
 
   @Field(() => ID)
   authorId: number;
+
+  @Field(() => [AudioInputDTO])
+  audio: AudioInputDTO[];
 }

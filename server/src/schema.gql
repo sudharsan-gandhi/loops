@@ -1645,6 +1645,7 @@ input PackInputDTO {
   """Example field (placeholder)"""
   type: PacketType!
   authorId: ID!
+  audio: [AudioInputDTO!]!
 }
 
 input UpdateOnePackInput {

@@ -21,7 +21,7 @@ export class AppController {
   @Get('/apollo')
   getApollo(@Res() res: Response) {
     res.redirect(
-      'http://sandbox.apollo.dev/?endpoint=http://localhost:3001/graphql',
+      'http://sandbox.apollo.dev/?endpoint=http://localhost:3000/graphql',
     );
   }
 
