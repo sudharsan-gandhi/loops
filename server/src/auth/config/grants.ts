@@ -57,7 +57,7 @@ export const grants = {
   },
   user: {
     audio: {
-      'create:any': ['*'],
+      'create:own': ['*'],
       'read:any': ['*'],
       'update:own': ['*'],
       'delete:own': ['*'],

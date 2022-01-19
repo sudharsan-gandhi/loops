@@ -9,6 +9,7 @@ import { Filter } from '@nestjs-query/core';
 import {
   AuthorizationContext,
   CustomAuthorizer,
+  OperationGroup,
 } from '@nestjs-query/query-graphql';
 import {
   Injectable,
@@ -45,9 +46,14 @@ export class PackAuthorizer implements CustomAuthorizer<PackInputDTO> {
     allowed = this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
     if (allowed) {
       // if not check if owned resource can be edited
-      const resource = await Pack.findOne(resourceId);
-      const ownerId = resource[this.OWNERKEY];
-      if (user[this.OWNERKEY] == ownerId) {
+      let resource;
+      if (action === OperationGroup.CREATE) {
+        resource = context.req.body.variables.input[this.NAME];
+      } else {
+        resource = await Pack.findOne(resourceId);
+      }
+      const ownerId = resource ? resource[this.OWNERKEY] : undefined;
+      if (user.id == ownerId) {
         resource[this.OWNERKEY] = ownerId;
         return {};
       }

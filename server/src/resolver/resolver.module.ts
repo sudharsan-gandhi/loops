@@ -22,6 +22,7 @@ import { Review } from 'src/_entities/review.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { GqlJwtGuard } from 'src/auth/guards/gql-jwt.guard';
 import { GqlRolesGuard } from 'src/auth/guards/gql-roles.guard';
+import { JwtNoauthGuard } from 'src/auth/guards/jwt-noauth.guard';
 
 import {
   AutoResolverOpts,
@@ -75,9 +76,10 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
     EntityClass: Pack,
     CreateDTOClass: PackInputDTO,
     UpdateDTOClass: PackInputDTO,
-    create: {many: {disabled: true}},
-    update: {many: {disabled:true}},
-    delete: {many: {disabled:true}}
+    read: {guards: [JwtNoauthGuard], many: {disabled: true}},
+    create: {guards: [GqlJwtGuard], many: {disabled: true}},
+    update: {guards: [GqlJwtGuard], many: {disabled:true}},
+    delete: {guards: [GqlJwtGuard], many: {disabled:true}}
   },
   {
     DTOClass: Paymentplan,

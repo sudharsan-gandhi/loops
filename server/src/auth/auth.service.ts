@@ -12,8 +12,16 @@ export class AuthService {
   }
 
   async saveUser(userDetails: User) {
-    const user = User.create(userDetails);
-    return await user.save();
+    const result = await User.upsert<User>(userDetails, {
+      conflictPaths: ['email'],
+    });
+    if (result && result.identifiers.length > 0) {
+      const user = await User.findOne({
+        where: { id: result.identifiers[0].id },
+      });
+      return user;
+    }
+    return null;
   }
 
   async validateUser(payload: any): Promise<any> {
@@ -28,10 +36,14 @@ export class AuthService {
   }
 
   async signUser(payload: any) {
-    const { password, ...dto} = payload;
+    const { password, ...dto } = payload;
     return {
-      accessToken: this.jwt.sign({...dto}),
-      data: dto
+      accessToken: this.jwt.sign({ ...dto }),
+      data: dto,
     };
+  }
+
+  async verifyToken(token: string) {
+    return this.jwt.verify(token);
   }
 }

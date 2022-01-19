@@ -241,6 +241,7 @@ input packFilter {
   id: IDFilterComparison
   name: StringFieldComparison
   price: FloatFieldComparison
+  description: StringFieldComparison
   authorId: IDFilterComparison
 }
 
@@ -274,6 +275,7 @@ enum packSortFields {
   id
   name
   price
+  description
   authorId
 }
 
@@ -462,6 +464,9 @@ type pack {
 
   """Example field (placeholder)"""
   price: Float!
+
+  """Example field (placeholder)"""
+  description: String!
 
   """Example field (placeholder)"""
   type: PacketType!
@@ -766,6 +771,9 @@ type PackDeleteResponse {
   price: Float
 
   """Example field (placeholder)"""
+  description: String
+
+  """Example field (placeholder)"""
   type: PacketType
   authorId: ID
 }
@@ -778,18 +786,11 @@ type packEdge {
   cursor: ConnectionCursor!
 }
 
-type PackConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [packEdge!]!
-}
-
 type packAggregateGroupBy {
   id: ID
   name: String
   price: Float
+  description: String
   authorId: ID
 }
 
@@ -797,6 +798,7 @@ type packCountAggregate {
   id: Int
   name: Int
   price: Int
+  description: Int
   authorId: Int
 }
 
@@ -816,6 +818,7 @@ type packMinAggregate {
   id: ID
   name: String
   price: Float
+  description: String
   authorId: ID
 }
 
@@ -823,6 +826,7 @@ type packMaxAggregate {
   id: ID
   name: String
   price: Float
+  description: String
   authorId: ID
 }
 
@@ -1306,16 +1310,6 @@ type Query {
     """The id of the record to find."""
     id: ID!
   ): pack
-  packs(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: packFilter = {}
-
-    """Specify to sort results."""
-    sorting: [packSort!] = []
-  ): PackConnection!
   paymentplan(
     """The id of the record to find."""
     id: ID!
@@ -1638,14 +1632,15 @@ input CreateOnePackInput {
 input PackInputDTO {
   """Example field (placeholder)"""
   name: String!
+  description: String!
 
   """Example field (placeholder)"""
-  price: Float!
+  price: Float
 
   """Example field (placeholder)"""
   type: PacketType!
-  authorId: ID!
-  audio: [AudioInputDTO!]!
+  authorId: ID
+  audio: [AudioInputDTO]
 }
 
 input UpdateOnePackInput {

@@ -13,19 +13,25 @@ import { AudioInputDTO } from './';
 @InputType()
 export class PackInputDTO {
   @FilterableField(() => String, { description: 'Example field (placeholder)' })
-  name: string | null;
+  name: string;
 
-  @FilterableField(() => Float, { description: 'Example field (placeholder)' })
-  price: number;
+  @Field(() => String)
+  description: string;
+
+  @FilterableField(() => Float, {
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  price?: number;
 
   @Field(() => PacketType, {
     description: 'Example field (placeholder)',
   })
   type: PacketType;
 
-  @Field(() => ID)
-  authorId: number;
+  @Field(() => ID, { nullable: true })
+  authorId?: number;
 
-  @Field(() => [AudioInputDTO])
-  audio: AudioInputDTO[];
+  @Field(() => [AudioInputDTO], { nullable: 'itemsAndList' })
+  audio?: AudioInputDTO[];
 }

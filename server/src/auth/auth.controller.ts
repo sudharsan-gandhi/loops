@@ -1,3 +1,5 @@
+import { Response } from 'express';
+
 import {
   Controller,
   Get,
@@ -25,8 +27,7 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   async login(@Req() req, @Res() res) {
     console.log(req.user);
-    res.cookie('accessToken', req.user.accessToken);
-    res.cookie('user', req.user.data);
+    this.attachUserCookie(req, res);
     res.redirect(this.clientUrl);
   }
 
@@ -38,8 +39,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   googleRedirect(@Req() req, @Res() res) {
     console.log(req.user);
-    res.cookie('accessToken', req.user.accessToken);
-    res.cookie('user', req.user.data);
+    this.attachUserCookie(req, res);
     res.redirect(this.clientUrl);
   }
 
@@ -51,14 +51,19 @@ export class AuthController {
   @UseGuards(AuthGuard('facebook'))
   facebookRedirect(@Req() req, @Res() res) {
     console.log(req.user);
-    res.cookie('accessToken', req.user.accessToken);
-    res.cookie('user', req.user.data);
+    this.attachUserCookie(req, res);
     res.redirect(this.clientUrl);
   }
 
   @Get('/logout')
-  logout(@Res() res) {
+  logout(@Res() res: Response) {
     res.clearCookie('accessToken');
     res.redirect(this.clientUrl + '/signin');
+  }
+
+  private attachUserCookie(req, res: Response) {
+    res.cookie('accessToken', req.user.accessToken);
+    res.cookie('user', req.user.data);
+    res.cookie('userId', req.user.data.id);
   }
 }

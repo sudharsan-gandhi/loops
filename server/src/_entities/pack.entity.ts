@@ -55,6 +55,10 @@ export class Pack extends BaseEntity {
   @Column('int', { name: 'price' })
   price: number;
 
+  @FilterableField(() => String, { description: 'Example field (placeholder)' })
+  @Column('varchar', {nullable: false, length: 200 })
+  description: string;
+
   @Field(() => PacketType, {
     description: 'Example field (placeholder)',
   })

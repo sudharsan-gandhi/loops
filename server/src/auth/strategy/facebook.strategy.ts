@@ -36,18 +36,19 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     done: VerifyFunction,
   ): Promise<any> {
     console.log(profile);
-    const { displayName, emails, photos } = profile;
+    const { displayName, emails, photos, name } = profile;
     const email = emails[0].value as string;
     let user = await this.auth.findUser(email);
-    if (!user) {
-      user = await this.auth.saveUser({
-        name: displayName,
-        email: emails[0].value as string,
-        image: photos[0].value as string,
-        emailVerified: emails[0].verified as boolean,
-        authorizer: Authorizer.FACEBOOK,
-      } as User);
-    }
+
+    // updates profile data with fb details on each signin
+    user = await this.auth.saveUser({
+      name: name.givenName + ' ' + name.familyName,
+      email: emails[0].value as string,
+      image: photos[0].value as string,
+      emailVerified: emails[0].verified as boolean,
+      authorizer: Authorizer.FACEBOOK,
+    } as User);
+
     if (user) {
       if (user.authorizer == Authorizer.FACEBOOK) {
         return this.auth.signUser(user);

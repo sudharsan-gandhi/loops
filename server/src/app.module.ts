@@ -61,7 +61,8 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
       playground: true,
       introspection: true,
       formatError: (error: GraphQLError) => {
-        console.error(error);
+        console.log('sudharsan')
+        console.dir(error);
         return error;
       },
     }),
