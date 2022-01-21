@@ -18,9 +18,7 @@ import { StorageEngineService } from '../services/storage-engine.service';
 // https://github.com/alexandre-steinberg/multer-cloud-storage/blob/master/src/index.ts
 @Controller()
 export class UserPhotoController {
-  constructor(private storage: StorageEngineService) {
-
-  }
+  constructor(private avatarStorage: StorageEngineService) {}
 
   @Post('upload/avatar')
   @UseInterceptors(
@@ -35,9 +33,9 @@ export class UserPhotoController {
     @Res() res,
   ) {
     const key = randomUUID() + extname(file.originalname);
-    await this.storage.upload(file as any as AdminUploadedFile, key);
+    await this.avatarStorage.upload(file as any as AdminUploadedFile, key);
     res.json({
-      path: key
+      path: key,
     });
   }
 }

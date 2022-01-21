@@ -76,7 +76,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
     EntityClass: Pack,
     CreateDTOClass: PackInputDTO,
     UpdateDTOClass: PackInputDTO,
-    read: {guards: [JwtNoauthGuard], many: {disabled: true}},
+    read: {guards: [JwtNoauthGuard]},
     create: {guards: [GqlJwtGuard], many: {disabled: true}},
     update: {guards: [GqlJwtGuard], many: {disabled:true}},
     delete: {guards: [GqlJwtGuard], many: {disabled:true}}

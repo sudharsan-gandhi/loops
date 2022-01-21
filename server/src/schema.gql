@@ -786,6 +786,14 @@ type packEdge {
   cursor: ConnectionCursor!
 }
 
+type PackConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [packEdge!]!
+}
+
 type packAggregateGroupBy {
   id: ID
   name: String
@@ -1310,6 +1318,16 @@ type Query {
     """The id of the record to find."""
     id: ID!
   ): pack
+  packs(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: packFilter = {}
+
+    """Specify to sort results."""
+    sorting: [packSort!] = []
+  ): PackConnection!
   paymentplan(
     """The id of the record to find."""
     id: ID!
@@ -1510,7 +1528,7 @@ input AudioInputDTO {
   audioType: AudioType!
 
   """Example field (placeholder)"""
-  key: String!
+  key: String
 
   """Example field (placeholder)"""
   tempo: Int!

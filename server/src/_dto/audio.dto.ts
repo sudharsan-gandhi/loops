@@ -1,14 +1,12 @@
-import {
-    FilterableField
-} from '@nestjs-query/query-graphql';
-import {
-    Field,
-    ID,
-    InputType,
-    Int
-} from '@nestjs/graphql';
 import { AudioType } from 'src/_entities';
 
+import { FilterableField } from '@nestjs-query/query-graphql';
+import {
+  Field,
+  ID,
+  InputType,
+  Int,
+} from '@nestjs/graphql';
 
 @InputType()
 export class AudioInputDTO {
@@ -29,8 +27,11 @@ export class AudioInputDTO {
   })
   audioType: AudioType;
 
-  @FilterableField({ description: 'Example field (placeholder)' })
-  key: string;
+  @FilterableField({
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  key?: string;
 
   @FilterableField(() => Int, { description: 'Example field (placeholder)' })
   tempo: number;

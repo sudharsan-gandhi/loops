@@ -61,13 +61,8 @@ export const ShowPack: React.FC = () => {
     <>
       <Flex alignItems={"flex-start"} justifyContent={"center"} mt="2">
         <VStack>
-          <Box w="container.lg">
+          <Box w={{ base: "full", md: "container.md", lg: "container.lg" }}>
             {pack && (
-              // <Box>
-              //   Pack Name: {pack.name}
-              //   price: {pack.price}
-              //   Produced by: {pack.author?.name}
-              // </Box>
               <Box
                 w={"full"}
                 bg={theme}
@@ -153,10 +148,12 @@ export const ShowPack: React.FC = () => {
               </Box>
             )}
           </Box>
-          {pack.audio.edges.length === 0 && (
+          {pack?.audio?.edges.length === 0 ? (
             <Box>
               <Text>No audio Found</Text>
             </Box>
+          ) : (
+            pack?.audio?.edges.map(({ node }) => <Box key={node.id}>{node.name}</Box>)
           )}
         </VStack>
       </Flex>

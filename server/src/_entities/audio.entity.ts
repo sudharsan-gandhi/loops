@@ -61,8 +61,8 @@ export class Audio extends BaseEntity {
   audioType: AudioType;
 
   @FilterableField({ description: 'Example field (placeholder)' })
-  @Column('char', { name: 'key', length: 2 })
-  key: string;
+  @Column('char', { name: 'key', length: 2 , nullable: true, default: '' })
+  key?: string;
 
   @FilterableField(() => Int, { description: 'Example field (placeholder)'})
   @Column('int', { name: 'tempo' })

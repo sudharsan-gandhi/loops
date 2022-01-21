@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 
+import { AudioStorageService } from './services/audio-storage.service';
 import { StorageEngineService } from './services/storage-engine.service';
 import { UserPhotoController } from './user-photo/user-photo.controller';
+import { AddAudioController } from './add-audio/add-audio.controller';
 
 @Module({
-  controllers: [UserPhotoController],
+  controllers: [UserPhotoController, AddAudioController],
   providers: [
     {
       provide: 'OPTIONS',
@@ -12,8 +14,15 @@ import { UserPhotoController } from './user-photo/user-photo.controller';
         bucket: './static/avatars',
       },
     },
-    StorageEngineService
+    {
+      provide: 'AVATAR_OPTIONS',
+      useValue: {
+        bucket: './static/packs',
+      },
+    },
+    StorageEngineService,
+    AudioStorageService
   ],
-  exports: [StorageEngineService]
+  exports: [StorageEngineService, AudioStorageService]
 })
 export class UploadModule {}

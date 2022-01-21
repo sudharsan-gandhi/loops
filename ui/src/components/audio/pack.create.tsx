@@ -5,9 +5,9 @@ import {
 
 import { Cookies } from 'index';
 import {
-  audioInputVariables,
   createPack,
   Pack,
+  packInputVariables,
 } from 'queries';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +30,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-const packetType = ["FREE", "PAID"];
+export const packetType = ["FREE", "PAID"];
 
 export const CreatePack: React.FC = () => {
   let history = useNavigate();
@@ -61,7 +61,7 @@ export const CreatePack: React.FC = () => {
       data.authorId = cookies.get("userId") as number;
       const {
         data: { createOnePack: pack },
-      } = await createOnePack(audioInputVariables(data));
+      } = await createOnePack(packInputVariables(data));
       console.log(pack);
       history(`/pack/${pack.id}`);
     } catch (err) {
@@ -126,7 +126,7 @@ export const CreatePack: React.FC = () => {
                     {errors.name && errors.name.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors.type}>
+                <FormControl isInvalid={errors.type} isRequired>
                   <FormLabel>Pack Type</FormLabel>
                   <Select
                     id="type"

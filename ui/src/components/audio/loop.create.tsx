@@ -1,7 +1,18 @@
-import { useState } from 'react';
-
-import { createPack } from 'queries/audio/audio.mutation';
 import {
+  useContext,
+  useState,
+} from 'react';
+
+import axios from 'axios';
+import { Cookies } from 'index';
+import {
+  createAudio,
+  createPack,
+  loopInputVariables,
+  packInputVariables,
+} from 'queries';
+import {
+  Loop,
   MakeOptional,
   Pack,
 } from 'queries/model';
@@ -26,12 +37,16 @@ import {
   SliderThumb,
   SliderTrack,
   Stack,
+  Textarea,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react';
 import {
   Dropzone,
   FileItem,
 } from '@dropzone-ui/react';
+
+import { packetType } from './pack.create';
 
 export const audioTypes = ["oneshot", "loop"];
 export const musicalNotes = [
@@ -62,7 +77,9 @@ const genres = [
 
 const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
   const packId = props?.packId || "";
-  const [createOneLoop, { data, loading, error }] = useMutation(createPack);
+  const [createOnePack] = useMutation(createPack);
+  const [createOneLoop] = useMutation(createAudio);
+  const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
     register,
@@ -73,6 +90,18 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
   const [isOneShot, setOneShot] = useState(false);
   const [tempoValue, setTempo] = useState(0);
   const [files, setFiles] = useState([]);
+  const [isFree, setFree] = useState(false);
+  const toast = useToast();
+  const { cookies } = useContext(Cookies);
+
+  const setFreeField = (e) => {
+    if (e.target.value === "FREE") {
+      setFree(false);
+    } else {
+      setFree(true);
+    }
+  };
+
   const updateFiles = (files) => {
     setFiles(files);
   };
@@ -82,22 +111,81 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
 
   const submit = async (data) => {
     // todo: should implement logic here to upload audio and get the file path
-    if (packId) {
-      // submit the audio as single package
-      data.packId = packId;
-      // todo: audio to pack logic
-
-      return;
-    } else {
-      const pack: MakeOptional<Pack, keyof Pack> = {
-        name: data.name,
-        price: data.price,
-        type: data.type,
-        audio: data,
-      };
-      delete data.price;
-      // todo: submit pack logic
-      return;
+    debugger;
+    data.tempo = tempoValue;
+    data.bpm = data.bpm ? parseInt(data.bpm) : undefined;
+    try {
+      if (files.length > 0) {
+        const formData = new FormData();
+        formData.append("file", files[0].file);
+        const response = await axios({
+          method: "post",
+          url: "/upload/audio",
+          data: formData,
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        });
+        console.log(response.data.path);
+        data.path = response.data.path;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+    const authorId = cookies.get("userId");
+    try {
+      if (packId) {
+        // submit the audio as single package
+        data.packId = packId;
+        setLoading(true);
+        const loop: MakeOptional<Loop, keyof Loop> = await createOneLoop(
+          loopInputVariables(data)
+        );
+        setLoading(false);
+        toast({
+          title: `Success saved`,
+          description: `${loop.name} added to pack`,
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+          position: "top",
+        });
+        //redirect to pack page
+        return;
+      } else {
+        const packInput: MakeOptional<Pack, keyof Pack> = {
+          name: data.name,
+          price: data.price,
+          type: data.type,
+          description: data.description,
+          authorId: authorId,
+        };
+        setLoading(true);
+        const {
+          data: { createOnePack: pack },
+        } = await createOnePack(packInputVariables(packInput));
+        delete data.type;
+        delete data.description;
+        delete data.price;
+        data.packId = pack.id;
+        const loop: MakeOptional<Loop, keyof Loop> = await createOneLoop(
+          loopInputVariables(data)
+        );
+        toast({
+          title: `Successfully created Single loop`,
+          description: `${loop.name} created`,
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+          position: "top",
+        });
+        setLoading(false);
+        return;
+      }
+    } catch (e) {
+      setLoading(false);
     }
   };
 
@@ -110,11 +198,11 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
     >
       <Stack spacing={8} mx={"auto"} w={"container.md"} py={12} px={6}>
         <Stack align={"center"}>
-          {!packId ? 
+          {!packId ? (
             <Heading fontSize={"4xl"} textAlign={"center"}>
               Upload your single audio loop
             </Heading>
-          : null}
+          ) : null}
         </Stack>
         <Box
           rounded={"lg"}
@@ -131,7 +219,7 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
             </Stack>
           ) : (
             <Stack spacing={4}>
-              <form>
+              <form onSubmit={handleSubmit(submit)}>
                 <FormControl id="name" isInvalid={errors.name} isRequired>
                   <FormLabel>Title</FormLabel>
                   <Input
@@ -157,25 +245,100 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                     {errors.name && errors.name.message}
                   </FormErrorMessage>
                 </FormControl>
-
+                {!packId && (
+                  <>
+                    <FormControl isInvalid={errors.type} isRequired>
+                      <FormLabel>Paid/Free</FormLabel>
+                      <Select
+                        id="type"
+                        name="type"
+                        defaultValue={""}
+                        {...register("type", {
+                          required: {
+                            value: true,
+                            message: "This Field is required",
+                          },
+                        })}
+                        onLoad={setFreeField}
+                        onChange={setFreeField}
+                      >
+                        <option key="defaultType" value="">
+                          Select Pack Type
+                        </option>
+                        {packetType.map((type) => (
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
+                        ))}
+                      </Select>
+                      <FormErrorMessage>
+                        {errors.type && errors.type.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                    <FormControl
+                      id="description"
+                      isInvalid={errors.description}
+                      isRequired
+                    >
+                      <FormLabel>Description</FormLabel>
+                      <Textarea
+                        id="description"
+                        name="description"
+                        {...register("description", {
+                          required: {
+                            value: true,
+                            message: "This Field is required",
+                          },
+                          maxLength: {
+                            value: 200,
+                            message: "maximum characters allowed is 200",
+                          },
+                          minLength: {
+                            value: 5,
+                            message: "minimum length must be 5",
+                          },
+                        })}
+                      />
+                      <FormErrorMessage>
+                        {errors.description && errors.description.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </>
+                )}
+                {isFree && (
+                  <FormControl key="price" isInvalid={errors.price}>
+                    <FormLabel>Price</FormLabel>
+                    <Input
+                      id="price"
+                      name="price"
+                      type="number"
+                      {...register("price", {
+                        required: {
+                          value: true,
+                          message: "This Field is required",
+                        },
+                        max: {
+                          value: 200,
+                          message: "Price cannot be greater than 200",
+                        },
+                        valueAsNumber: true,
+                      })}
+                    />
+                    <FormErrorMessage>
+                      {errors.price && errors.price.message}
+                    </FormErrorMessage>
+                  </FormControl>
+                )}
                 <FormControl id="bpm" isInvalid={errors.bpm} isRequired>
                   <FormLabel>Beats Per Minute</FormLabel>
                   <Input
-                    type="text"
+                    type="number"
                     id="bpm"
                     name="bpm"
                     {...register("bpm", {
                       required: {
                         value: true,
                         message: "This Field is required",
-                      },
-                      maxLength: {
-                        value: 75,
-                        message: "maximum characters allowed is 75",
-                      },
-                      minLength: {
-                        value: 5,
-                        message: "minimum length must be 5",
                       },
                     })}
                   />

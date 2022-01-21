@@ -13,8 +13,8 @@ import {
 } from '@nestjs/common';
 
 @Injectable()
-export class StorageEngineService extends BaseProvider {
-  constructor(@Inject('OPTIONS') options: LocalUploadOptions) {
+export class AudioStorageService extends BaseProvider {
+  constructor(@Inject('AVATAR_OPTIONS') options: LocalUploadOptions) {
     super(options.bucket);
     if (!existsSync(options.bucket)) {
       throw new Error(

@@ -1,5 +1,8 @@
 import { AudioInputDTO } from 'src/_dto';
-import { Audio } from 'src/_entities';
+import {
+  Audio,
+  Pack,
+} from 'src/_entities';
 import {
   AccessControlService,
   AuthPossesion,
@@ -9,8 +12,10 @@ import { Filter } from '@nestjs-query/core';
 import {
   AuthorizationContext,
   CustomAuthorizer,
+  OperationGroup,
 } from '@nestjs-query/query-graphql';
 import {
+  BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -19,7 +24,7 @@ import { UserContext } from './model';
 
 @Injectable()
 export class AudioAuthorizer implements CustomAuthorizer<AudioInputDTO> {
-  NAME = 'audio';
+  NAME = 'loop';
   OWNERKEY = 'authorId';
   constructor(protected acl: AccessControlService) {}
 
@@ -44,10 +49,20 @@ export class AudioAuthorizer implements CustomAuthorizer<AudioInputDTO> {
     allowed = this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
     if (allowed) {
       // if not check if owned resource can be edited
-      const resource: Audio = await Audio.findOne(resourceId, {
-        relations: ['pack'],
-      });
-      const ownerId = resource.pack[this.OWNERKEY];
+      let resource;
+      if (action === OperationGroup.CREATE) {
+        const audio: Audio = context.req.body.variables.input[this.NAME];
+        resource = await Pack.findOne(audio.packId);
+        if(!resource) {
+          throw new BadRequestException('Cannot find parent pack to add audio');
+        }
+      } else {
+        const audio: Audio = await Audio.findOne(resourceId, {
+          relations: ['pack'],
+        });
+        resource = audio.pack;
+      }
+      const ownerId = resource[this.OWNERKEY];
       // special case where you need to get user from parent pack instead of audio directly
       if (user.id == ownerId) {
         return {};

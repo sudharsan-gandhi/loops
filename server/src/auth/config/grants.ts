@@ -1,6 +1,6 @@
 export const grants = {
   admin: {
-    audio: {
+    loop: {
       'create:any': ['*'],
       'read:any': ['*'],
       'update:any': ['*'],
@@ -56,7 +56,7 @@ export const grants = {
     },
   },
   user: {
-    audio: {
+    loop: {
       'create:own': ['*'],
       'read:any': ['*'],
       'update:own': ['*'],
