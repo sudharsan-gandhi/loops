@@ -1,4 +1,5 @@
 import {
+  Loop,
   MakeOptional,
   Pack,
 } from 'queries';
@@ -16,11 +17,37 @@ export const createPack = gql`
   }
 `;
 
-export const audioInputVariables = (pack: MakeOptional<Pack, keyof Pack>) => {
+export const packInputVariables = (pack: MakeOptional<Pack, keyof Pack>) => {
   return {
     variables: {
       input: {
         pack,
+      },
+    },
+  };
+};
+
+export const createAudio = gql`
+  mutation CreateOneLoop($input: CreateOneLoopInput!) {
+    createOneLoop(input: $input) {
+      id
+      name
+      genre
+      bpm
+      path
+      key
+      audioType
+      tempo
+      packId
+    }
+  }
+`;
+
+export const loopInputVariables = (loop: MakeOptional<Loop, keyof Loop>) => {
+  return {
+    variables: {
+      input: {
+        loop,
       },
     },
   };

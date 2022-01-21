@@ -1,3 +1,5 @@
+import { AllPacks } from 'components/audio/pack.all';
+
 import {
   Tab,
   TabList,
@@ -9,13 +11,13 @@ import {
 const PackPage: React.FC = () => {
   return (
     <>
-      <Tabs>
+      <Tabs isFitted>
         <TabList>
           <Tab>My Packs</Tab>
           <Tab>My Loops</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>my packs</TabPanel>
+          <TabPanel><AllPacks/></TabPanel>
           <TabPanel>My loops</TabPanel>
         </TabPanels>
       </Tabs>
