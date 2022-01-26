@@ -81,7 +81,6 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
             resource: User,
             options: {
               properties: {
-                bucket: { isVisible: true },
                 authorizer: {
                   // will be always local authorizer
                   // google and fb not possible
@@ -109,7 +108,7 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
                   key: 'image',
                   bucket: 'bucket',
                 },
-                validation: { mimeTypes: ['image/png'] },
+                validation: { mimeTypes: ['image/*'] },
               }),
             ],
           },

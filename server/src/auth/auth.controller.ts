@@ -23,6 +23,12 @@ export class AuthController {
     }
   }
 
+  @Get('/isLoggedIn')
+  @UseGuards(AuthGuard('jwt'))
+  async isLoggedIn(@Req() req) {
+    return req.user;
+  }
+
   @Post('/login')
   @UseGuards(AuthGuard('local'))
   async login(@Req() req, @Res() res) {
@@ -40,7 +46,7 @@ export class AuthController {
   googleRedirect(@Req() req, @Res() res) {
     console.log(req.user);
     this.attachUserCookie(req, res);
-    res.redirect(this.clientUrl);
+    res.redirect(this.clientUrl + '/signin');
   }
 
   @Get('/facebook')
@@ -52,13 +58,15 @@ export class AuthController {
   facebookRedirect(@Req() req, @Res() res) {
     console.log(req.user);
     this.attachUserCookie(req, res);
-    res.redirect(this.clientUrl);
+    res.redirect(this.clientUrl + '/signin');
   }
 
   @Get('/logout')
   logout(@Res() res: Response) {
     res.clearCookie('accessToken');
-    res.redirect(this.clientUrl + '/signin');
+    res.clearCookie('userId');
+    res.clearCookie('user');
+    res.json({});
   }
 
   private attachUserCookie(req, res: Response) {
