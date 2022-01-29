@@ -242,6 +242,7 @@ input packFilter {
   name: StringFieldComparison
   price: FloatFieldComparison
   description: StringFieldComparison
+  isLoop: BooleanFieldComparison
   authorId: IDFilterComparison
 }
 
@@ -265,6 +266,11 @@ input FloatFieldComparisonBetween {
   upper: Float!
 }
 
+input BooleanFieldComparison {
+  is: Boolean
+  isNot: Boolean
+}
+
 input packSort {
   field: packSortFields!
   direction: SortDirection!
@@ -276,6 +282,7 @@ enum packSortFields {
   name
   price
   description
+  isLoop
   authorId
 }
 
@@ -470,6 +477,7 @@ type pack {
 
   """Example field (placeholder)"""
   type: PacketType!
+  isLoop: Boolean!
   authorId: ID!
   author: user!
   audio(
@@ -775,6 +783,7 @@ type PackDeleteResponse {
 
   """Example field (placeholder)"""
   type: PacketType
+  isLoop: Boolean
   authorId: ID
 }
 
@@ -799,6 +808,7 @@ type packAggregateGroupBy {
   name: String
   price: Float
   description: String
+  isLoop: Boolean
   authorId: ID
 }
 
@@ -807,6 +817,7 @@ type packCountAggregate {
   name: Int
   price: Int
   description: Int
+  isLoop: Int
   authorId: Int
 }
 
@@ -1653,7 +1664,8 @@ input PackInputDTO {
   description: String!
 
   """Example field (placeholder)"""
-  price: Float
+  price: Float = 0
+  isLoop: Boolean = false
 
   """Example field (placeholder)"""
   type: PacketType!
