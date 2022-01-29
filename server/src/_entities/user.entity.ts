@@ -7,6 +7,7 @@ import { UserAuthorizer } from 'src/resolver/authorizer/user.authorizer';
 import {
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   Index,
@@ -71,7 +72,7 @@ export class User extends BaseEntity {
   emailVerified: boolean | null;
 
   @Column('varchar', { name: 'image', nullable: true, length: 191 })
-  @Field({nullable: true})
+  @Field({ nullable: true })
   image: string | null;
 
   @Column('varchar', { name: 'name', nullable: true, length: 191 })
@@ -95,7 +96,7 @@ export class User extends BaseEntity {
     name: 'role',
     default: 'user',
   })
-  @Field()
+  @Field({defaultValue: 'user'})
   role: string;
 
   // @OneToMany(() => Account, (account) => account.user)
@@ -121,8 +122,9 @@ export class User extends BaseEntity {
   reviews?: Review[];
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPassword() {
-    if (this.authorizer === Authorizer.LOCAL) {
+    if (this.password) {
       this.password = await hash(this.password, 10);
     }
   }
