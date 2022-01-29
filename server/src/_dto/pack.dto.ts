@@ -1,3 +1,4 @@
+import { GraphQLBoolean } from 'graphql';
 import { PacketType } from 'src/_entities';
 
 import { FilterableField } from '@nestjs-query/query-graphql';
@@ -21,8 +22,14 @@ export class PackInputDTO {
   @FilterableField(() => Float, {
     description: 'Example field (placeholder)',
     nullable: true,
+    defaultValue: 0
   })
   price?: number;
+
+  @FilterableField(() => GraphQLBoolean, {
+    defaultValue: false
+  })
+  isLoop?: boolean;
 
   @Field(() => PacketType, {
     description: 'Example field (placeholder)',

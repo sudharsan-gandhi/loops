@@ -31,7 +31,7 @@ export class UserInputDTO {
 @InputType()
 export class UserUpdateDTO {
   @FilterableField({nullable: true})
-  email: string | null;
+  email?: string | null;
 
   @Field({nullable: true})
   password?: string | null;
@@ -40,10 +40,10 @@ export class UserUpdateDTO {
   emailVerified: boolean | null;
 
   @Field({nullable: true})
-  image: string | null;
+  image?: string | null;
 
   @FilterableField({nullable: true})
-  name: string | null;
+  name?: string | null;
 
   @Field({nullable: true})
   about?: string | null;

@@ -43,7 +43,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
     }
     if (!allowed) {
       allowed = this.acl.allowed(
-        user.role,
+        user?.role || 'user',
         this.NAME,
         action,
         AuthPossesion.OWN,

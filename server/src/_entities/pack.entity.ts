@@ -1,3 +1,4 @@
+import { GraphQLBoolean } from 'graphql';
 import { Audio } from 'src/_entities/audio.entity';
 import { Payment } from 'src/_entities/payment.entity';
 import { User } from 'src/_entities/user.entity';
@@ -51,12 +52,15 @@ export class Pack extends BaseEntity {
   @Column('varchar', { name: 'name', nullable: true, length: 191 })
   name: string | null;
 
-  @FilterableField(() => Float, { description: 'Example field (placeholder)' })
+  @FilterableField(() => Float, {
+    description: 'Example field (placeholder)',
+    defaultValue: 0,
+  })
   @Column('int', { name: 'price' })
   price: number;
 
   @FilterableField(() => String, { description: 'Example field (placeholder)' })
-  @Column('varchar', {nullable: false, length: 200 })
+  @Column('varchar', { nullable: false, length: 200 })
   description: string;
 
   @Field(() => PacketType, {
@@ -64,6 +68,10 @@ export class Pack extends BaseEntity {
   })
   @Column('enum', { name: 'packetType', enum: PacketType })
   type: PacketType;
+
+  @FilterableField(() => GraphQLBoolean)
+  @Column('boolean', { default: false })
+  isLoop: boolean;
 
   @OneToMany(() => Audio, (audio) => audio.pack)
   audio: Audio[];
