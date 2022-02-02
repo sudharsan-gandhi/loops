@@ -5,9 +5,9 @@ import {
 
 import { AppContext } from 'index';
 import {
-  createPack,
   Pack,
-  packInputVariables,
+  updateOnePack,
+  updateOnePackVariables,
 } from 'queries';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -32,18 +32,22 @@ import {
 
 export const packetType = ["FREE", "PAID"];
 
-export const CreatePack: React.FC = () => {
+export const EditPack: React.FC<{
+  pack: Pack;
+  refetch: any;
+  editClose: any;
+}> = ({pack, refetch, editClose}) => {
   let history = useNavigate();
-  const [createOnePack, { loading, error }] =
-    useMutation<{ createOnePack: Pack }>(createPack);
+  const [updatePack, { loading }] =
+    useMutation<{ UpdateOnePack: Pack }>(updateOnePack);
   const [isFree, setFree] = useState(false);
-  console.log(isFree);
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
+    defaultValues: { ...(pack as any) },
   });
 
   const setFreeField = (e) => {
@@ -58,12 +62,14 @@ export const CreatePack: React.FC = () => {
 
   const submit = async (data) => {
     try {
+      debugger;
       data.authorId = cookies.get("userId") as number;
       const {
-        data: { createOnePack: pack },
-      } = await createOnePack(packInputVariables(data));
+        data: { UpdateOnePack: pack },
+      } = await updatePack(updateOnePackVariables(data));
       console.log(pack);
-      history(`/pack/${pack.id}`);
+      refetch();
+      editClose();
     } catch (err) {
       console.log(err);
     }
@@ -79,7 +85,7 @@ export const CreatePack: React.FC = () => {
       <Stack spacing={8} mx={"auto"} w={"container.md"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
-            Create your Audio Pack
+            Edit your audio pack
           </Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
             You can add audios one's the pack is created.
@@ -217,7 +223,7 @@ export const CreatePack: React.FC = () => {
                     }}
                     type="submit"
                   >
-                    Create Pack
+                    Update Pack
                   </Button>
                 </Stack>
               </form>

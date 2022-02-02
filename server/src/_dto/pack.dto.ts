@@ -22,17 +22,54 @@ export class PackInputDTO {
   @FilterableField(() => Float, {
     description: 'Example field (placeholder)',
     nullable: true,
-    defaultValue: 0
+    defaultValue: 0,
   })
   price?: number;
 
   @FilterableField(() => GraphQLBoolean, {
-    defaultValue: false
+    defaultValue: false,
   })
   isLoop?: boolean;
 
   @Field(() => PacketType, {
     description: 'Example field (placeholder)',
+  })
+  type: PacketType;
+
+  @Field(() => ID, { nullable: true })
+  authorId?: number;
+
+  @Field(() => [AudioInputDTO], { nullable: 'itemsAndList' })
+  audio?: AudioInputDTO[];
+}
+
+@InputType()
+export class PackUpdateDTO {
+  @FilterableField(() => String, {
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  name?: string;
+
+  @Field(() => String, { nullable: true })
+  description?: string;
+
+  @FilterableField(() => Float, {
+    description: 'Example field (placeholder)',
+    nullable: true,
+    defaultValue: 0,
+  })
+  price?: number;
+
+  @FilterableField(() => GraphQLBoolean, {
+    defaultValue: false,
+    nullable: true
+  })
+  isLoop?: boolean;
+
+  @Field(() => PacketType, {
+    description: 'Example field (placeholder)',
+    nullable: true
   })
   type: PacketType;
 

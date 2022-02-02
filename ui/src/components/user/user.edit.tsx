@@ -1,47 +1,45 @@
 import { useState } from 'react';
 
 import axios from 'axios';
-import { UserForm } from 'components/user/_user.form';
 import {
-  signupUser,
-  signupVariables,
+  MakeOptional,
+  updateOneUser,
+  updateOneUserVariables,
+  User,
 } from 'queries';
-import { useForm } from 'react-hook-form';
 import {
-  Link as Router,
+  useLocation,
   useNavigate,
 } from 'react-router-dom';
+import { useUser } from 'state/user';
 
 import { useMutation } from '@apollo/client';
 import {
   Box,
   Flex,
   Heading,
-  Link,
   Skeleton,
   Stack,
-  Text,
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react';
 
-export const State = (state) => <pre>{JSON.stringify(state, null, 2)}</pre>;
+import { UserForm } from './_user.form';
 
-const SignUp: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [createOneUser, { data, loading, error }] = useMutation(signupUser);
+const EditUser: React.FC = () => {
+  const [updateUser, { loading }] = useMutation(updateOneUser);
   const history = useNavigate();
+  let { state: location } = useLocation();
+  let from = (location as any)?.from?.pathname || "/";
+  let setUser = useUser((state) => state.setUser);
   const toast = useToast();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm({
-    mode: "onTouched",
-  });
-
+  const [files, setFiles] = useState([]);
+  const currentUser: MakeOptional<User, keyof User> = useUser(
+    (state) => state.currentUser
+  );
   const submit = async (data) => {
     try {
+      debugger;
       if (files.length > 0) {
         const formData = new FormData();
         formData.append("file", files[0].file);
@@ -54,27 +52,33 @@ const SignUp: React.FC = () => {
         console.log(response.data.path);
         data.image = response.data.path;
       }
-      const u: any = await createOneUser(signupVariables(data));
+      console.log(data);
+      delete data.iat;
+      delete data.exp;
+      const newData = Object.entries(data)
+        .filter(([_, v]) => {
+          console.log(v);
+          return true;
+        })
+        .filter(([_, v]) => v && (v as string) !== "")
+        .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {});
+
+      const {
+        data: { updateOneUser: u },
+      }: any = await updateUser(updateOneUserVariables(newData));
       toast({
-        title: `User ${u.name} created Successfully`,
+        title: `User ${u.name} updated Successfully`,
         description: "redirecting to Signin page",
         status: "success",
         duration: 4000,
         isClosable: true,
         position: "top",
       });
-      history("/signin", { replace: true });
+      setUser(u);
+      history(from, { replace: true });
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const [files, setFiles] = useState([]);
-  const updateFiles = (files) => {
-    setFiles(files);
-  };
-  const onDelete = (id) => {
-    setFiles(files.filter((x) => x.id !== id));
   };
 
   return (
@@ -87,11 +91,8 @@ const SignUp: React.FC = () => {
       <Stack spacing={8} mx={"auto"} w={"container.md"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
-            Welcome to Kabaflow
+            Edit Profile
           </Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            new user
-          </Text>
         </Stack>
         <Box
           rounded={"lg"}
@@ -108,30 +109,19 @@ const SignUp: React.FC = () => {
           ) : (
             <Stack spacing={4}>
               <UserForm
-                buttonText="Sign Up"
-                files={files}
-                setFiles={setFiles}
+                buttonText="update user"
                 handleSubmit={submit}
+                setFiles={setFiles}
+                files={files}
+                user={currentUser}
+                update={true}
               />
-              <Stack pt={6}>
-                <Text align={"center"}>
-                  Already a user?{" "}
-                  <Link as={Router} to="/signin" color={"blue.400"}>
-                    Login
-                  </Link>
-                </Text>
-              </Stack>
             </Stack>
           )}
         </Box>
       </Stack>
-      )
     </Flex>
   );
 };
 
-const dropzone = {
-  border: "1px dashed black",
-};
-
-export default SignUp;
+export default EditUser;

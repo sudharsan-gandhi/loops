@@ -1,6 +1,6 @@
 import {
   CursorPaging,
-  InputMaybe,
+  Maybe,
   PackFilter,
   PackSort,
 } from 'queries';
@@ -16,6 +16,25 @@ export const getAllPacks = gql`
           name
           price
           type
+          author {
+            name
+            id
+          }
+          audio {
+            edges {
+              node {
+                id
+                name
+                genre
+                bpm
+                path
+                audioType
+                key
+                tempo
+                packId
+              }
+            }
+          }
         }
       }
     }
@@ -25,18 +44,32 @@ export const getAllPacks = gql`
 export const getAllPacksVariables = (
   authorId: string,
   paging: CursorPaging = { first: 10 },
-  filter: InputMaybe<PackFilter>,
-  sorting: InputMaybe<Array<PackSort>>
+  filter: Maybe<PackFilter>,
+  sorting: Maybe<Array<PackSort>>,
+  isLoop: boolean = false
 ) => {
   const author = {
     authorId: {
       eq: authorId,
     },
   };
+  let onlyPackOrLoop: Maybe<PackFilter> = {
+    isLoop: {
+      isNot: true
+    }
+  }
+  if(isLoop) {
+    onlyPackOrLoop= {
+      isLoop: {
+        is: true
+      }
+    }
+  }
+  
   return {
     variables: {
       ...paging,
-      filter: { ...author, ...filter },
+      filter: { ...author, ...onlyPackOrLoop, ...filter },
       ...sorting,
     },
   };
@@ -50,6 +83,7 @@ export const getPackWithAudiosById = gql`
       description
       price
       type
+      isLoop
       author {
         name
         email

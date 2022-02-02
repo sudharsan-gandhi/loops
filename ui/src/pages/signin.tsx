@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useReducer,
   useState,
 } from 'react';
@@ -8,8 +9,13 @@ import { FaFacebook } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import {
   Link as Router,
+  useLocation,
   useNavigate,
 } from 'react-router-dom';
+import {
+  useAuth,
+  useUser,
+} from 'state/user';
 
 import {
   Box,
@@ -33,6 +39,46 @@ const SignIn: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const history = useNavigate();
+  let { state: location } = useLocation();
+  let from = (location as any)?.from?.pathname || "/";
+  const auth = useAuth.getState().auth;
+  const { login, logout } = useAuth();
+  const setUser = useUser((state) => state.setUser);
+
+  async function isLoggedIn() {
+    const resp = await axios.get("/auth/isLoggedIn");
+    console.log("isloggedin", resp);
+    resp?.data?.id ? login() : logout();
+    resp?.data?.id ? setUser(resp.data) : setUser({});
+  }
+
+  useEffect(() => {
+    try {
+      if (!auth) {
+        debugger;
+        isLoggedIn();
+      }
+    } catch (e) {
+      logout();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (auth) {
+      toast({
+        title: `login sucessful`,
+        description: "redirecting to user dashboard...",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+        variant: "left-accent",
+      });
+      isLoggedIn();
+      history(from, { replace: true });
+    }
+  }, [auth, toast, history, from]);
+
   const reducer = (state, action) => {
     return { ...state, ...action };
   };
@@ -59,15 +105,7 @@ const SignIn: React.FC = () => {
       if (resp.status === 200) {
         console.log(resp.statusText);
       }
-      toast({
-        title: `login sucessfull`,
-        description: "redirecting to user dashboard...",
-        status: "success",
-        duration: 4000,
-        isClosable: true,
-        position: "top",
-      });
-      history("/", { replace: true });
+      login();
     } catch (err) {
       console.log(err);
     }
@@ -130,11 +168,8 @@ const SignIn: React.FC = () => {
                   <Stack spacing="3" align="center">
                     <Button
                       w="100%"
-                      bg={"blue.400"}
+                      variant="solid"
                       color={"white"}
-                      _hover={{
-                        bg: "blue.500",
-                      }}
                       type="submit"
                     >
                       Sign in
@@ -155,11 +190,6 @@ const SignIn: React.FC = () => {
                       aria-label="google"
                       variant={"outline"}
                       leftIcon={<FcGoogle />}
-                      bg="#333333"
-                      color="#fff"
-                      _hover={{
-                        bg: "#222",
-                      }}
                       onClick={googleLogin}
                     >
                       Sign in with Google

@@ -1551,7 +1551,31 @@ input UpdateOneLoopInput {
   id: ID!
 
   """The update to apply."""
-  update: AudioInputDTO!
+  update: AudioUpdateDTO!
+}
+
+input AudioUpdateDTO {
+  """Example field (placeholder)"""
+  name: String
+
+  """Example field (placeholder)"""
+  genre: String
+
+  """Example field (placeholder)"""
+  bpm: Int
+
+  """Example field (placeholder)"""
+  path: String
+
+  """Example field (placeholder)"""
+  audioType: AudioType
+
+  """Example field (placeholder)"""
+  key: String
+
+  """Example field (placeholder)"""
+  tempo: Int
+  packId: ID
 }
 
 input DeleteOneLoopInput {
@@ -1678,7 +1702,22 @@ input UpdateOnePackInput {
   id: ID!
 
   """The update to apply."""
-  update: PackInputDTO!
+  update: PackUpdateDTO!
+}
+
+input PackUpdateDTO {
+  """Example field (placeholder)"""
+  name: String
+  description: String
+
+  """Example field (placeholder)"""
+  price: Float = 0
+  isLoop: Boolean = false
+
+  """Example field (placeholder)"""
+  type: PacketType
+  authorId: ID
+  audio: [AudioInputDTO]
 }
 
 input DeleteOnePackInput {

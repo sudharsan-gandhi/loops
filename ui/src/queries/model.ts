@@ -1,2204 +1,2147 @@
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Maybe<T> = T | null
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K]
+}
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: string
+  String: string
+  Boolean: boolean
+  Int: number
+  Float: number
   /** `Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch. */
-  Timestamp: any;
+  Timestamp: any
   /** Cursor for paging through collections */
-  ConnectionCursor: any;
-};
+  ConnectionCursor: any
+}
 
 export type Job = {
-  __typename?: 'job';
+  __typename?: "job"
   /** Example field (placeholder) */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** Example field (placeholder) */
-  title: Scalars['String'];
+  title: Scalars["String"]
   /** Example field (placeholder) */
-  description: Scalars['String'];
+  description: Scalars["String"]
   /** Example field (placeholder) */
-  postDate: Scalars['Timestamp'];
+  postDate: Scalars["Timestamp"]
   /** Example field (placeholder) */
-  expirationDate: Scalars['Timestamp'];
+  expirationDate: Scalars["Timestamp"]
   /** Example field (placeholder) */
-  updatedAt: Scalars['Timestamp'];
-  postedById: Scalars['ID'];
-  postedBy: User;
-};
+  updatedAt: Scalars["Timestamp"]
+  postedById: Scalars["ID"]
+  postedBy: User
+}
 
 export type Rave = {
-  __typename?: 'rave';
-  id: Scalars['ID'];
+  __typename?: "rave"
+  id: Scalars["ID"]
   /** Example field (placeholder) */
-  followerId: Scalars['Int'];
+  followerId: Scalars["Int"]
   /** Example field (placeholder) */
-  followingId: Scalars['Int'];
-  follower: User;
-  following: User;
-};
+  followingId: Scalars["Int"]
+  follower: User
+  following: User
+}
 
 export type Review = {
-  __typename?: 'Review';
-  id: Scalars['ID'];
-  review: Scalars['String'];
-  userId: Scalars['ID'];
-  packId: Scalars['ID'];
-  user: User;
-  pack: Pack;
-};
+  __typename?: "Review"
+  id: Scalars["ID"]
+  review: Scalars["String"]
+  userId: Scalars["ID"]
+  packId: Scalars["ID"]
+  user: User
+  pack: Pack
+}
 
 export type User = {
-  __typename?: 'user';
-  id: Scalars['ID'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-  emailVerified?: Maybe<Scalars['Boolean']>;
-  image?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  about: Scalars['String'];
-  authorizer: Authorizer;
-  role: Scalars['String'];
-  jobs: UserJobsConnection;
-  packs: UserPacksConnection;
-  followers: UserFollowersConnection;
-  followings: UserFollowingsConnection;
-  payments: UserPaymentsConnection;
-  reviews: UserReviewsConnection;
-};
-
+  __typename?: "user"
+  id: Scalars["ID"]
+  email: Scalars["String"]
+  password: Scalars["String"]
+  emailVerified?: Maybe<Scalars["Boolean"]>
+  image?: Maybe<Scalars["String"]>
+  name: Scalars["String"]
+  about: Scalars["String"]
+  authorizer: Authorizer
+  role: Scalars["String"]
+  jobs: UserJobsConnection
+  packs: UserPacksConnection
+  followers: UserFollowersConnection
+  followings: UserFollowingsConnection
+  payments: UserPaymentsConnection
+  reviews: UserReviewsConnection
+}
 
 export type UserJobsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<JobFilter>;
-  sorting?: InputMaybe<Array<JobSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<JobFilter>
+  sorting?: Maybe<Array<JobSort>>
+}
 
 export type UserPacksArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PackFilter>;
-  sorting?: InputMaybe<Array<PackSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PackFilter>
+  sorting?: Maybe<Array<PackSort>>
+}
 
 export type UserFollowersArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<RaveFilter>;
-  sorting?: InputMaybe<Array<RaveSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<RaveFilter>
+  sorting?: Maybe<Array<RaveSort>>
+}
 
 export type UserFollowingsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<RaveFilter>;
-  sorting?: InputMaybe<Array<RaveSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<RaveFilter>
+  sorting?: Maybe<Array<RaveSort>>
+}
 
 export type UserPaymentsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PaymentFilter>;
-  sorting?: InputMaybe<Array<PaymentSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PaymentFilter>
+  sorting?: Maybe<Array<PaymentSort>>
+}
 
 export type UserReviewsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<ReviewFilter>;
-  sorting?: InputMaybe<Array<ReviewSort>>;
-};
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<ReviewFilter>
+  sorting?: Maybe<Array<ReviewSort>>
+}
 
 export enum Authorizer {
-  Google = 'GOOGLE',
-  Facebook = 'FACEBOOK',
-  Local = 'LOCAL'
+  Google = "GOOGLE",
+  Facebook = "FACEBOOK",
+  Local = "LOCAL"
 }
 
 export type CursorPaging = {
   /** Paginate before opaque cursor */
-  before?: InputMaybe<Scalars['ConnectionCursor']>;
+  before?: Maybe<Scalars["ConnectionCursor"]>
   /** Paginate after opaque cursor */
-  after?: InputMaybe<Scalars['ConnectionCursor']>;
+  after?: Maybe<Scalars["ConnectionCursor"]>
   /** Paginate first */
-  first?: InputMaybe<Scalars['Int']>;
+  first?: Maybe<Scalars["Int"]>
   /** Paginate last */
-  last?: InputMaybe<Scalars['Int']>;
-};
+  last?: Maybe<Scalars["Int"]>
+}
 
 export type JobFilter = {
-  and?: InputMaybe<Array<JobFilter>>;
-  or?: InputMaybe<Array<JobFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  title?: InputMaybe<StringFieldComparison>;
-  postDate?: InputMaybe<TimestampFieldComparison>;
-  expirationDate?: InputMaybe<TimestampFieldComparison>;
-  postedById?: InputMaybe<IdFilterComparison>;
-};
+  and?: Maybe<Array<JobFilter>>
+  or?: Maybe<Array<JobFilter>>
+  id?: Maybe<IdFilterComparison>
+  title?: Maybe<StringFieldComparison>
+  postDate?: Maybe<TimestampFieldComparison>
+  expirationDate?: Maybe<TimestampFieldComparison>
+  postedById?: Maybe<IdFilterComparison>
+}
 
 export type IdFilterComparison = {
-  is?: InputMaybe<Scalars['Boolean']>;
-  isNot?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['ID']>;
-  neq?: InputMaybe<Scalars['ID']>;
-  gt?: InputMaybe<Scalars['ID']>;
-  gte?: InputMaybe<Scalars['ID']>;
-  lt?: InputMaybe<Scalars['ID']>;
-  lte?: InputMaybe<Scalars['ID']>;
-  like?: InputMaybe<Scalars['ID']>;
-  notLike?: InputMaybe<Scalars['ID']>;
-  iLike?: InputMaybe<Scalars['ID']>;
-  notILike?: InputMaybe<Scalars['ID']>;
-  in?: InputMaybe<Array<Scalars['ID']>>;
-  notIn?: InputMaybe<Array<Scalars['ID']>>;
-};
+  is?: Maybe<Scalars["Boolean"]>
+  isNot?: Maybe<Scalars["Boolean"]>
+  eq?: Maybe<Scalars["ID"]>
+  neq?: Maybe<Scalars["ID"]>
+  gt?: Maybe<Scalars["ID"]>
+  gte?: Maybe<Scalars["ID"]>
+  lt?: Maybe<Scalars["ID"]>
+  lte?: Maybe<Scalars["ID"]>
+  like?: Maybe<Scalars["ID"]>
+  notLike?: Maybe<Scalars["ID"]>
+  iLike?: Maybe<Scalars["ID"]>
+  notILike?: Maybe<Scalars["ID"]>
+  in?: Maybe<Array<Scalars["ID"]>>
+  notIn?: Maybe<Array<Scalars["ID"]>>
+}
 
 export type StringFieldComparison = {
-  is?: InputMaybe<Scalars['Boolean']>;
-  isNot?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['String']>;
-  neq?: InputMaybe<Scalars['String']>;
-  gt?: InputMaybe<Scalars['String']>;
-  gte?: InputMaybe<Scalars['String']>;
-  lt?: InputMaybe<Scalars['String']>;
-  lte?: InputMaybe<Scalars['String']>;
-  like?: InputMaybe<Scalars['String']>;
-  notLike?: InputMaybe<Scalars['String']>;
-  iLike?: InputMaybe<Scalars['String']>;
-  notILike?: InputMaybe<Scalars['String']>;
-  in?: InputMaybe<Array<Scalars['String']>>;
-  notIn?: InputMaybe<Array<Scalars['String']>>;
-};
+  is?: Maybe<Scalars["Boolean"]>
+  isNot?: Maybe<Scalars["Boolean"]>
+  eq?: Maybe<Scalars["String"]>
+  neq?: Maybe<Scalars["String"]>
+  gt?: Maybe<Scalars["String"]>
+  gte?: Maybe<Scalars["String"]>
+  lt?: Maybe<Scalars["String"]>
+  lte?: Maybe<Scalars["String"]>
+  like?: Maybe<Scalars["String"]>
+  notLike?: Maybe<Scalars["String"]>
+  iLike?: Maybe<Scalars["String"]>
+  notILike?: Maybe<Scalars["String"]>
+  in?: Maybe<Array<Scalars["String"]>>
+  notIn?: Maybe<Array<Scalars["String"]>>
+}
 
 export type TimestampFieldComparison = {
-  is?: InputMaybe<Scalars['Boolean']>;
-  isNot?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['Timestamp']>;
-  neq?: InputMaybe<Scalars['Timestamp']>;
-  gt?: InputMaybe<Scalars['Timestamp']>;
-  gte?: InputMaybe<Scalars['Timestamp']>;
-  lt?: InputMaybe<Scalars['Timestamp']>;
-  lte?: InputMaybe<Scalars['Timestamp']>;
-  in?: InputMaybe<Array<Scalars['Timestamp']>>;
-  notIn?: InputMaybe<Array<Scalars['Timestamp']>>;
-  between?: InputMaybe<TimestampFieldComparisonBetween>;
-  notBetween?: InputMaybe<TimestampFieldComparisonBetween>;
-};
+  is?: Maybe<Scalars["Boolean"]>
+  isNot?: Maybe<Scalars["Boolean"]>
+  eq?: Maybe<Scalars["Timestamp"]>
+  neq?: Maybe<Scalars["Timestamp"]>
+  gt?: Maybe<Scalars["Timestamp"]>
+  gte?: Maybe<Scalars["Timestamp"]>
+  lt?: Maybe<Scalars["Timestamp"]>
+  lte?: Maybe<Scalars["Timestamp"]>
+  in?: Maybe<Array<Scalars["Timestamp"]>>
+  notIn?: Maybe<Array<Scalars["Timestamp"]>>
+  between?: Maybe<TimestampFieldComparisonBetween>
+  notBetween?: Maybe<TimestampFieldComparisonBetween>
+}
 
 export type TimestampFieldComparisonBetween = {
-  lower: Scalars['Timestamp'];
-  upper: Scalars['Timestamp'];
-};
+  lower: Scalars["Timestamp"]
+  upper: Scalars["Timestamp"]
+}
 
 export type JobSort = {
-  field: JobSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: JobSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum JobSortFields {
-  Id = 'id',
-  Title = 'title',
-  PostDate = 'postDate',
-  ExpirationDate = 'expirationDate',
-  PostedById = 'postedById'
+  Id = "id",
+  Title = "title",
+  PostDate = "postDate",
+  ExpirationDate = "expirationDate",
+  PostedById = "postedById"
 }
 
 /** Sort Directions */
 export enum SortDirection {
-  Asc = 'ASC',
-  Desc = 'DESC'
+  Asc = "ASC",
+  Desc = "DESC"
 }
 
 /** Sort Nulls Options */
 export enum SortNulls {
-  NullsFirst = 'NULLS_FIRST',
-  NullsLast = 'NULLS_LAST'
+  NullsFirst = "NULLS_FIRST",
+  NullsLast = "NULLS_LAST"
 }
 
 export type PackFilter = {
-  and?: InputMaybe<Array<PackFilter>>;
-  or?: InputMaybe<Array<PackFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  name?: InputMaybe<StringFieldComparison>;
-  price?: InputMaybe<FloatFieldComparison>;
-  authorId?: InputMaybe<IdFilterComparison>;
-};
+  and?: Maybe<Array<PackFilter>>
+  or?: Maybe<Array<PackFilter>>
+  id?: Maybe<IdFilterComparison>
+  name?: Maybe<StringFieldComparison>
+  price?: Maybe<FloatFieldComparison>
+  description?: Maybe<StringFieldComparison>
+  isLoop?: Maybe<BooleanFieldComparison>
+  authorId?: Maybe<IdFilterComparison>
+}
 
 export type FloatFieldComparison = {
-  is?: InputMaybe<Scalars['Boolean']>;
-  isNot?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['Float']>;
-  neq?: InputMaybe<Scalars['Float']>;
-  gt?: InputMaybe<Scalars['Float']>;
-  gte?: InputMaybe<Scalars['Float']>;
-  lt?: InputMaybe<Scalars['Float']>;
-  lte?: InputMaybe<Scalars['Float']>;
-  in?: InputMaybe<Array<Scalars['Float']>>;
-  notIn?: InputMaybe<Array<Scalars['Float']>>;
-  between?: InputMaybe<FloatFieldComparisonBetween>;
-  notBetween?: InputMaybe<FloatFieldComparisonBetween>;
-};
+  is?: Maybe<Scalars["Boolean"]>
+  isNot?: Maybe<Scalars["Boolean"]>
+  eq?: Maybe<Scalars["Float"]>
+  neq?: Maybe<Scalars["Float"]>
+  gt?: Maybe<Scalars["Float"]>
+  gte?: Maybe<Scalars["Float"]>
+  lt?: Maybe<Scalars["Float"]>
+  lte?: Maybe<Scalars["Float"]>
+  in?: Maybe<Array<Scalars["Float"]>>
+  notIn?: Maybe<Array<Scalars["Float"]>>
+  between?: Maybe<FloatFieldComparisonBetween>
+  notBetween?: Maybe<FloatFieldComparisonBetween>
+}
 
 export type FloatFieldComparisonBetween = {
-  lower: Scalars['Float'];
-  upper: Scalars['Float'];
-};
+  lower: Scalars["Float"]
+  upper: Scalars["Float"]
+}
+
+export type BooleanFieldComparison = {
+  is?: Maybe<Scalars["Boolean"]>
+  isNot?: Maybe<Scalars["Boolean"]>
+}
 
 export type PackSort = {
-  field: PackSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: PackSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum PackSortFields {
-  Id = 'id',
-  Name = 'name',
-  Price = 'price',
-  AuthorId = 'authorId'
+  Id = "id",
+  Name = "name",
+  Price = "price",
+  Description = "description",
+  IsLoop = "isLoop",
+  AuthorId = "authorId"
 }
 
 export type RaveFilter = {
-  and?: InputMaybe<Array<RaveFilter>>;
-  or?: InputMaybe<Array<RaveFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  followerId?: InputMaybe<IntFieldComparison>;
-  followingId?: InputMaybe<IntFieldComparison>;
-};
+  and?: Maybe<Array<RaveFilter>>
+  or?: Maybe<Array<RaveFilter>>
+  id?: Maybe<IdFilterComparison>
+  followerId?: Maybe<IntFieldComparison>
+  followingId?: Maybe<IntFieldComparison>
+}
 
 export type IntFieldComparison = {
-  is?: InputMaybe<Scalars['Boolean']>;
-  isNot?: InputMaybe<Scalars['Boolean']>;
-  eq?: InputMaybe<Scalars['Int']>;
-  neq?: InputMaybe<Scalars['Int']>;
-  gt?: InputMaybe<Scalars['Int']>;
-  gte?: InputMaybe<Scalars['Int']>;
-  lt?: InputMaybe<Scalars['Int']>;
-  lte?: InputMaybe<Scalars['Int']>;
-  in?: InputMaybe<Array<Scalars['Int']>>;
-  notIn?: InputMaybe<Array<Scalars['Int']>>;
-  between?: InputMaybe<IntFieldComparisonBetween>;
-  notBetween?: InputMaybe<IntFieldComparisonBetween>;
-};
+  is?: Maybe<Scalars["Boolean"]>
+  isNot?: Maybe<Scalars["Boolean"]>
+  eq?: Maybe<Scalars["Int"]>
+  neq?: Maybe<Scalars["Int"]>
+  gt?: Maybe<Scalars["Int"]>
+  gte?: Maybe<Scalars["Int"]>
+  lt?: Maybe<Scalars["Int"]>
+  lte?: Maybe<Scalars["Int"]>
+  in?: Maybe<Array<Scalars["Int"]>>
+  notIn?: Maybe<Array<Scalars["Int"]>>
+  between?: Maybe<IntFieldComparisonBetween>
+  notBetween?: Maybe<IntFieldComparisonBetween>
+}
 
 export type IntFieldComparisonBetween = {
-  lower: Scalars['Int'];
-  upper: Scalars['Int'];
-};
+  lower: Scalars["Int"]
+  upper: Scalars["Int"]
+}
 
 export type RaveSort = {
-  field: RaveSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: RaveSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum RaveSortFields {
-  Id = 'id',
-  FollowerId = 'followerId',
-  FollowingId = 'followingId'
+  Id = "id",
+  FollowerId = "followerId",
+  FollowingId = "followingId"
 }
 
 export type PaymentFilter = {
-  and?: InputMaybe<Array<PaymentFilter>>;
-  or?: InputMaybe<Array<PaymentFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  price?: InputMaybe<IntFieldComparison>;
-  date?: InputMaybe<TimestampFieldComparison>;
-  planStartDate?: InputMaybe<TimestampFieldComparison>;
-  planEndDate?: InputMaybe<TimestampFieldComparison>;
-  isActive?: InputMaybe<PaymentIsActiveFilterComparison>;
-  packId?: InputMaybe<IdFilterComparison>;
-  paymentPlanId?: InputMaybe<IdFilterComparison>;
-  userId?: InputMaybe<IdFilterComparison>;
-};
+  and?: Maybe<Array<PaymentFilter>>
+  or?: Maybe<Array<PaymentFilter>>
+  id?: Maybe<IdFilterComparison>
+  price?: Maybe<IntFieldComparison>
+  date?: Maybe<TimestampFieldComparison>
+  planStartDate?: Maybe<TimestampFieldComparison>
+  planEndDate?: Maybe<TimestampFieldComparison>
+  isActive?: Maybe<PaymentIsActiveFilterComparison>
+  packId?: Maybe<IdFilterComparison>
+  paymentPlanId?: Maybe<IdFilterComparison>
+  userId?: Maybe<IdFilterComparison>
+}
 
 export type PaymentIsActiveFilterComparison = {
-  eq?: InputMaybe<Scalars['Int']>;
-};
+  eq?: Maybe<Scalars["Int"]>
+}
 
 export type PaymentSort = {
-  field: PaymentSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: PaymentSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum PaymentSortFields {
-  Id = 'id',
-  Price = 'price',
-  Date = 'date',
-  PlanStartDate = 'planStartDate',
-  PlanEndDate = 'planEndDate',
-  IsActive = 'isActive',
-  PackId = 'packId',
-  PaymentPlanId = 'paymentPlanId',
-  UserId = 'userId'
+  Id = "id",
+  Price = "price",
+  Date = "date",
+  PlanStartDate = "planStartDate",
+  PlanEndDate = "planEndDate",
+  IsActive = "isActive",
+  PackId = "packId",
+  PaymentPlanId = "paymentPlanId",
+  UserId = "userId"
 }
 
 export type ReviewFilter = {
-  and?: InputMaybe<Array<ReviewFilter>>;
-  or?: InputMaybe<Array<ReviewFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  userId?: InputMaybe<IdFilterComparison>;
-  packId?: InputMaybe<IdFilterComparison>;
-};
+  and?: Maybe<Array<ReviewFilter>>
+  or?: Maybe<Array<ReviewFilter>>
+  id?: Maybe<IdFilterComparison>
+  userId?: Maybe<IdFilterComparison>
+  packId?: Maybe<IdFilterComparison>
+}
 
 export type ReviewSort = {
-  field: ReviewSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: ReviewSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum ReviewSortFields {
-  Id = 'id',
-  UserId = 'userId',
-  PackId = 'packId'
+  Id = "id",
+  UserId = "userId",
+  PackId = "packId"
 }
 
 export type Paymentplan = {
-  __typename?: 'paymentplan';
+  __typename?: "paymentplan"
   /** Example field (placeholder) */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** Example field (placeholder) */
-  title: Scalars['String'];
+  title: Scalars["String"]
   /** Example field (placeholder) */
-  description: Scalars['String'];
+  description: Scalars["String"]
   /** Example field (placeholder) */
-  amount: Scalars['Float'];
+  amount: Scalars["Float"]
   /** Example field (placeholder) */
-  month: Scalars['Int'];
+  month: Scalars["Int"]
   /** Example field (placeholder) */
-  postDate: Scalars['Timestamp'];
+  postDate: Scalars["Timestamp"]
   /** Example field (placeholder) */
-  updatedAt: Scalars['Timestamp'];
-  postedById: Scalars['ID'];
-  postedBy: User;
-  payments: PaymentplanPaymentsConnection;
-};
-
+  updatedAt: Scalars["Timestamp"]
+  postedById: Scalars["ID"]
+  postedBy: User
+  payments: PaymentplanPaymentsConnection
+}
 
 export type PaymentplanPaymentsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PaymentFilter>;
-  sorting?: InputMaybe<Array<PaymentSort>>;
-};
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PaymentFilter>
+  sorting?: Maybe<Array<PaymentSort>>
+}
 
 export type Payment = {
-  __typename?: 'payment';
+  __typename?: "payment"
   /** Example field (placeholder) */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** Example field (placeholder) */
-  type: PlanType;
+  type: PlanType
   /** Example filed (placeholder) */
-  price: Scalars['Int'];
+  price: Scalars["Int"]
   /** Example filed (placeholder) */
-  date: Scalars['Timestamp'];
+  date: Scalars["Timestamp"]
   /** Example filed (placeholder) */
-  planStartDate: Scalars['Timestamp'];
+  planStartDate: Scalars["Timestamp"]
   /** Example filed (placeholder) */
-  planEndDate: Scalars['Timestamp'];
+  planEndDate: Scalars["Timestamp"]
   /** Example filed (placeholder) */
-  paymentMode: PaymentModel;
+  paymentMode: PaymentModel
   /** Example filed (placeholder) */
-  confirmationToken: Scalars['String'];
+  confirmationToken: Scalars["String"]
   /** Example filed (placeholder) */
-  isActive: Scalars['Int'];
-  packId: Scalars['ID'];
-  paymentPlanId: Scalars['ID'];
-  userId: Scalars['ID'];
-  pack: Pack;
-  paymentPlan: Paymentplan;
-  user: User;
-};
+  isActive: Scalars["Int"]
+  packId: Scalars["ID"]
+  paymentPlanId: Scalars["ID"]
+  userId: Scalars["ID"]
+  pack: Pack
+  paymentPlan: Paymentplan
+  user: User
+}
 
 export enum PlanType {
-  Subscription = 'subscription',
-  Buy = 'buy'
+  Subscription = "subscription",
+  Buy = "buy"
 }
 
 export enum PaymentModel {
-  PayPal = 'PayPal',
-  MoPay = 'MoPay'
+  PayPal = "PayPal",
+  MoPay = "MoPay"
 }
 
 export type Pack = {
-  __typename?: 'pack';
+  __typename?: "pack"
   /** Example field (placeholder) */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** Example field (placeholder) */
-  name: Scalars['String'];
-  description: Scalars['String'];
+  name: Scalars["String"]
   /** Example field (placeholder) */
-  price: Scalars['Float'];
+  price: Scalars["Float"]
   /** Example field (placeholder) */
-  type: PacketType;
-  authorId: Scalars['ID'];
-  author: User;
-  audio: PackAudioConnection;
-  payments: PackPaymentsConnection;
-  reviews: PackReviewsConnection;
-};
-
+  description: Scalars["String"]
+  /** Example field (placeholder) */
+  type: PacketType
+  isLoop: Scalars["Boolean"]
+  authorId: Scalars["ID"]
+  author: User
+  audio: PackAudioConnection
+  payments: PackPaymentsConnection
+  reviews: PackReviewsConnection
+}
 
 export type PackAudioArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<LoopFilter>;
-  sorting?: InputMaybe<Array<LoopSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<LoopFilter>
+  sorting?: Maybe<Array<LoopSort>>
+}
 
 export type PackPaymentsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PaymentFilter>;
-  sorting?: InputMaybe<Array<PaymentSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PaymentFilter>
+  sorting?: Maybe<Array<PaymentSort>>
+}
 
 export type PackReviewsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PaymentFilter>;
-  sorting?: InputMaybe<Array<PaymentSort>>;
-};
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PaymentFilter>
+  sorting?: Maybe<Array<PaymentSort>>
+}
 
 export enum PacketType {
-  Free = 'FREE',
-  Paid = 'PAID'
+  Free = "FREE",
+  Paid = "PAID"
 }
 
 export type LoopFilter = {
-  and?: InputMaybe<Array<LoopFilter>>;
-  or?: InputMaybe<Array<LoopFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  name?: InputMaybe<StringFieldComparison>;
-  genre?: InputMaybe<StringFieldComparison>;
-  bpm?: InputMaybe<IntFieldComparison>;
-  key?: InputMaybe<StringFieldComparison>;
-  tempo?: InputMaybe<IntFieldComparison>;
-  packId?: InputMaybe<IdFilterComparison>;
-};
+  and?: Maybe<Array<LoopFilter>>
+  or?: Maybe<Array<LoopFilter>>
+  id?: Maybe<IdFilterComparison>
+  name?: Maybe<StringFieldComparison>
+  genre?: Maybe<StringFieldComparison>
+  bpm?: Maybe<IntFieldComparison>
+  key?: Maybe<StringFieldComparison>
+  tempo?: Maybe<IntFieldComparison>
+  packId?: Maybe<IdFilterComparison>
+}
 
 export type LoopSort = {
-  field: LoopSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: LoopSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum LoopSortFields {
-  Id = 'id',
-  Name = 'name',
-  Genre = 'genre',
-  Bpm = 'bpm',
-  Key = 'key',
-  Tempo = 'tempo',
-  PackId = 'packId'
+  Id = "id",
+  Name = "name",
+  Genre = "genre",
+  Bpm = "bpm",
+  Key = "key",
+  Tempo = "tempo",
+  PackId = "packId"
 }
 
 export type Loop = {
-  __typename?: 'loop';
+  __typename?: "loop"
   /** Example field (placeholder) */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** Example field (placeholder) */
-  name: Scalars['String'];
+  name: Scalars["String"]
   /** Example field (placeholder) */
-  genre: Scalars['String'];
+  genre: Scalars["String"]
   /** Example field (placeholder) */
-  bpm: Scalars['Int'];
+  bpm: Scalars["Int"]
   /** Example field (placeholder) */
-  path: Scalars['String'];
+  path: Scalars["String"]
   /** Example field (placeholder) */
-  audioType: AudioType;
+  audioType: AudioType
   /** Example field (placeholder) */
-  key: Scalars['String'];
+  key: Scalars["String"]
   /** Example field (placeholder) */
-  tempo: Scalars['Int'];
-  packId: Scalars['ID'];
-  pack: Pack;
-};
+  tempo: Scalars["Int"]
+  packId: Scalars["ID"]
+  pack: Pack
+}
 
 export enum AudioType {
-  Oneshot = 'oneshot',
-  Loop = 'loop'
+  Oneshot = "oneshot",
+  Loop = "loop"
 }
 
 export type LoopDeleteResponse = {
-  __typename?: 'LoopDeleteResponse';
+  __typename?: "LoopDeleteResponse"
   /** Example field (placeholder) */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars["ID"]>
   /** Example field (placeholder) */
-  name?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  genre?: Maybe<Scalars['String']>;
+  genre?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  bpm?: Maybe<Scalars['Int']>;
+  bpm?: Maybe<Scalars["Int"]>
   /** Example field (placeholder) */
-  path?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  audioType?: Maybe<AudioType>;
+  audioType?: Maybe<AudioType>
   /** Example field (placeholder) */
-  key?: Maybe<Scalars['String']>;
+  key?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  tempo?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  tempo?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type LoopEdge = {
-  __typename?: 'loopEdge';
+  __typename?: "loopEdge"
   /** The node containing the loop */
-  node: Loop;
+  node: Loop
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type PageInfo = {
-  __typename?: 'PageInfo';
+  __typename?: "PageInfo"
   /** true if paging forward and there are more records. */
-  hasNextPage?: Maybe<Scalars['Boolean']>;
+  hasNextPage?: Maybe<Scalars["Boolean"]>
   /** true if paging backwards and there are more records. */
-  hasPreviousPage?: Maybe<Scalars['Boolean']>;
+  hasPreviousPage?: Maybe<Scalars["Boolean"]>
   /** The cursor of the first returned record. */
-  startCursor?: Maybe<Scalars['ConnectionCursor']>;
+  startCursor?: Maybe<Scalars["ConnectionCursor"]>
   /** The cursor of the last returned record. */
-  endCursor?: Maybe<Scalars['ConnectionCursor']>;
-};
+  endCursor?: Maybe<Scalars["ConnectionCursor"]>
+}
 
 export type LoopConnection = {
-  __typename?: 'LoopConnection';
+  __typename?: "LoopConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<LoopEdge>;
-};
+  edges: Array<LoopEdge>
+}
 
 export type LoopAggregateGroupBy = {
-  __typename?: 'loopAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  genre?: Maybe<Scalars['String']>;
-  bpm?: Maybe<Scalars['Int']>;
-  key?: Maybe<Scalars['String']>;
-  tempo?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "loopAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  name?: Maybe<Scalars["String"]>
+  genre?: Maybe<Scalars["String"]>
+  bpm?: Maybe<Scalars["Int"]>
+  key?: Maybe<Scalars["String"]>
+  tempo?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type LoopCountAggregate = {
-  __typename?: 'loopCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['Int']>;
-  genre?: Maybe<Scalars['Int']>;
-  bpm?: Maybe<Scalars['Int']>;
-  key?: Maybe<Scalars['Int']>;
-  tempo?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "loopCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  name?: Maybe<Scalars["Int"]>
+  genre?: Maybe<Scalars["Int"]>
+  bpm?: Maybe<Scalars["Int"]>
+  key?: Maybe<Scalars["Int"]>
+  tempo?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["Int"]>
+}
 
 export type LoopSumAggregate = {
-  __typename?: 'loopSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-  bpm?: Maybe<Scalars['Float']>;
-  tempo?: Maybe<Scalars['Float']>;
-  packId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "loopSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  bpm?: Maybe<Scalars["Float"]>
+  tempo?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+}
 
 export type LoopAvgAggregate = {
-  __typename?: 'loopAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-  bpm?: Maybe<Scalars['Float']>;
-  tempo?: Maybe<Scalars['Float']>;
-  packId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "loopAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  bpm?: Maybe<Scalars["Float"]>
+  tempo?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+}
 
 export type LoopMinAggregate = {
-  __typename?: 'loopMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  genre?: Maybe<Scalars['String']>;
-  bpm?: Maybe<Scalars['Int']>;
-  key?: Maybe<Scalars['String']>;
-  tempo?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "loopMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  name?: Maybe<Scalars["String"]>
+  genre?: Maybe<Scalars["String"]>
+  bpm?: Maybe<Scalars["Int"]>
+  key?: Maybe<Scalars["String"]>
+  tempo?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type LoopMaxAggregate = {
-  __typename?: 'loopMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  genre?: Maybe<Scalars['String']>;
-  bpm?: Maybe<Scalars['Int']>;
-  key?: Maybe<Scalars['String']>;
-  tempo?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "loopMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  name?: Maybe<Scalars["String"]>
+  genre?: Maybe<Scalars["String"]>
+  bpm?: Maybe<Scalars["Int"]>
+  key?: Maybe<Scalars["String"]>
+  tempo?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type JobDeleteResponse = {
-  __typename?: 'JobDeleteResponse';
+  __typename?: "JobDeleteResponse"
   /** Example field (placeholder) */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars["ID"]>
   /** Example field (placeholder) */
-  title?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  postDate?: Maybe<Scalars['Timestamp']>;
+  postDate?: Maybe<Scalars["Timestamp"]>
   /** Example field (placeholder) */
-  expirationDate?: Maybe<Scalars['Timestamp']>;
+  expirationDate?: Maybe<Scalars["Timestamp"]>
   /** Example field (placeholder) */
-  updatedAt?: Maybe<Scalars['Timestamp']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type JobEdge = {
-  __typename?: 'jobEdge';
+  __typename?: "jobEdge"
   /** The node containing the job */
-  node: Job;
+  node: Job
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type JobConnection = {
-  __typename?: 'JobConnection';
+  __typename?: "JobConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<JobEdge>;
-};
+  edges: Array<JobEdge>
+}
 
 export type JobAggregateGroupBy = {
-  __typename?: 'jobAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  title?: Maybe<Scalars['String']>;
-  postDate?: Maybe<Scalars['Timestamp']>;
-  expirationDate?: Maybe<Scalars['Timestamp']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  __typename?: "jobAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  title?: Maybe<Scalars["String"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  expirationDate?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type JobCountAggregate = {
-  __typename?: 'jobCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  title?: Maybe<Scalars['Int']>;
-  postDate?: Maybe<Scalars['Int']>;
-  expirationDate?: Maybe<Scalars['Int']>;
-  postedById?: Maybe<Scalars['Int']>;
-};
+  __typename?: "jobCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  title?: Maybe<Scalars["Int"]>
+  postDate?: Maybe<Scalars["Int"]>
+  expirationDate?: Maybe<Scalars["Int"]>
+  postedById?: Maybe<Scalars["Int"]>
+}
 
 export type JobSumAggregate = {
-  __typename?: 'jobSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-  postedById?: Maybe<Scalars['Float']>;
-};
+  __typename?: "jobSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["Float"]>
+}
 
 export type JobAvgAggregate = {
-  __typename?: 'jobAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-  postedById?: Maybe<Scalars['Float']>;
-};
+  __typename?: "jobAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["Float"]>
+}
 
 export type JobMinAggregate = {
-  __typename?: 'jobMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  title?: Maybe<Scalars['String']>;
-  postDate?: Maybe<Scalars['Timestamp']>;
-  expirationDate?: Maybe<Scalars['Timestamp']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  __typename?: "jobMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  title?: Maybe<Scalars["String"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  expirationDate?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type JobMaxAggregate = {
-  __typename?: 'jobMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  title?: Maybe<Scalars['String']>;
-  postDate?: Maybe<Scalars['Timestamp']>;
-  expirationDate?: Maybe<Scalars['Timestamp']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  __typename?: "jobMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  title?: Maybe<Scalars["String"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  expirationDate?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type PackDeleteResponse = {
-  __typename?: 'PackDeleteResponse';
+  __typename?: "PackDeleteResponse"
   /** Example field (placeholder) */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars["ID"]>
   /** Example field (placeholder) */
-  name?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  price?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars["Float"]>
   /** Example field (placeholder) */
-  type?: Maybe<PacketType>;
-  authorId?: Maybe<Scalars['ID']>;
-};
+  description?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  type?: Maybe<PacketType>
+  isLoop?: Maybe<Scalars["Boolean"]>
+  authorId?: Maybe<Scalars["ID"]>
+}
 
 export type PackEdge = {
-  __typename?: 'packEdge';
+  __typename?: "packEdge"
   /** The node containing the pack */
-  node: Pack;
+  node: Pack
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type PackConnection = {
-  __typename?: 'PackConnection';
+  __typename?: "PackConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PackEdge>;
-};
+  edges: Array<PackEdge>
+}
 
 export type PackAggregateGroupBy = {
-  __typename?: 'packAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['Float']>;
-  authorId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "packAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  name?: Maybe<Scalars["String"]>
+  price?: Maybe<Scalars["Float"]>
+  description?: Maybe<Scalars["String"]>
+  isLoop?: Maybe<Scalars["Boolean"]>
+  authorId?: Maybe<Scalars["ID"]>
+}
 
 export type PackCountAggregate = {
-  __typename?: 'packCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['Int']>;
-  authorId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "packCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  name?: Maybe<Scalars["Int"]>
+  price?: Maybe<Scalars["Int"]>
+  description?: Maybe<Scalars["Int"]>
+  isLoop?: Maybe<Scalars["Int"]>
+  authorId?: Maybe<Scalars["Int"]>
+}
 
 export type PackSumAggregate = {
-  __typename?: 'packSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-  price?: Maybe<Scalars['Float']>;
-  authorId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "packSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  price?: Maybe<Scalars["Float"]>
+  authorId?: Maybe<Scalars["Float"]>
+}
 
 export type PackAvgAggregate = {
-  __typename?: 'packAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-  price?: Maybe<Scalars['Float']>;
-  authorId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "packAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  price?: Maybe<Scalars["Float"]>
+  authorId?: Maybe<Scalars["Float"]>
+}
 
 export type PackMinAggregate = {
-  __typename?: 'packMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['Float']>;
-  authorId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "packMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  name?: Maybe<Scalars["String"]>
+  price?: Maybe<Scalars["Float"]>
+  description?: Maybe<Scalars["String"]>
+  authorId?: Maybe<Scalars["ID"]>
+}
 
 export type PackMaxAggregate = {
-  __typename?: 'packMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['Float']>;
-  authorId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "packMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  name?: Maybe<Scalars["String"]>
+  price?: Maybe<Scalars["Float"]>
+  description?: Maybe<Scalars["String"]>
+  authorId?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentEdge = {
-  __typename?: 'paymentEdge';
+  __typename?: "paymentEdge"
   /** The node containing the payment */
-  node: Payment;
+  node: Payment
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type PackReviewsConnection = {
-  __typename?: 'PackReviewsConnection';
+  __typename?: "PackReviewsConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PaymentEdge>;
-};
+  edges: Array<PaymentEdge>
+}
 
 export type PackPaymentsConnection = {
-  __typename?: 'PackPaymentsConnection';
+  __typename?: "PackPaymentsConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PaymentEdge>;
-};
+  edges: Array<PaymentEdge>
+}
 
 export type PackAudioConnection = {
-  __typename?: 'PackAudioConnection';
+  __typename?: "PackAudioConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<LoopEdge>;
-};
+  edges: Array<LoopEdge>
+}
 
 export type PaymentplanDeleteResponse = {
-  __typename?: 'PaymentplanDeleteResponse';
+  __typename?: "PaymentplanDeleteResponse"
   /** Example field (placeholder) */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars["ID"]>
   /** Example field (placeholder) */
-  title?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  amount?: Maybe<Scalars['Float']>;
+  amount?: Maybe<Scalars["Float"]>
   /** Example field (placeholder) */
-  month?: Maybe<Scalars['Int']>;
+  month?: Maybe<Scalars["Int"]>
   /** Example field (placeholder) */
-  postDate?: Maybe<Scalars['Timestamp']>;
+  postDate?: Maybe<Scalars["Timestamp"]>
   /** Example field (placeholder) */
-  updatedAt?: Maybe<Scalars['Timestamp']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentplanEdge = {
-  __typename?: 'paymentplanEdge';
+  __typename?: "paymentplanEdge"
   /** The node containing the paymentplan */
-  node: Paymentplan;
+  node: Paymentplan
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type PaymentplanConnection = {
-  __typename?: 'PaymentplanConnection';
+  __typename?: "PaymentplanConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PaymentplanEdge>;
-};
+  edges: Array<PaymentplanEdge>
+}
 
 export type PaymentplanAggregateGroupBy = {
-  __typename?: 'paymentplanAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  amount?: Maybe<Scalars['Float']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  __typename?: "paymentplanAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  amount?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentplanCountAggregate = {
-  __typename?: 'paymentplanCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  amount?: Maybe<Scalars['Int']>;
-  postedById?: Maybe<Scalars['Int']>;
-};
+  __typename?: "paymentplanCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  amount?: Maybe<Scalars["Int"]>
+  postedById?: Maybe<Scalars["Int"]>
+}
 
 export type PaymentplanSumAggregate = {
-  __typename?: 'paymentplanSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-  amount?: Maybe<Scalars['Float']>;
-  postedById?: Maybe<Scalars['Float']>;
-};
+  __typename?: "paymentplanSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["Float"]>
+}
 
 export type PaymentplanAvgAggregate = {
-  __typename?: 'paymentplanAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-  amount?: Maybe<Scalars['Float']>;
-  postedById?: Maybe<Scalars['Float']>;
-};
+  __typename?: "paymentplanAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  amount?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["Float"]>
+}
 
 export type PaymentplanMinAggregate = {
-  __typename?: 'paymentplanMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  amount?: Maybe<Scalars['Float']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  __typename?: "paymentplanMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  amount?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentplanMaxAggregate = {
-  __typename?: 'paymentplanMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  amount?: Maybe<Scalars['Float']>;
-  postedById?: Maybe<Scalars['ID']>;
-};
+  __typename?: "paymentplanMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  amount?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentplanPaymentsConnection = {
-  __typename?: 'PaymentplanPaymentsConnection';
+  __typename?: "PaymentplanPaymentsConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PaymentEdge>;
-};
+  edges: Array<PaymentEdge>
+}
 
 export type PaymentDeleteResponse = {
-  __typename?: 'PaymentDeleteResponse';
+  __typename?: "PaymentDeleteResponse"
   /** Example field (placeholder) */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars["ID"]>
   /** Example field (placeholder) */
-  type?: Maybe<PlanType>;
+  type?: Maybe<PlanType>
   /** Example filed (placeholder) */
-  price?: Maybe<Scalars['Int']>;
+  price?: Maybe<Scalars["Int"]>
   /** Example filed (placeholder) */
-  date?: Maybe<Scalars['Timestamp']>;
+  date?: Maybe<Scalars["Timestamp"]>
   /** Example filed (placeholder) */
-  planStartDate?: Maybe<Scalars['Timestamp']>;
+  planStartDate?: Maybe<Scalars["Timestamp"]>
   /** Example filed (placeholder) */
-  planEndDate?: Maybe<Scalars['Timestamp']>;
+  planEndDate?: Maybe<Scalars["Timestamp"]>
   /** Example filed (placeholder) */
-  paymentMode?: Maybe<PaymentModel>;
+  paymentMode?: Maybe<PaymentModel>
   /** Example filed (placeholder) */
-  confirmationToken?: Maybe<Scalars['String']>;
+  confirmationToken?: Maybe<Scalars["String"]>
   /** Example filed (placeholder) */
-  isActive?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['ID']>;
-  paymentPlanId?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
-};
+  isActive?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["ID"]>
+  paymentPlanId?: Maybe<Scalars["ID"]>
+  userId?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentConnection = {
-  __typename?: 'PaymentConnection';
+  __typename?: "PaymentConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PaymentEdge>;
-};
+  edges: Array<PaymentEdge>
+}
 
 export type PaymentAggregateGroupBy = {
-  __typename?: 'paymentAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  price?: Maybe<Scalars['Int']>;
-  date?: Maybe<Scalars['Timestamp']>;
-  planStartDate?: Maybe<Scalars['Timestamp']>;
-  planEndDate?: Maybe<Scalars['Timestamp']>;
-  isActive?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['ID']>;
-  paymentPlanId?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "paymentAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  price?: Maybe<Scalars["Int"]>
+  date?: Maybe<Scalars["Timestamp"]>
+  planStartDate?: Maybe<Scalars["Timestamp"]>
+  planEndDate?: Maybe<Scalars["Timestamp"]>
+  isActive?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["ID"]>
+  paymentPlanId?: Maybe<Scalars["ID"]>
+  userId?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentCountAggregate = {
-  __typename?: 'paymentCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['Int']>;
-  date?: Maybe<Scalars['Int']>;
-  planStartDate?: Maybe<Scalars['Int']>;
-  planEndDate?: Maybe<Scalars['Int']>;
-  isActive?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['Int']>;
-  paymentPlanId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "paymentCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  price?: Maybe<Scalars["Int"]>
+  date?: Maybe<Scalars["Int"]>
+  planStartDate?: Maybe<Scalars["Int"]>
+  planEndDate?: Maybe<Scalars["Int"]>
+  isActive?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["Int"]>
+  paymentPlanId?: Maybe<Scalars["Int"]>
+  userId?: Maybe<Scalars["Int"]>
+}
 
 export type PaymentSumAggregate = {
-  __typename?: 'paymentSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-  price?: Maybe<Scalars['Float']>;
-  packId?: Maybe<Scalars['Float']>;
-  paymentPlanId?: Maybe<Scalars['Float']>;
-  userId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "paymentSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  price?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+  paymentPlanId?: Maybe<Scalars["Float"]>
+  userId?: Maybe<Scalars["Float"]>
+}
 
 export type PaymentAvgAggregate = {
-  __typename?: 'paymentAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-  price?: Maybe<Scalars['Float']>;
-  packId?: Maybe<Scalars['Float']>;
-  paymentPlanId?: Maybe<Scalars['Float']>;
-  userId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "paymentAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  price?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+  paymentPlanId?: Maybe<Scalars["Float"]>
+  userId?: Maybe<Scalars["Float"]>
+}
 
 export type PaymentMinAggregate = {
-  __typename?: 'paymentMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  price?: Maybe<Scalars['Int']>;
-  date?: Maybe<Scalars['Timestamp']>;
-  planStartDate?: Maybe<Scalars['Timestamp']>;
-  planEndDate?: Maybe<Scalars['Timestamp']>;
-  packId?: Maybe<Scalars['ID']>;
-  paymentPlanId?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "paymentMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  price?: Maybe<Scalars["Int"]>
+  date?: Maybe<Scalars["Timestamp"]>
+  planStartDate?: Maybe<Scalars["Timestamp"]>
+  planEndDate?: Maybe<Scalars["Timestamp"]>
+  packId?: Maybe<Scalars["ID"]>
+  paymentPlanId?: Maybe<Scalars["ID"]>
+  userId?: Maybe<Scalars["ID"]>
+}
 
 export type PaymentMaxAggregate = {
-  __typename?: 'paymentMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  price?: Maybe<Scalars['Int']>;
-  date?: Maybe<Scalars['Timestamp']>;
-  planStartDate?: Maybe<Scalars['Timestamp']>;
-  planEndDate?: Maybe<Scalars['Timestamp']>;
-  packId?: Maybe<Scalars['ID']>;
-  paymentPlanId?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "paymentMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  price?: Maybe<Scalars["Int"]>
+  date?: Maybe<Scalars["Timestamp"]>
+  planStartDate?: Maybe<Scalars["Timestamp"]>
+  planEndDate?: Maybe<Scalars["Timestamp"]>
+  packId?: Maybe<Scalars["ID"]>
+  paymentPlanId?: Maybe<Scalars["ID"]>
+  userId?: Maybe<Scalars["ID"]>
+}
 
 export type RaveDeleteResponse = {
-  __typename?: 'RaveDeleteResponse';
-  id?: Maybe<Scalars['ID']>;
+  __typename?: "RaveDeleteResponse"
+  id?: Maybe<Scalars["ID"]>
   /** Example field (placeholder) */
-  followerId?: Maybe<Scalars['Int']>;
+  followerId?: Maybe<Scalars["Int"]>
   /** Example field (placeholder) */
-  followingId?: Maybe<Scalars['Int']>;
-};
+  followingId?: Maybe<Scalars["Int"]>
+}
 
 export type RaveEdge = {
-  __typename?: 'raveEdge';
+  __typename?: "raveEdge"
   /** The node containing the rave */
-  node: Rave;
+  node: Rave
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type RaveConnection = {
-  __typename?: 'RaveConnection';
+  __typename?: "RaveConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<RaveEdge>;
-};
+  edges: Array<RaveEdge>
+}
 
 export type RaveAggregateGroupBy = {
-  __typename?: 'raveAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  followerId?: Maybe<Scalars['Int']>;
-  followingId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "raveAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  followerId?: Maybe<Scalars["Int"]>
+  followingId?: Maybe<Scalars["Int"]>
+}
 
 export type RaveCountAggregate = {
-  __typename?: 'raveCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  followerId?: Maybe<Scalars['Int']>;
-  followingId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "raveCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  followerId?: Maybe<Scalars["Int"]>
+  followingId?: Maybe<Scalars["Int"]>
+}
 
 export type RaveSumAggregate = {
-  __typename?: 'raveSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-  followerId?: Maybe<Scalars['Float']>;
-  followingId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "raveSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  followerId?: Maybe<Scalars["Float"]>
+  followingId?: Maybe<Scalars["Float"]>
+}
 
 export type RaveAvgAggregate = {
-  __typename?: 'raveAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-  followerId?: Maybe<Scalars['Float']>;
-  followingId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "raveAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  followerId?: Maybe<Scalars["Float"]>
+  followingId?: Maybe<Scalars["Float"]>
+}
 
 export type RaveMinAggregate = {
-  __typename?: 'raveMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  followerId?: Maybe<Scalars['Int']>;
-  followingId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "raveMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  followerId?: Maybe<Scalars["Int"]>
+  followingId?: Maybe<Scalars["Int"]>
+}
 
 export type RaveMaxAggregate = {
-  __typename?: 'raveMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  followerId?: Maybe<Scalars['Int']>;
-  followingId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "raveMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  followerId?: Maybe<Scalars["Int"]>
+  followingId?: Maybe<Scalars["Int"]>
+}
 
 export type UserDeleteResponse = {
-  __typename?: 'UserDeleteResponse';
-  id?: Maybe<Scalars['ID']>;
-  email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  emailVerified?: Maybe<Scalars['Boolean']>;
-  image?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  about?: Maybe<Scalars['String']>;
-  authorizer?: Maybe<Authorizer>;
-  role?: Maybe<Scalars['String']>;
-};
+  __typename?: "UserDeleteResponse"
+  id?: Maybe<Scalars["ID"]>
+  email?: Maybe<Scalars["String"]>
+  password?: Maybe<Scalars["String"]>
+  emailVerified?: Maybe<Scalars["Boolean"]>
+  image?: Maybe<Scalars["String"]>
+  name?: Maybe<Scalars["String"]>
+  about?: Maybe<Scalars["String"]>
+  authorizer?: Maybe<Authorizer>
+  role?: Maybe<Scalars["String"]>
+}
 
 export type UserEdge = {
-  __typename?: 'userEdge';
+  __typename?: "userEdge"
   /** The node containing the user */
-  node: User;
+  node: User
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type UserConnection = {
-  __typename?: 'UserConnection';
+  __typename?: "UserConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<UserEdge>;
-};
+  edges: Array<UserEdge>
+}
 
 export type UserAggregateGroupBy = {
-  __typename?: 'userAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  email?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-};
+  __typename?: "userAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  email?: Maybe<Scalars["String"]>
+  name?: Maybe<Scalars["String"]>
+}
 
 export type UserCountAggregate = {
-  __typename?: 'userCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  email?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['Int']>;
-};
+  __typename?: "userCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  email?: Maybe<Scalars["Int"]>
+  name?: Maybe<Scalars["Int"]>
+}
 
 export type UserSumAggregate = {
-  __typename?: 'userSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-};
+  __typename?: "userSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+}
 
 export type UserAvgAggregate = {
-  __typename?: 'userAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-};
+  __typename?: "userAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+}
 
 export type UserMinAggregate = {
-  __typename?: 'userMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  email?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-};
+  __typename?: "userMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  email?: Maybe<Scalars["String"]>
+  name?: Maybe<Scalars["String"]>
+}
 
 export type UserMaxAggregate = {
-  __typename?: 'userMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  email?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-};
+  __typename?: "userMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  email?: Maybe<Scalars["String"]>
+  name?: Maybe<Scalars["String"]>
+}
 
 export type ReviewEdge = {
-  __typename?: 'ReviewEdge';
+  __typename?: "ReviewEdge"
   /** The node containing the Review */
-  node: Review;
+  node: Review
   /** Cursor for this node. */
-  cursor: Scalars['ConnectionCursor'];
-};
+  cursor: Scalars["ConnectionCursor"]
+}
 
 export type UserReviewsConnection = {
-  __typename?: 'UserReviewsConnection';
+  __typename?: "UserReviewsConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<ReviewEdge>;
-};
+  edges: Array<ReviewEdge>
+}
 
 export type UserPaymentsConnection = {
-  __typename?: 'UserPaymentsConnection';
+  __typename?: "UserPaymentsConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PaymentEdge>;
-};
+  edges: Array<PaymentEdge>
+}
 
 export type UserFollowingsConnection = {
-  __typename?: 'UserFollowingsConnection';
+  __typename?: "UserFollowingsConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<RaveEdge>;
-};
+  edges: Array<RaveEdge>
+}
 
 export type UserFollowersConnection = {
-  __typename?: 'UserFollowersConnection';
+  __typename?: "UserFollowersConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<RaveEdge>;
-};
+  edges: Array<RaveEdge>
+}
 
 export type UserPacksConnection = {
-  __typename?: 'UserPacksConnection';
+  __typename?: "UserPacksConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PackEdge>;
-};
+  edges: Array<PackEdge>
+}
 
 export type UserJobsConnection = {
-  __typename?: 'UserJobsConnection';
+  __typename?: "UserJobsConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<JobEdge>;
-};
+  edges: Array<JobEdge>
+}
 
 export type ReviewDeleteResponse = {
-  __typename?: 'ReviewDeleteResponse';
-  id?: Maybe<Scalars['ID']>;
-  review?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['ID']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "ReviewDeleteResponse"
+  id?: Maybe<Scalars["ID"]>
+  review?: Maybe<Scalars["String"]>
+  userId?: Maybe<Scalars["ID"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type ReviewConnection = {
-  __typename?: 'ReviewConnection';
+  __typename?: "ReviewConnection"
   /** Paging information */
-  pageInfo: PageInfo;
+  pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<ReviewEdge>;
-};
+  edges: Array<ReviewEdge>
+}
 
 export type ReviewAggregateGroupBy = {
-  __typename?: 'ReviewAggregateGroupBy';
-  id?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "ReviewAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  userId?: Maybe<Scalars["ID"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type ReviewCountAggregate = {
-  __typename?: 'ReviewCountAggregate';
-  id?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
-  packId?: Maybe<Scalars['Int']>;
-};
+  __typename?: "ReviewCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  userId?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["Int"]>
+}
 
 export type ReviewSumAggregate = {
-  __typename?: 'ReviewSumAggregate';
-  id?: Maybe<Scalars['Float']>;
-  userId?: Maybe<Scalars['Float']>;
-  packId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "ReviewSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  userId?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+}
 
 export type ReviewAvgAggregate = {
-  __typename?: 'ReviewAvgAggregate';
-  id?: Maybe<Scalars['Float']>;
-  userId?: Maybe<Scalars['Float']>;
-  packId?: Maybe<Scalars['Float']>;
-};
+  __typename?: "ReviewAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  userId?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+}
 
 export type ReviewMinAggregate = {
-  __typename?: 'ReviewMinAggregate';
-  id?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "ReviewMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  userId?: Maybe<Scalars["ID"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type ReviewMaxAggregate = {
-  __typename?: 'ReviewMaxAggregate';
-  id?: Maybe<Scalars['ID']>;
-  userId?: Maybe<Scalars['ID']>;
-  packId?: Maybe<Scalars['ID']>;
-};
+  __typename?: "ReviewMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  userId?: Maybe<Scalars["ID"]>
+  packId?: Maybe<Scalars["ID"]>
+}
 
 export type Query = {
-  __typename?: 'Query';
-  loop?: Maybe<Loop>;
-  loops: LoopConnection;
-  job?: Maybe<Job>;
-  jobs: JobConnection;
-  pack?: Maybe<Pack>;
-  packs: PackConnection;
-  paymentplan?: Maybe<Paymentplan>;
-  paymentplans: PaymentplanConnection;
-  payment?: Maybe<Payment>;
-  payments: PaymentConnection;
-  rave?: Maybe<Rave>;
-  raves: RaveConnection;
-  user?: Maybe<User>;
-  users: UserConnection;
-  review?: Maybe<Review>;
-  reviews: ReviewConnection;
-};
-
+  __typename?: "Query"
+  loop?: Maybe<Loop>
+  loops: LoopConnection
+  job?: Maybe<Job>
+  jobs: JobConnection
+  pack?: Maybe<Pack>
+  packs: PackConnection
+  paymentplan?: Maybe<Paymentplan>
+  paymentplans: PaymentplanConnection
+  payment?: Maybe<Payment>
+  payments: PaymentConnection
+  rave?: Maybe<Rave>
+  raves: RaveConnection
+  user?: Maybe<User>
+  users: UserConnection
+  review?: Maybe<Review>
+  reviews: ReviewConnection
+}
 
 export type QueryLoopArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryLoopsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<LoopFilter>;
-  sorting?: InputMaybe<Array<LoopSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<LoopFilter>
+  sorting?: Maybe<Array<LoopSort>>
+}
 
 export type QueryJobArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryJobsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<JobFilter>;
-  sorting?: InputMaybe<Array<JobSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<JobFilter>
+  sorting?: Maybe<Array<JobSort>>
+}
 
 export type QueryPackArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryPacksArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PackFilter>;
-  sorting?: InputMaybe<Array<PackSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PackFilter>
+  sorting?: Maybe<Array<PackSort>>
+}
 
 export type QueryPaymentplanArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryPaymentplansArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PaymentplanFilter>;
-  sorting?: InputMaybe<Array<PaymentplanSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PaymentplanFilter>
+  sorting?: Maybe<Array<PaymentplanSort>>
+}
 
 export type QueryPaymentArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryPaymentsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<PaymentFilter>;
-  sorting?: InputMaybe<Array<PaymentSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<PaymentFilter>
+  sorting?: Maybe<Array<PaymentSort>>
+}
 
 export type QueryRaveArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryRavesArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<RaveFilter>;
-  sorting?: InputMaybe<Array<RaveSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<RaveFilter>
+  sorting?: Maybe<Array<RaveSort>>
+}
 
 export type QueryUserArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryUsersArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<UserFilter>;
-  sorting?: InputMaybe<Array<UserSort>>;
-};
-
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<UserFilter>
+  sorting?: Maybe<Array<UserSort>>
+}
 
 export type QueryReviewArgs = {
-  id: Scalars['ID'];
-};
-
+  id: Scalars["ID"]
+}
 
 export type QueryReviewsArgs = {
-  paging?: InputMaybe<CursorPaging>;
-  filter?: InputMaybe<ReviewFilter>;
-  sorting?: InputMaybe<Array<ReviewSort>>;
-};
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<ReviewFilter>
+  sorting?: Maybe<Array<ReviewSort>>
+}
 
 export type PaymentplanFilter = {
-  and?: InputMaybe<Array<PaymentplanFilter>>;
-  or?: InputMaybe<Array<PaymentplanFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  amount?: InputMaybe<FloatFieldComparison>;
-  postedById?: InputMaybe<IdFilterComparison>;
-};
+  and?: Maybe<Array<PaymentplanFilter>>
+  or?: Maybe<Array<PaymentplanFilter>>
+  id?: Maybe<IdFilterComparison>
+  amount?: Maybe<FloatFieldComparison>
+  postedById?: Maybe<IdFilterComparison>
+}
 
 export type PaymentplanSort = {
-  field: PaymentplanSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: PaymentplanSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum PaymentplanSortFields {
-  Id = 'id',
-  Amount = 'amount',
-  PostedById = 'postedById'
+  Id = "id",
+  Amount = "amount",
+  PostedById = "postedById"
 }
 
 export type UserFilter = {
-  and?: InputMaybe<Array<UserFilter>>;
-  or?: InputMaybe<Array<UserFilter>>;
-  id?: InputMaybe<IdFilterComparison>;
-  email?: InputMaybe<StringFieldComparison>;
-  name?: InputMaybe<StringFieldComparison>;
-};
+  and?: Maybe<Array<UserFilter>>
+  or?: Maybe<Array<UserFilter>>
+  id?: Maybe<IdFilterComparison>
+  email?: Maybe<StringFieldComparison>
+  name?: Maybe<StringFieldComparison>
+}
 
 export type UserSort = {
-  field: UserSortFields;
-  direction: SortDirection;
-  nulls?: InputMaybe<SortNulls>;
-};
+  field: UserSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
 
 export enum UserSortFields {
-  Id = 'id',
-  Email = 'email',
-  Name = 'name'
+  Id = "id",
+  Email = "email",
+  Name = "name"
 }
 
 export type Mutation = {
-  __typename?: 'Mutation';
-  setPackOnLoop: Loop;
-  createOneLoop: Loop;
-  updateOneLoop: Loop;
-  deleteOneLoop: LoopDeleteResponse;
-  setPostedByOnJob: Job;
-  createOneJob: Job;
-  updateOneJob: Job;
-  deleteOneJob: JobDeleteResponse;
-  setAuthorOnPack: Pack;
-  addAudioToPack: Pack;
-  setAudioOnPack: Pack;
-  addPaymentsToPack: Pack;
-  setPaymentsOnPack: Pack;
-  addReviewsToPack: Pack;
-  setReviewsOnPack: Pack;
-  createOnePack: Pack;
-  updateOnePack: Pack;
-  deleteOnePack: PackDeleteResponse;
-  setPostedByOnPaymentplan: Paymentplan;
-  addPaymentsToPaymentplan: Paymentplan;
-  setPaymentsOnPaymentplan: Paymentplan;
-  createOnePaymentplan: Paymentplan;
-  updateOnePaymentplan: Paymentplan;
-  deleteOnePaymentplan: PaymentplanDeleteResponse;
-  setPackOnPayment: Payment;
-  setPaymentPlanOnPayment: Payment;
-  setUserOnPayment: Payment;
-  createOnePayment: Payment;
-  updateOnePayment: Payment;
-  deleteOnePayment: PaymentDeleteResponse;
-  setFollowerOnRave: Rave;
-  setFollowingOnRave: Rave;
-  createOneRave: Rave;
-  updateOneRave: Rave;
-  deleteOneRave: RaveDeleteResponse;
-  addJobsToUser: User;
-  setJobsOnUser: User;
-  addPacksToUser: User;
-  setPacksOnUser: User;
-  addFollowersToUser: User;
-  setFollowersOnUser: User;
-  addFollowingsToUser: User;
-  setFollowingsOnUser: User;
-  addPaymentsToUser: User;
-  setPaymentsOnUser: User;
-  addReviewsToUser: User;
-  setReviewsOnUser: User;
-  createOneUser: User;
-  updateOneUser: User;
-  deleteOneUser: UserDeleteResponse;
-  setUserOnReview: Review;
-  setPackOnReview: Review;
-  createOneReview: Review;
-  updateOneReview: Review;
-  deleteOneReview: ReviewDeleteResponse;
-};
-
+  __typename?: "Mutation"
+  setPackOnLoop: Loop
+  createOneLoop: Loop
+  updateOneLoop: Loop
+  deleteOneLoop: LoopDeleteResponse
+  setPostedByOnJob: Job
+  createOneJob: Job
+  updateOneJob: Job
+  deleteOneJob: JobDeleteResponse
+  setAuthorOnPack: Pack
+  addAudioToPack: Pack
+  setAudioOnPack: Pack
+  addPaymentsToPack: Pack
+  setPaymentsOnPack: Pack
+  addReviewsToPack: Pack
+  setReviewsOnPack: Pack
+  createOnePack: Pack
+  updateOnePack: Pack
+  deleteOnePack: PackDeleteResponse
+  setPostedByOnPaymentplan: Paymentplan
+  addPaymentsToPaymentplan: Paymentplan
+  setPaymentsOnPaymentplan: Paymentplan
+  createOnePaymentplan: Paymentplan
+  updateOnePaymentplan: Paymentplan
+  deleteOnePaymentplan: PaymentplanDeleteResponse
+  setPackOnPayment: Payment
+  setPaymentPlanOnPayment: Payment
+  setUserOnPayment: Payment
+  createOnePayment: Payment
+  updateOnePayment: Payment
+  deleteOnePayment: PaymentDeleteResponse
+  setFollowerOnRave: Rave
+  setFollowingOnRave: Rave
+  createOneRave: Rave
+  updateOneRave: Rave
+  deleteOneRave: RaveDeleteResponse
+  addJobsToUser: User
+  setJobsOnUser: User
+  addPacksToUser: User
+  setPacksOnUser: User
+  addFollowersToUser: User
+  setFollowersOnUser: User
+  addFollowingsToUser: User
+  setFollowingsOnUser: User
+  addPaymentsToUser: User
+  setPaymentsOnUser: User
+  addReviewsToUser: User
+  setReviewsOnUser: User
+  createOneUser: User
+  updateOneUser: User
+  deleteOneUser: UserDeleteResponse
+  setUserOnReview: Review
+  setPackOnReview: Review
+  createOneReview: Review
+  updateOneReview: Review
+  deleteOneReview: ReviewDeleteResponse
+}
 
 export type MutationSetPackOnLoopArgs = {
-  input: SetPackOnLoopInput;
-};
-
+  input: SetPackOnLoopInput
+}
 
 export type MutationCreateOneLoopArgs = {
-  input: CreateOneLoopInput;
-};
-
+  input: CreateOneLoopInput
+}
 
 export type MutationUpdateOneLoopArgs = {
-  input: UpdateOneLoopInput;
-};
-
+  input: UpdateOneLoopInput
+}
 
 export type MutationDeleteOneLoopArgs = {
-  input: DeleteOneLoopInput;
-};
-
+  input: DeleteOneLoopInput
+}
 
 export type MutationSetPostedByOnJobArgs = {
-  input: SetPostedByOnJobInput;
-};
-
+  input: SetPostedByOnJobInput
+}
 
 export type MutationCreateOneJobArgs = {
-  input: CreateOneJobInput;
-};
-
+  input: CreateOneJobInput
+}
 
 export type MutationUpdateOneJobArgs = {
-  input: UpdateOneJobInput;
-};
-
+  input: UpdateOneJobInput
+}
 
 export type MutationDeleteOneJobArgs = {
-  input: DeleteOneJobInput;
-};
-
+  input: DeleteOneJobInput
+}
 
 export type MutationSetAuthorOnPackArgs = {
-  input: SetAuthorOnPackInput;
-};
-
+  input: SetAuthorOnPackInput
+}
 
 export type MutationAddAudioToPackArgs = {
-  input: AddAudioToPackInput;
-};
-
+  input: AddAudioToPackInput
+}
 
 export type MutationSetAudioOnPackArgs = {
-  input: SetAudioOnPackInput;
-};
-
+  input: SetAudioOnPackInput
+}
 
 export type MutationAddPaymentsToPackArgs = {
-  input: AddPaymentsToPackInput;
-};
-
+  input: AddPaymentsToPackInput
+}
 
 export type MutationSetPaymentsOnPackArgs = {
-  input: SetPaymentsOnPackInput;
-};
-
+  input: SetPaymentsOnPackInput
+}
 
 export type MutationAddReviewsToPackArgs = {
-  input: AddReviewsToPackInput;
-};
-
+  input: AddReviewsToPackInput
+}
 
 export type MutationSetReviewsOnPackArgs = {
-  input: SetReviewsOnPackInput;
-};
-
+  input: SetReviewsOnPackInput
+}
 
 export type MutationCreateOnePackArgs = {
-  input: CreateOnePackInput;
-};
-
+  input: CreateOnePackInput
+}
 
 export type MutationUpdateOnePackArgs = {
-  input: UpdateOnePackInput;
-};
-
+  input: UpdateOnePackInput
+}
 
 export type MutationDeleteOnePackArgs = {
-  input: DeleteOnePackInput;
-};
-
+  input: DeleteOnePackInput
+}
 
 export type MutationSetPostedByOnPaymentplanArgs = {
-  input: SetPostedByOnPaymentplanInput;
-};
-
+  input: SetPostedByOnPaymentplanInput
+}
 
 export type MutationAddPaymentsToPaymentplanArgs = {
-  input: AddPaymentsToPaymentplanInput;
-};
-
+  input: AddPaymentsToPaymentplanInput
+}
 
 export type MutationSetPaymentsOnPaymentplanArgs = {
-  input: SetPaymentsOnPaymentplanInput;
-};
-
+  input: SetPaymentsOnPaymentplanInput
+}
 
 export type MutationCreateOnePaymentplanArgs = {
-  input: CreateOnePaymentplanInput;
-};
-
+  input: CreateOnePaymentplanInput
+}
 
 export type MutationUpdateOnePaymentplanArgs = {
-  input: UpdateOnePaymentplanInput;
-};
-
+  input: UpdateOnePaymentplanInput
+}
 
 export type MutationDeleteOnePaymentplanArgs = {
-  input: DeleteOnePaymentplanInput;
-};
-
+  input: DeleteOnePaymentplanInput
+}
 
 export type MutationSetPackOnPaymentArgs = {
-  input: SetPackOnPaymentInput;
-};
-
+  input: SetPackOnPaymentInput
+}
 
 export type MutationSetPaymentPlanOnPaymentArgs = {
-  input: SetPaymentPlanOnPaymentInput;
-};
-
+  input: SetPaymentPlanOnPaymentInput
+}
 
 export type MutationSetUserOnPaymentArgs = {
-  input: SetUserOnPaymentInput;
-};
-
+  input: SetUserOnPaymentInput
+}
 
 export type MutationCreateOnePaymentArgs = {
-  input: CreateOnePaymentInput;
-};
-
+  input: CreateOnePaymentInput
+}
 
 export type MutationUpdateOnePaymentArgs = {
-  input: UpdateOnePaymentInput;
-};
-
+  input: UpdateOnePaymentInput
+}
 
 export type MutationDeleteOnePaymentArgs = {
-  input: DeleteOnePaymentInput;
-};
-
+  input: DeleteOnePaymentInput
+}
 
 export type MutationSetFollowerOnRaveArgs = {
-  input: SetFollowerOnRaveInput;
-};
-
+  input: SetFollowerOnRaveInput
+}
 
 export type MutationSetFollowingOnRaveArgs = {
-  input: SetFollowingOnRaveInput;
-};
-
+  input: SetFollowingOnRaveInput
+}
 
 export type MutationCreateOneRaveArgs = {
-  input: CreateOneRaveInput;
-};
-
+  input: CreateOneRaveInput
+}
 
 export type MutationUpdateOneRaveArgs = {
-  input: UpdateOneRaveInput;
-};
-
+  input: UpdateOneRaveInput
+}
 
 export type MutationDeleteOneRaveArgs = {
-  input: DeleteOneRaveInput;
-};
-
+  input: DeleteOneRaveInput
+}
 
 export type MutationAddJobsToUserArgs = {
-  input: AddJobsToUserInput;
-};
-
+  input: AddJobsToUserInput
+}
 
 export type MutationSetJobsOnUserArgs = {
-  input: SetJobsOnUserInput;
-};
-
+  input: SetJobsOnUserInput
+}
 
 export type MutationAddPacksToUserArgs = {
-  input: AddPacksToUserInput;
-};
-
+  input: AddPacksToUserInput
+}
 
 export type MutationSetPacksOnUserArgs = {
-  input: SetPacksOnUserInput;
-};
-
+  input: SetPacksOnUserInput
+}
 
 export type MutationAddFollowersToUserArgs = {
-  input: AddFollowersToUserInput;
-};
-
+  input: AddFollowersToUserInput
+}
 
 export type MutationSetFollowersOnUserArgs = {
-  input: SetFollowersOnUserInput;
-};
-
+  input: SetFollowersOnUserInput
+}
 
 export type MutationAddFollowingsToUserArgs = {
-  input: AddFollowingsToUserInput;
-};
-
+  input: AddFollowingsToUserInput
+}
 
 export type MutationSetFollowingsOnUserArgs = {
-  input: SetFollowingsOnUserInput;
-};
-
+  input: SetFollowingsOnUserInput
+}
 
 export type MutationAddPaymentsToUserArgs = {
-  input: AddPaymentsToUserInput;
-};
-
+  input: AddPaymentsToUserInput
+}
 
 export type MutationSetPaymentsOnUserArgs = {
-  input: SetPaymentsOnUserInput;
-};
-
+  input: SetPaymentsOnUserInput
+}
 
 export type MutationAddReviewsToUserArgs = {
-  input: AddReviewsToUserInput;
-};
-
+  input: AddReviewsToUserInput
+}
 
 export type MutationSetReviewsOnUserArgs = {
-  input: SetReviewsOnUserInput;
-};
-
+  input: SetReviewsOnUserInput
+}
 
 export type MutationCreateOneUserArgs = {
-  input: CreateOneUserInput;
-};
-
+  input: CreateOneUserInput
+}
 
 export type MutationUpdateOneUserArgs = {
-  input: UpdateOneUserInput;
-};
-
+  input: UpdateOneUserInput
+}
 
 export type MutationDeleteOneUserArgs = {
-  input: DeleteOneUserInput;
-};
-
+  input: DeleteOneUserInput
+}
 
 export type MutationSetUserOnReviewArgs = {
-  input: SetUserOnReviewInput;
-};
-
+  input: SetUserOnReviewInput
+}
 
 export type MutationSetPackOnReviewArgs = {
-  input: SetPackOnReviewInput;
-};
-
+  input: SetPackOnReviewInput
+}
 
 export type MutationCreateOneReviewArgs = {
-  input: CreateOneReviewInput;
-};
-
+  input: CreateOneReviewInput
+}
 
 export type MutationUpdateOneReviewArgs = {
-  input: UpdateOneReviewInput;
-};
-
+  input: UpdateOneReviewInput
+}
 
 export type MutationDeleteOneReviewArgs = {
-  input: DeleteOneReviewInput;
-};
+  input: DeleteOneReviewInput
+}
 
 export type SetPackOnLoopInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type CreateOneLoopInput = {
   /** The record to create */
-  loop: AudioInputDto;
-};
+  loop: AudioInputDto
+}
 
 export type AudioInputDto = {
   /** Example field (placeholder) */
-  name: Scalars['String'];
+  name: Scalars["String"]
   /** Example field (placeholder) */
-  genre: Scalars['String'];
+  genre: Scalars["String"]
   /** Example field (placeholder) */
-  bpm: Scalars['Int'];
+  bpm: Scalars["Int"]
   /** Example field (placeholder) */
-  path: Scalars['String'];
+  path: Scalars["String"]
   /** Example field (placeholder) */
-  audioType: AudioType;
+  audioType: AudioType
   /** Example field (placeholder) */
-  key: Scalars['String'];
+  key?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
-  tempo: Scalars['Int'];
-  packId: Scalars['ID'];
-};
+  tempo: Scalars["Int"]
+  packId: Scalars["ID"]
+}
 
 export type UpdateOneLoopInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: AudioInputDto;
-};
+  update: AudioInputDto
+}
 
 export type DeleteOneLoopInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}
 
 export type SetPostedByOnJobInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type CreateOneJobInput = {
   /** The record to create */
-  job: JobInputDto;
-};
+  job: JobInputDto
+}
 
 export type JobInputDto = {
   /** Example field (placeholder) */
-  title: Scalars['String'];
+  title: Scalars["String"]
   /** Example field (placeholder) */
-  description: Scalars['String'];
+  description: Scalars["String"]
   /** Example field (placeholder) */
-  expirationDate: Scalars['Timestamp'];
-  postedById: Scalars['ID'];
-};
+  expirationDate: Scalars["Timestamp"]
+  postedById: Scalars["ID"]
+}
 
 export type UpdateOneJobInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: JobInputDto;
-};
+  update: JobInputDto
+}
 
 export type DeleteOneJobInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}
 
 export type SetAuthorOnPackInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type AddAudioToPackInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetAudioOnPackInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type AddPaymentsToPackInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetPaymentsOnPackInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type AddReviewsToPackInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetReviewsOnPackInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type CreateOnePackInput = {
   /** The record to create */
-  pack: PackInputDto;
-};
+  pack: PackInputDto
+}
 
 export type PackInputDto = {
   /** Example field (placeholder) */
-  name: Scalars['String'];
-  description: Scalars['String'];
+  name: Scalars["String"]
+  description: Scalars["String"]
   /** Example field (placeholder) */
-  price: Scalars['Float'];
+  price?: Maybe<Scalars["Float"]>
+  isLoop?: Maybe<Scalars["Boolean"]>
   /** Example field (placeholder) */
-  type: PacketType;
-  authorId: Scalars['ID'];
-  audio: Array<AudioInputDto>;
-};
+  type: PacketType
+  authorId?: Maybe<Scalars["ID"]>
+  audio?: Maybe<Array<Maybe<AudioInputDto>>>
+}
 
 export type UpdateOnePackInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: PackInputDto;
-};
+  update: PackInputDto
+}
 
 export type DeleteOnePackInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}
 
 export type SetPostedByOnPaymentplanInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type AddPaymentsToPaymentplanInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetPaymentsOnPaymentplanInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type CreateOnePaymentplanInput = {
   /** The record to create */
-  paymentplan: PaymentplanInputDto;
-};
+  paymentplan: PaymentplanInputDto
+}
 
 export type PaymentplanInputDto = {
   /** Example field (placeholder) */
-  title: Scalars['String'];
+  title: Scalars["String"]
   /** Example field (placeholder) */
-  description: Scalars['String'];
+  description: Scalars["String"]
   /** Example field (placeholder) */
-  amount: Scalars['Float'];
+  amount: Scalars["Float"]
   /** Example field (placeholder) */
-  month: Scalars['Int'];
-  postedById: Scalars['ID'];
-};
+  month: Scalars["Int"]
+  postedById: Scalars["ID"]
+}
 
 export type UpdateOnePaymentplanInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: PaymentplanInputDto;
-};
+  update: PaymentplanInputDto
+}
 
 export type DeleteOnePaymentplanInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}
 
 export type SetPackOnPaymentInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type SetPaymentPlanOnPaymentInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type SetUserOnPaymentInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type CreateOnePaymentInput = {
   /** The record to create */
-  payment: PaymentInputDto;
-};
+  payment: PaymentInputDto
+}
 
 export type PaymentInputDto = {
   /** Example field (placeholder) */
-  type: PlanType;
+  type: PlanType
   /** Example filed (placeholder) */
-  price: Scalars['Int'];
+  price: Scalars["Int"]
   /** Example filed (placeholder) */
-  planStartDate: Scalars['Timestamp'];
+  planStartDate: Scalars["Timestamp"]
   /** Example filed (placeholder) */
-  planEndDate: Scalars['Timestamp'];
+  planEndDate: Scalars["Timestamp"]
   /** possible values are (MoPay) and (PayPal) */
-  paymentMode: PaymentModel;
+  paymentMode: PaymentModel
   /** Example filed (placeholder) */
-  confirmationToken: Scalars['String'];
+  confirmationToken: Scalars["String"]
   /** Example filed (placeholder) */
-  isActive: Scalars['Int'];
-  packId: Scalars['ID'];
-  paymentPlanId: Scalars['ID'];
-  userId: Scalars['ID'];
-};
+  isActive: Scalars["Int"]
+  packId: Scalars["ID"]
+  paymentPlanId: Scalars["ID"]
+  userId: Scalars["ID"]
+}
 
 export type UpdateOnePaymentInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: PaymentInputDto;
-};
+  update: PaymentInputDto
+}
 
 export type DeleteOnePaymentInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}
 
 export type SetFollowerOnRaveInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type SetFollowingOnRaveInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type CreateOneRaveInput = {
   /** The record to create */
-  rave: RaveInputDto;
-};
+  rave: RaveInputDto
+}
 
 export type RaveInputDto = {
   /** Example field (placeholder) */
-  followerId: Scalars['Int'];
+  followerId: Scalars["Int"]
   /** Example field (placeholder) */
-  followingId: Scalars['Int'];
-};
+  followingId: Scalars["Int"]
+}
 
 export type UpdateOneRaveInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: RaveInputDto;
-};
+  update: RaveInputDto
+}
 
 export type DeleteOneRaveInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}
 
 export type AddJobsToUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetJobsOnUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type AddPacksToUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetPacksOnUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type AddFollowersToUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetFollowersOnUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type AddFollowingsToUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetFollowingsOnUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type AddPaymentsToUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetPaymentsOnUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type AddReviewsToUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type SetReviewsOnUserInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The ids of the relations. */
-  relationIds: Array<Scalars['ID']>;
-};
+  relationIds: Array<Scalars["ID"]>
+}
 
 export type CreateOneUserInput = {
   /** The record to create */
-  user: UserInputDto;
-};
+  user: UserInputDto
+}
 
 export type UserInputDto = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  emailVerified?: InputMaybe<Scalars['Boolean']>;
-  image?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-  about?: InputMaybe<Scalars['String']>;
-};
+  email: Scalars["String"]
+  password: Scalars["String"]
+  emailVerified?: Maybe<Scalars["Boolean"]>
+  image?: Maybe<Scalars["String"]>
+  name: Scalars["String"]
+  about?: Maybe<Scalars["String"]>
+}
 
 export type UpdateOneUserInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: UserUpdateDto;
-};
+  update: UserUpdateDto
+}
 
 export type UserUpdateDto = {
-  email?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  emailVerified?: InputMaybe<Scalars['Boolean']>;
-  image?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  about?: InputMaybe<Scalars['String']>;
-};
+  email?: Maybe<Scalars["String"]>
+  password?: Maybe<Scalars["String"]>
+  emailVerified?: Maybe<Scalars["Boolean"]>
+  image?: Maybe<Scalars["String"]>
+  name?: Maybe<Scalars["String"]>
+  about?: Maybe<Scalars["String"]>
+}
 
 export type DeleteOneUserInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}
 
 export type SetUserOnReviewInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type SetPackOnReviewInput = {
   /** The id of the record. */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The id of relation. */
-  relationId: Scalars['ID'];
-};
+  relationId: Scalars["ID"]
+}
 
 export type CreateOneReviewInput = {
   /** The record to create */
-  review: ReviewInputDto;
-};
+  review: ReviewInputDto
+}
 
 export type ReviewInputDto = {
-  review: Scalars['String'];
-  userId: Scalars['ID'];
-  packId: Scalars['ID'];
-};
+  review: Scalars["String"]
+  userId: Scalars["ID"]
+  packId: Scalars["ID"]
+}
 
 export type UpdateOneReviewInput = {
   /** The id of the record to update */
-  id: Scalars['ID'];
+  id: Scalars["ID"]
   /** The update to apply. */
-  update: ReviewInputDto;
-};
+  update: ReviewInputDto
+}
 
 export type DeleteOneReviewInput = {
   /** The id of the record to delete. */
-  id: Scalars['ID'];
-};
+  id: Scalars["ID"]
+}

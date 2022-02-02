@@ -1,15 +1,16 @@
 import {
   useContext,
+  useEffect,
   useState,
 } from 'react';
 
 import axios from 'axios';
 import { AppContext } from 'index';
 import {
-  createAudio,
-  createPack,
-  loopInputVariables,
-  packInputVariables,
+  updateOneAudio,
+  updateOneLoopVariables,
+  updateOnePack,
+  updateOnePackVariables,
 } from 'queries';
 import {
   Loop,
@@ -18,7 +19,6 @@ import {
 } from 'queries/model';
 import { useForm } from 'react-hook-form';
 import { MdGraphicEq } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
 import {
@@ -76,13 +76,14 @@ const genres = [
   "Electro",
 ];
 
-const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
-  let history = useNavigate();
-  const packId = props?.packId || "";
-  const [createOnePack] =
-    useMutation<{ createOnePack: MakeOptional<Pack, keyof Pack> }>(createPack);
-  const [createOneLoop] =
-    useMutation<{ createOneLoop: MakeOptional<Loop, keyof Loop> }>(createAudio);
+const EditLoop: React.FC<{
+  packId: string;
+  loop: MakeOptional<Loop, keyof Loop>;
+  isLoop: boolean;
+  refetch?: any;
+}> = ({ packId, loop: defaultValue = {}, isLoop = false, refetch }) => {
+  const [updatePack] = useMutation<{ UpdateOnePack: Pack }>(updateOnePack);
+  const [updateLoop] = useMutation<{ UpdateOneLoop: Loop }>(updateOneAudio);
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -90,9 +91,13 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
     formState: { errors },
   } = useForm({
     mode: "onTouched",
+    defaultValues: { ...(defaultValue as any) },
   });
   const [isOneShot, setOneShot] = useState(false);
   const [tempoValue, setTempo] = useState(0);
+  useEffect(() => {
+    setTempo(defaultValue.tempo || 0);
+  }, []);
   const [files, setFiles] = useState([]);
   const [isFree, setFree] = useState(false);
   const toast = useToast();
@@ -115,12 +120,14 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
 
   const submit = async (data) => {
     // todo: should implement logic here to upload audio and get the file path
+    debugger;
     data.tempo = tempoValue;
     data.bpm = data.bpm ? parseInt(data.bpm) : undefined;
     try {
       if (files.length > 0) {
         const formData = new FormData();
         formData.append("file", files[0].file);
+
         const response = await axios({
           method: "post",
           url: "/upload/audio",
@@ -130,8 +137,6 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
         });
         console.log(response.data.path);
         data.path = response.data.path;
-      } else {
-        return false;
       }
     } catch (e) {
       console.log(e);
@@ -139,53 +144,58 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
     }
     const authorId = cookies.get("userId");
     try {
-      if (packId) {
-        // submit the audio as single package
+      if (!isLoop) {
+        // submit the audio to a package
         data.packId = packId;
         setLoading(true);
-        const {
-          data: { createOneLoop: loop },
-        } = await createOneLoop(loopInputVariables(data));
+        const loop: MakeOptional<Loop, keyof Loop> = await updateLoop(
+          updateOneLoopVariables(data)
+        );
         setLoading(false);
         toast({
-          title: `Success saved`,
+          title: `Success updated audio details`,
           description: `${loop.name} added to pack`,
           status: "success",
           duration: 4000,
           isClosable: true,
           position: "top",
         });
-        history(`/pack/${packId}`);
+        if (refetch) {
+          refetch();
+        }
+        //redirect to pack page
+        return;
       } else {
         const packInput: MakeOptional<Pack, keyof Pack> = {
+          id: packId,
           name: data.name,
           price: data.price,
           type: data.type,
           description: data.description,
           authorId: authorId,
-          isLoop: true,
         };
         setLoading(true);
         const {
-          data: { createOnePack: pack },
-        } = await createOnePack(packInputVariables(packInput));
+          data: { UpdateOnePack: pack },
+        } = await updatePack(updateOnePackVariables(packInput));
+
         delete data.type;
         delete data.description;
         delete data.price;
         data.packId = pack.id;
         const {
-          data: { createOneLoop: loop },
-        } = await createOneLoop(loopInputVariables(data));
+          data: { UpdateOneLoop: loop },
+        } = await updateLoop(updateOneLoopVariables(data));
         toast({
-          title: `Successfully created Single loop`,
-          description: `${loop.name} created`,
+          title: `Successfully updated loop`,
+          description: `${loop.name} updated`,
           status: "success",
           duration: 4000,
           isClosable: true,
           position: "top",
         });
         setLoading(false);
-        history(`/pack`, {state: {activeTab: 1}});
+        return;
       }
     } catch (e) {
       setLoading(false);
@@ -203,7 +213,7 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
         <Stack align={"center"}>
           {!packId ? (
             <Heading fontSize={"4xl"} textAlign={"center"}>
-              Upload your single audio loop
+              Edit your audio details
             </Heading>
           ) : null}
         </Stack>
@@ -223,17 +233,13 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
           ) : (
             <Stack spacing={4}>
               <form onSubmit={handleSubmit(submit)}>
-                <FormControl id="name" isInvalid={errors.name} isRequired>
+                <FormControl id="name" isInvalid={errors.name}>
                   <FormLabel>Title</FormLabel>
                   <Input
                     type="text"
                     id="name"
                     name="name"
                     {...register("name", {
-                      required: {
-                        value: true,
-                        message: "This Field is required",
-                      },
                       maxLength: {
                         value: 75,
                         message: "maximum characters allowed is 75",
@@ -250,18 +256,13 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                 </FormControl>
                 {!packId && (
                   <>
-                    <FormControl isInvalid={errors.type} isRequired>
+                    <FormControl isInvalid={errors.type}>
                       <FormLabel>Paid/Free</FormLabel>
                       <Select
                         id="type"
                         name="type"
                         defaultValue={""}
-                        {...register("type", {
-                          required: {
-                            value: true,
-                            message: "This Field is required",
-                          },
-                        })}
+                        {...register("type", {})}
                         onLoad={setFreeField}
                         onChange={setFreeField}
                       >
@@ -281,17 +282,12 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                     <FormControl
                       id="description"
                       isInvalid={errors.description}
-                      isRequired
                     >
                       <FormLabel>Description</FormLabel>
                       <Textarea
                         id="description"
                         name="description"
                         {...register("description", {
-                          required: {
-                            value: true,
-                            message: "This Field is required",
-                          },
                           maxLength: {
                             value: 200,
                             message: "maximum characters allowed is 200",
@@ -316,10 +312,6 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                       name="price"
                       type="number"
                       {...register("price", {
-                        required: {
-                          value: true,
-                          message: "This Field is required",
-                        },
                         max: {
                           value: 200,
                           message: "Price cannot be greater than 200",
@@ -332,35 +324,25 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                     </FormErrorMessage>
                   </FormControl>
                 )}
-                <FormControl id="bpm" isInvalid={errors.bpm} isRequired>
+                <FormControl id="bpm" isInvalid={errors.bpm}>
                   <FormLabel>Beats Per Minute</FormLabel>
                   <Input
                     type="number"
                     id="bpm"
                     name="bpm"
-                    {...register("bpm", {
-                      required: {
-                        value: true,
-                        message: "This Field is required",
-                      },
-                    })}
+                    {...register("bpm", {})}
                   />
                   <FormErrorMessage>
                     {errors.bpm && errors.bpm.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors.audioType} isRequired>
+                <FormControl isInvalid={errors.audioType}>
                   <FormLabel>Audio Type</FormLabel>
                   <Select
                     id="audioType"
                     name="audioType"
                     defaultValue={""}
-                    {...register("audioType", {
-                      required: {
-                        value: true,
-                        message: "This Field is required",
-                      },
-                    })}
+                    {...register("audioType", {})}
                     onChange={(e) => {
                       console.log(e.target.value);
                       if (e.target.value === "oneshot") {
@@ -384,18 +366,13 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                   </FormErrorMessage>
                 </FormControl>
                 {isOneShot && (
-                  <FormControl isInvalid={errors.key} isRequired>
+                  <FormControl isInvalid={errors.key}>
                     <FormLabel>key</FormLabel>
                     <Select
                       id="key"
                       name="key"
                       defaultValue={""}
-                      {...register("key", {
-                        required: {
-                          value: true,
-                          message: "This Field is required",
-                        },
-                      })}
+                      {...register("key", {})}
                       onChange={(e) => {
                         console.log(e.target.value);
                       }}
@@ -420,12 +397,7 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                     id="genre"
                     name="genre"
                     defaultValue={""}
-                    {...register("genre", {
-                      required: {
-                        value: true,
-                        message: "This Field is required",
-                      },
-                    })}
+                    {...register("genre", {})}
                     onChange={(e) => {
                       console.log(e.target.value);
                     }}
@@ -443,13 +415,13 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                     {errors.genre && errors.genre.message}
                   </FormErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={errors.tempo} isRequired>
+                <FormControl isInvalid={errors.tempo}>
                   <FormLabel>Tempo</FormLabel>
                   <FormHelperText>{tempoValue}</FormHelperText>
                   <Slider
                     min={0}
                     max={300}
-                    defaultValue={tempoValue}
+                    defaultValue={defaultValue?.tempo}
                     onChange={(val) => setTempo(val)}
                   >
                     <SliderTrack bg="red.100">
@@ -499,7 +471,7 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
                     }}
                     type="submit"
                   >
-                    Add Audio {packId && "to Pack"}
+                    Update Audio {!isLoop && "in Pack"}
                   </Button>
                 </Stack>
               </form>
@@ -511,4 +483,4 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
   );
 };
 
-export { CreateLoop };
+export { EditLoop };

@@ -39,3 +39,48 @@ export class AudioInputDTO {
   @FilterableField(() => ID)
   packId: number;
 }
+
+@InputType()
+export class AudioUpdateDTO {
+  @FilterableField({
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  name?: string;
+
+  @FilterableField({
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  genre?: string;
+
+  @FilterableField(() => Int, {
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  bpm?: number;
+
+  @Field({ description: 'Example field (placeholder)', nullable: true })
+  path?: string;
+
+  @Field(() => AudioType, {
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  audioType?: AudioType;
+
+  @FilterableField({
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  key?: string;
+
+  @FilterableField(() => Int, {
+    description: 'Example field (placeholder)',
+    nullable: true,
+  })
+  tempo?: number;
+
+  @FilterableField(() => ID, { nullable: true })
+  packId?: number;
+}

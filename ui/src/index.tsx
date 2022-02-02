@@ -2,6 +2,7 @@ import React, { createContext } from 'react';
 import ReactDOM from 'react-dom';
 
 import { ShowPack } from 'components/audio/pack.show';
+import EditUser from 'components/user/user.edit';
 import theme from 'definitions/chakra/theme';
 import { KabaflowLayout } from 'layouts/kabaflow.layout';
 import { NewAudioPage } from 'pages/newAudio.page';
@@ -13,6 +14,7 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
+import { RequireAuth } from 'state/user';
 import Cookie from 'universal-cookie';
 
 import {
@@ -29,7 +31,9 @@ const cookies = new Cookie();
 
 const client = new ApolloClient({
   uri: "/graphql",
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
   credentials: "include",
 });
 
@@ -39,17 +43,26 @@ export const AppRouter = () => {
       <Route path="/" element={<App />} />
       <Route path="signup" element={<SignUp />} />
       <Route path="signin" element={<SignIn />} />
-      <Route path="pack" element={<PackPage />} />
-      <Route path="pack/:id" element={<ShowPack />} />
+      <Route path="profile" element={<EditUser />} />
+      <Route
+        path="pack"
+        element={
+          <RequireAuth>
+            <PackPage />
+          </RequireAuth>
+        }
+      />
+
+      <Route path="pack/:id" element={<RequireAuth><ShowPack /></RequireAuth>} />
       <Route path="new-pack" element={<NewAudioPage />} />
     </Routes>
   );
 };
-export const Cookies = createContext({ cookies });
+export const AppContext = createContext({ cookies });
 
 const Index: React.FC = () => {
   return (
-    <Cookies.Provider value={{ cookies }}>
+    <AppContext.Provider value={{ cookies }}>
       <ApolloProvider client={client}>
         <ChakraProvider theme={theme}>
           <BrowserRouter>
@@ -57,7 +70,7 @@ const Index: React.FC = () => {
           </BrowserRouter>
         </ChakraProvider>
       </ApolloProvider>
-    </Cookies.Provider>
+    </AppContext.Provider>
   );
 };
 

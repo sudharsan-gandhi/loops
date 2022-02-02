@@ -3,7 +3,7 @@ import {
   useEffect,
 } from 'react';
 
-import { PackCard } from 'components/cards';
+import { LoopCardWithPack } from 'components/cards/loop.card';
 import { AppContext } from 'index';
 import {
   CursorPaging,
@@ -13,22 +13,21 @@ import {
   PackFilter,
   PackSort,
 } from 'queries';
-import { Link } from 'react-router-dom';
 
 import { useLazyQuery } from '@apollo/client';
 import {
   Box,
   Flex,
-  SimpleGrid,
   Skeleton,
   Stack,
   VStack,
 } from '@chakra-ui/react';
 
-export const AllPacks: React.FC = () => {
+export const AllLoops: React.FC = () => {
   const { cookies } = useContext(AppContext);
   const userId = cookies.get("userId");
-  const [loadGreeting, { called, loading, data }] = useLazyQuery(getAllPacks);
+  const [loadLoops, { called, loading, data, refetch }] =
+    useLazyQuery(getAllPacks);
 
   const paging: CursorPaging = {
     first: 10,
@@ -39,7 +38,7 @@ export const AllPacks: React.FC = () => {
   const sorting: Maybe<Array<PackSort>> = [];
 
   useEffect(() => {
-    loadGreeting(getAllPacksVariables(userId, paging, filter, sorting));
+    loadLoops(getAllPacksVariables(userId, paging, filter, sorting, true));
   }, []);
   return (
     <>
@@ -55,15 +54,20 @@ export const AllPacks: React.FC = () => {
             ) : data?.packs?.edges.length === 0 ? (
               <Box>No Packs added</Box>
             ) : (
-              <SimpleGrid columns={{base: 2, md: 3, lg: 4}} spacing={10} px={{base: 5, md: 10}} py={10}>
+              <VStack>
                 {data?.packs?.edges.map(({ node }, index) => (
-                  <>
-                    <Link key={index} to={`/pack/${node.id}`}>
-                      <PackCard key={node.id} pack={node} />
-                    </Link>
+                  <> 
+                    {/* <Link key={index} to={`/pack/${node.id}`}> */}
+                    <LoopCardWithPack
+                      key={node.id}
+                      pack={node}
+                      packId={node.id}
+                      refetch={refetch}
+                    />
+                    {/* </Link> */}
                   </>
                 ))}
-              </SimpleGrid>
+              </VStack>
             )}
           </Box>
         </VStack>
