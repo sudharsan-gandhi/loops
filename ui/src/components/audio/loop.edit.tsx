@@ -139,6 +139,14 @@ const EditLoop: React.FC<{
         data.path = response.data.path;
       }
     } catch (e) {
+      toast({
+        title: `Error updating new audio file`,
+        description: e.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(e);
       return false;
     }
@@ -198,6 +206,14 @@ const EditLoop: React.FC<{
         return;
       }
     } catch (e) {
+      toast({
+        title: `Error updating data`,
+        description: e.message,
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
       setLoading(false);
     }
   };

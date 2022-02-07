@@ -5,16 +5,20 @@ import { ShowPack } from 'components/audio/pack.show';
 import EditUser from 'components/user/user.edit';
 import theme from 'definitions/chakra/theme';
 import { KabaflowLayout } from 'layouts/kabaflow.layout';
+import Home from 'pages/home.page';
 import { NewAudioPage } from 'pages/newAudio.page';
-import { PackPage } from 'pages/pack/pack.page';
-import SignIn from 'pages/signin';
-import SignUp from 'pages/signup';
+import { PackPage } from 'pages/pack.page';
+import SignIn from 'pages/signin.page';
+import SignUp from 'pages/signup.page';
 import {
   BrowserRouter,
   Route,
   Routes,
 } from 'react-router-dom';
-import { RequireAuth } from 'state/user';
+import {
+  LoadAuth,
+  RequireAuth,
+} from 'state/user';
 import Cookie from 'universal-cookie';
 
 import {
@@ -24,7 +28,6 @@ import {
 } from '@apollo/client';
 import { ChakraProvider } from '@chakra-ui/react';
 
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const cookies = new Cookie();
@@ -40,10 +43,24 @@ const client = new ApolloClient({
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/" element={<App />} />
+      <Route
+        path="/"
+        element={
+          <LoadAuth>
+            <Home />
+          </LoadAuth>
+        }
+      />
       <Route path="signup" element={<SignUp />} />
       <Route path="signin" element={<SignIn />} />
-      <Route path="profile" element={<EditUser />} />
+      <Route
+        path="profile"
+        element={
+          <RequireAuth>
+            <EditUser />
+          </RequireAuth>
+        }
+      />
       <Route
         path="pack"
         element={
@@ -53,8 +70,22 @@ export const AppRouter = () => {
         }
       />
 
-      <Route path="pack/:id" element={<RequireAuth><ShowPack /></RequireAuth>} />
-      <Route path="new-pack" element={<NewAudioPage />} />
+      <Route
+        path="pack/:id"
+        element={
+          <LoadAuth>
+            <ShowPack />
+          </LoadAuth>
+        }
+      />
+      <Route
+        path="new-pack"
+        element={
+          <RequireAuth>
+            <NewAudioPage />
+          </RequireAuth>
+        }
+      />
     </Routes>
   );
 };

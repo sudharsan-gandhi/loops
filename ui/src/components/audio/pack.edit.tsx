@@ -10,7 +10,6 @@ import {
   updateOnePackVariables,
 } from 'queries';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import { useMutation } from '@apollo/client';
 import {
@@ -28,6 +27,7 @@ import {
   Text,
   Textarea,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react';
 
 export const packetType = ["FREE", "PAID"];
@@ -36,8 +36,7 @@ export const EditPack: React.FC<{
   pack: Pack;
   refetch: any;
   editClose: any;
-}> = ({pack, refetch, editClose}) => {
-  let history = useNavigate();
+}> = ({ pack, refetch, editClose }) => {
   const [updatePack, { loading }] =
     useMutation<{ UpdateOnePack: Pack }>(updateOnePack);
   const [isFree, setFree] = useState(false);
@@ -49,6 +48,8 @@ export const EditPack: React.FC<{
     mode: "onTouched",
     defaultValues: { ...(pack as any) },
   });
+
+  const toast = useToast();
 
   const setFreeField = (e) => {
     if (e.target.value === "FREE") {
@@ -62,15 +63,29 @@ export const EditPack: React.FC<{
 
   const submit = async (data) => {
     try {
-      debugger;
       data.authorId = cookies.get("userId") as number;
       const {
         data: { UpdateOnePack: pack },
       } = await updatePack(updateOnePackVariables(data));
-      console.log(pack);
+      toast({
+        title: `Successfully updated pack details`,
+        description: `${pack.name} updated`,
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
       refetch();
       editClose();
     } catch (err) {
+      toast({
+        title: `Error updating pack`,
+        description: err.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(err);
     }
   };

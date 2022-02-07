@@ -37,7 +37,7 @@ export class AudioAuthorizer implements CustomAuthorizer<AudioInputDTO> {
     // check first global access
     const action = authorizationContext.operationGroup;
     let allowed = this.acl.allowed(
-      user.role,
+      user.role || 'guest',
       this.NAME,
       action,
       AuthPossesion.ANY,

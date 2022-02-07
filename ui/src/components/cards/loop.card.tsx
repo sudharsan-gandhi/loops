@@ -55,11 +55,14 @@ function labelAndValue(label, value) {
       <VStack
         justifyContent={"baseline"}
         display={{ base: "none", lg: "flex" }}
+        flex="1"
       >
         <Box>
           <Badge colorScheme={"red"}>{label}</Badge>
         </Box>
-        <Box>{value}</Box>
+        <Box>
+          <Text isTruncated>{value}</Text>
+        </Box>
       </VStack>
     </>
   );
@@ -171,7 +174,6 @@ export const LoopCardWithPack: React.FC<{
 
   const deleteAudioFn = async () => {
     try {
-      debugger;
       const {
         data: { deleteOneLoop: deleted },
       } = await deleteAudio(deleteOneVariable(audio.id));
@@ -238,17 +240,19 @@ export const LoopCardWithPack: React.FC<{
         p="5"
         m="5"
         boxShadow="2xl"
-        w={{ base: "sm", lg: "3xl" }}
+        w="100%"
       >
-        <HStack justifyContent={"space-between"} alignItems={"center"}>
-          <Center>
+        <HStack alignItems={"center"}>
+          <Center flex="1">
             <IconButton aria-label="play" icon={<FiPlay></FiPlay>}></IconButton>
           </Center>
-          <VStack justifyContent={"baseline"}>
+          <VStack justifyContent={"baseline"} flex="1">
             <Box display={{ base: "none", lg: "flex" }}>
               <Badge colorScheme={"red"}>Name</Badge>
             </Box>
-            <Box fontWeight={"bold"}>{audio.name}</Box>
+            <Box fontWeight={"bold"}>
+              <Text maxWidth="" isTruncated>{audio.name}</Text>
+            </Box>
           </VStack>
           {labelAndValue("BPM", audio.bpm)}
           {labelAndValue("Genre", audio.genre)}
@@ -256,7 +260,7 @@ export const LoopCardWithPack: React.FC<{
           {audio.key && labelAndValue("Note", audio.key)}
           {labelAndValue("Type", audio.audioType)}
           {showPrice(pack)}
-          <Center>
+          <Center flex="1">
             <IconButton
               variant={"ghost"}
               aria-label="extra"
@@ -393,19 +397,20 @@ export const LoopCard: React.FC<{
         borderColor={"red.200"}
         borderRadius={4}
         p="5"
-        m="5"
         boxShadow="2xl"
-        w={{ base: "sm", lg: "3xl" }}
+        w={{ base: "sm", md: "lg", lg: "3xl" }}
       >
         <HStack justifyContent={"space-between"} alignItems={"center"}>
           <Center>
             <IconButton aria-label="play" icon={<FiPlay></FiPlay>}></IconButton>
           </Center>
-          <VStack justifyContent={"baseline"}>
-            <Box>
+          <VStack justifyContent={"center"}>
+            <Box display={{ base: "none", lg: "block" }}>
               <Badge colorScheme={"red"}>Name</Badge>
             </Box>
-            <Box fontWeight={"bold"}>{audio.name}</Box>
+            <Box fontWeight={"bold"}>
+              <Text isTruncated>{audio.name}</Text>
+            </Box>
           </VStack>
           {labelAndValue("BPM", audio.bpm)}
           {labelAndValue("Genre", audio.genre)}

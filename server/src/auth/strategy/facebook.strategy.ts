@@ -41,13 +41,15 @@ export class FacebookStrategy extends PassportStrategy(Strategy) {
     let user = await this.auth.findUser(email);
 
     // updates profile data with fb details on each signin
-    user = await this.auth.saveUser({
-      name: name.givenName + ' ' + name.familyName,
-      email: emails[0].value as string,
-      image: photos[0].value as string,
-      emailVerified: emails[0].verified as boolean,
-      authorizer: Authorizer.FACEBOOK,
-    } as User);
+    if (!user) {
+      user = await this.auth.saveUser({
+        name: name.givenName + ' ' + name.familyName,
+        email: emails[0].value as string,
+        image: photos[0].value as string,
+        emailVerified: emails[0].verified as boolean,
+        authorizer: Authorizer.FACEBOOK,
+      } as User);
+    }
 
     if (user) {
       if (user.authorizer == Authorizer.FACEBOOK) {

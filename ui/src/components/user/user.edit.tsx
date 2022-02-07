@@ -15,6 +15,7 @@ import { useUser } from 'state/user';
 
 import { useMutation } from '@apollo/client';
 import {
+  Badge,
   Box,
   Flex,
   Heading,
@@ -91,8 +92,11 @@ const EditUser: React.FC = () => {
       <Stack spacing={8} mx={"auto"} w={"container.md"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
-            Edit Profile
+            Edit Profile{" "}
           </Heading>
+          {currentUser?.authorizer.toUpperCase() !== "LOCAL" && (
+              <Badge colorScheme="red" p="1">{currentUser.authorizer} User</Badge>
+            )}
         </Stack>
         <Box
           rounded={"lg"}

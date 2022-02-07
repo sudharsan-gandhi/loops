@@ -19,7 +19,6 @@ import {
   FiEdit,
   FiHome,
   FiMenu,
-  FiSettings,
   FiStar,
 } from 'react-icons/fi';
 import { MdOutlineMusicVideo } from 'react-icons/md';
@@ -29,6 +28,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import {
+  IsAuth,
   useAuth,
   useUser,
 } from 'state/user';
@@ -68,13 +68,14 @@ interface LinkItemProps {
   name: string;
   link: string;
   icon: IconType;
+  isAuth?: boolean;
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, link: "/" },
-  { name: "Add Packs", icon: CgFolderAdd, link: "/new-pack" },
-  { name: "My Packs", icon: MdOutlineMusicVideo, link: "/pack" },
-  { name: "WishList", icon: FiStar, link: "/" },
-  { name: "Settings", icon: FiSettings, link: "/" },
+  { name: "Add Packs", icon: CgFolderAdd, link: "/new-pack", isAuth: true },
+  { name: "My Packs", icon: MdOutlineMusicVideo, link: "/pack", isAuth: true },
+  { name: "WishList", icon: FiStar, link: "/", isAuth: true },
+  // { name: "Settings", icon: FiSettings, link: "/" },
 ];
 
 interface NavItemProps extends FlexProps {
@@ -118,6 +119,7 @@ export const KabaflowLayout: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const { auth, logout } = useAuth();
+  const { setUser } = useUser();
   let location = useLocation();
   let history = useNavigate();
   let [currentUser, setCurrentUser] = useState<MakeOptional<User, keyof User>>(
@@ -154,21 +156,32 @@ export const KabaflowLayout: React.FC = () => {
   const btnRef = useRef();
   const btnRight = useRef();
   const signOut = async () => {
-    const resp = await axios.get("/auth/logout");
-    if (resp.status === 200) {
-      toast({
-        title: "Logged out user",
-        description: "redirecting to home page",
-        duration: 4000,
-        id: "signout",
-        status: "success",
-      });
-      logout();
-      history("/");
-    } else {
+    try {
+      const resp = await axios.get("/auth/logout");
+      if (resp.status === 200) {
+        toast({
+          title: "Logged out user",
+          description: "redirecting to home page",
+          duration: 4000,
+          id: "signout",
+          status: "success",
+        });
+        logout();
+        setUser({});
+        history("/");
+      } else {
+        toast({
+          title: "Error terminating session",
+          description: `${resp.statusText}`,
+          duration: 4000,
+          status: "error",
+          position: "top",
+        });
+      }
+    } catch (e) {
       toast({
         title: "Error terminating session",
-        description: `${resp.statusText}`,
+        description: e.message,
         duration: 4000,
         status: "error",
         position: "top",
@@ -266,11 +279,23 @@ export const KabaflowLayout: React.FC = () => {
           <DrawerHeader>Kabaflow</DrawerHeader>
 
           <DrawerBody>
-            {LinkItems.map((link) => (
-              <NavItem link={link.link} key={link.name} icon={link.icon}>
-                {link.name}
-              </NavItem>
-            ))}
+            {LinkItems.map((link) => {
+              if (link.isAuth) {
+                return (
+                  <IsAuth userId={currentUser.id}>
+                    <NavItem link={link.link} key={link.name} icon={link.icon}>
+                      {link.name}
+                    </NavItem>
+                  </IsAuth>
+                );
+              } else {
+                return (
+                  <NavItem link={link.link} key={link.name} icon={link.icon}>
+                    {link.name}
+                  </NavItem>
+                );
+              }
+            })}
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>
@@ -307,7 +332,9 @@ export const KabaflowLayout: React.FC = () => {
                     size={"xl"}
                     src={
                       currentUser?.image
-                        ? `/static/avatars/${currentUser?.image}`
+                        ? currentUser.image.startsWith("http")
+                          ? currentUser?.image
+                          : `/static/avatars/${currentUser?.image}`
                         : ""
                     }
                   />

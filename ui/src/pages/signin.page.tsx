@@ -46,10 +46,15 @@ const SignIn: React.FC = () => {
   const setUser = useUser((state) => state.setUser);
 
   async function isLoggedIn() {
-    const resp = await axios.get("/auth/isLoggedIn");
-    console.log("isloggedin", resp);
-    resp?.data?.id ? login() : logout();
-    resp?.data?.id ? setUser(resp.data) : setUser({});
+    try {
+      const resp = await axios.get("/auth/isLoggedIn");
+      console.log("isloggedin", resp);
+      resp?.data?.id ? login() : logout();
+      resp?.data?.id ? setUser(resp.data) : setUser({});
+    } catch (e) {
+      logout();
+      setUser({});
+    }
   }
 
   useEffect(() => {
@@ -60,6 +65,7 @@ const SignIn: React.FC = () => {
       }
     } catch (e) {
       logout();
+      setUser({});
     }
   }, []);
 
@@ -107,6 +113,15 @@ const SignIn: React.FC = () => {
       }
       login();
     } catch (err) {
+      toast({
+        title: `login failed`,
+        description: err.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+        variant: "left-accent",
+      });
       console.log(err);
     }
     setTimeout(() => setLoading(false), 1000);

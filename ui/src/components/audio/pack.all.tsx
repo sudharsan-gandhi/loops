@@ -22,13 +22,15 @@ import {
   SimpleGrid,
   Skeleton,
   Stack,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 
 export const AllPacks: React.FC = () => {
   const { cookies } = useContext(AppContext);
   const userId = cookies.get("userId");
-  const [loadGreeting, { called, loading, data }] = useLazyQuery(getAllPacks);
+  const toast = useToast();
+  const [loadPacks, { called, loading, data }] = useLazyQuery(getAllPacks);
 
   const paging: CursorPaging = {
     first: 10,
@@ -39,8 +41,20 @@ export const AllPacks: React.FC = () => {
   const sorting: Maybe<Array<PackSort>> = [];
 
   useEffect(() => {
-    loadGreeting(getAllPacksVariables(userId, paging, filter, sorting));
+    try {
+      loadPacks(getAllPacksVariables(userId, paging, filter, sorting));
+    } catch (err) {
+      toast({
+        title: `Unable to load packages`,
+        description: err.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
+    }
   }, []);
+
   return (
     <>
       <Flex alignItems={"flex-start"} justifyContent={"center"} mt="2">
@@ -55,7 +69,12 @@ export const AllPacks: React.FC = () => {
             ) : data?.packs?.edges.length === 0 ? (
               <Box>No Packs added</Box>
             ) : (
-              <SimpleGrid columns={{base: 2, md: 3, lg: 4}} spacing={10} px={{base: 5, md: 10}} py={10}>
+              <SimpleGrid
+                columns={{ base: 2, md: 3, lg: 4 }}
+                spacing={{ base: 4, md: 5 }}
+                px={{ base: 5, md: 10 }}
+                py={{ base: 5, md: 4 }}
+              >
                 {data?.packs?.edges.map(({ node }, index) => (
                   <>
                     <Link key={index} to={`/pack/${node.id}`}>

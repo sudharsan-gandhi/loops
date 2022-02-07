@@ -6,7 +6,6 @@ import {
   signupUser,
   signupVariables,
 } from 'queries';
-import { useForm } from 'react-hook-form';
 import {
   Link as Router,
   useNavigate,
@@ -28,17 +27,9 @@ import {
 export const State = (state) => <pre>{JSON.stringify(state, null, 2)}</pre>;
 
 const SignUp: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [createOneUser, { data, loading, error }] = useMutation(signupUser);
+  const [createOneUser, { loading }] = useMutation(signupUser);
   const history = useNavigate();
   const toast = useToast();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm({
-    mode: "onTouched",
-  });
 
   const submit = async (data) => {
     try {
@@ -70,12 +61,6 @@ const SignUp: React.FC = () => {
   };
 
   const [files, setFiles] = useState([]);
-  const updateFiles = (files) => {
-    setFiles(files);
-  };
-  const onDelete = (id) => {
-    setFiles(files.filter((x) => x.id !== id));
-  };
 
   return (
     <Flex
@@ -128,10 +113,6 @@ const SignUp: React.FC = () => {
       )
     </Flex>
   );
-};
-
-const dropzone = {
-  border: "1px dashed black",
 };
 
 export default SignUp;

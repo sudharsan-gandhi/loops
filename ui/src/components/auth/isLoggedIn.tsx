@@ -38,6 +38,7 @@ export const IsLoggedIn: React.FC<{ children: ReactElement }> = ({
     }
   } catch (e) {
     logout();
+    setUser({});
   }
 
   useEffect(() => {

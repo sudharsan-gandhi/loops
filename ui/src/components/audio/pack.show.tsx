@@ -1,4 +1,7 @@
-import { useContext } from 'react';
+import {
+  useContext,
+  useEffect,
+} from 'react';
 
 import { LoopCard } from 'components/cards/loop.card';
 import { AppContext } from 'index';
@@ -13,12 +16,14 @@ import {
 } from 'react-icons/fi';
 import { MdAdd } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
+import { IsOwn } from 'state/user';
 
 import { useQuery } from '@apollo/client';
 import {
   Avatar,
   Box,
   Button,
+  Container,
   Flex,
   Heading,
   HStack,
@@ -29,10 +34,12 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Skeleton,
   Stack,
   Text,
   useColorModeValue,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 
@@ -50,7 +57,7 @@ export const ShowPack: React.FC = () => {
   );
   const theme = useColorModeValue("white", "gray.900");
   const headingTheme = useColorModeValue("gray.700", "white");
-
+  const toast = useToast();
   const {
     isOpen: isModelOpen,
     onOpen: onModelOpen,
@@ -63,118 +70,160 @@ export const ShowPack: React.FC = () => {
     onClose: closeEdit,
   } = useDisclosure();
 
+  useEffect(() => {
+    toast({
+      title: `Error while fetching pack details`,
+      description: error.message,
+      status: "error",
+      duration: 4000,
+      isClosable: true,
+      position: "top",
+    });
+  }, [error]);
+
   console.log("data", data);
   const pack = data?.pack;
   return (
     <>
-      <Flex alignItems={"flex-start"} justifyContent={"center"} mt="2">
-        <VStack>
-          <Box w={{ base: "full", md: "container.md", lg: "container.lg" }}>
-            {pack && (
-              <Box
-                w={"full"}
-                bg={theme}
-                boxShadow={"2xl"}
-                rounded={"md"}
-                p={6}
-                overflow={"hidden"}
-              >
+      <Container maxW="container.xl">
+        <Flex alignItems={"flex-start"} justifyContent={"center"} mt="2">
+          <VStack>
+            <VStack
+              w={{
+                base: "container",
+                md: "container.sm",
+                lg: "container.md",
+                xl: "container.xl",
+              }}
+            >
+              {loading && (
                 <Stack>
-                  <HStack justifyContent={"space-between"}>
-                    <Heading
-                      color={headingTheme}
-                      fontSize={"2xl"}
-                      fontFamily={"body"}
+                  <Skeleton height="100px" />
+                </Stack>
+              )}
+              {error && (
+                <Stack>
+                  <Text>Cannot load pack. Please try again later</Text>
+                </Stack>
+              )}
+              {pack && (
+                <Box
+                  w={"full"}
+                  bg={theme}
+                  boxShadow={"2xl"}
+                  rounded={"md"}
+                  p={6}
+                  overflow={"hidden"}
+                >
+                  <Stack>
+                    <HStack justifyContent={"space-between"}>
+                      <Heading
+                        color={headingTheme}
+                        fontSize={"2xl"}
+                        fontFamily={"body"}
+                      >
+                        {pack.name.toUpperCase()}
+                      </Heading>
+                      <IsOwn
+                        children={
+                          <>
+                            <HStack display={{ base: "none", md: "block" }}>
+                              <Button
+                                aria-label="Edit Pack"
+                                leftIcon={<FiEdit />}
+                                onClick={OpenEdit}
+                              >
+                                {pack?.isLoop ? "Edit Loop" : "Edit Pack"}
+                              </Button>
+                              <Button
+                                aria-label="add audio"
+                                leftIcon={
+                                  <>
+                                    <FiMusic />
+                                    <sup>
+                                      <MdAdd />
+                                    </sup>
+                                  </>
+                                }
+                                onClick={onModelOpen}
+                              >
+                                Add Audio
+                              </Button>
+                            </HStack>
+                            <HStack display={{ base: "block", md: "none" }}>
+                              <IconButton
+                                aria-label="add audio"
+                                leftIcon={<FiEdit />}
+                                onClick={onModelOpen}
+                              />
+                              <IconButton
+                                aria-label="add audio"
+                                leftIcon={
+                                  <>
+                                    <FiMusic />
+                                    <sup>
+                                      <MdAdd />
+                                    </sup>
+                                  </>
+                                }
+                                onClick={onModelOpen}
+                              />
+                            </HStack>
+                          </>
+                        }
+                        userId={pack.author.id || pack.authorId || userId}
+                      />
+                    </HStack>
+
+                    <Text
+                      color={"green.500"}
+                      textTransform={"uppercase"}
+                      fontWeight={800}
+                      fontSize={"sm"}
+                      letterSpacing={1.1}
                     >
-                      {pack.name.toUpperCase()}
-                    </Heading>
-                    <HStack display={{ base: "none", md: "block" }}>
-                      <Button
-                        aria-label="Edit Pack"
-                        leftIcon={<FiEdit />}
-                        onClick={OpenEdit}
-                      >
-                        {pack?.isLoop ? "Edit Loop" : "Edit Pack"}
-                      </Button>
-                      <Button
-                        aria-label="add audio"
-                        leftIcon={
-                          <>
-                            <FiMusic />
-                            <sup>
-                              <MdAdd />
-                            </sup>
-                          </>
-                        }
-                        onClick={onModelOpen}
-                      >
-                        Add Audio
-                      </Button>
-                    </HStack>
-                    <HStack display={{ base: "block", md: "none" }}>
-                      <IconButton
-                        aria-label="add audio"
-                        leftIcon={<FiEdit />}
-                        onClick={onModelOpen}
-                      />
-                      <IconButton
-                        aria-label="add audio"
-                        leftIcon={
-                          <>
-                            <FiMusic />
-                            <sup>
-                              <MdAdd />
-                            </sup>
-                          </>
-                        }
-                        onClick={onModelOpen}
-                      />
-                    </HStack>
-                  </HStack>
-
-                  <Text
-                    color={"green.500"}
-                    textTransform={"uppercase"}
-                    fontWeight={800}
-                    fontSize={"sm"}
-                    letterSpacing={1.1}
-                  >
-                    {pack.price && pack.price > 0
-                      ? `$ ${pack.price} CAD`
-                      : "Free"}
-                  </Text>
-
-                  <Text color={"gray.500"}>{pack?.description}</Text>
-                </Stack>
-                <Stack mt={6} direction={"row"} spacing={4} align={"center"}>
-                  <Avatar src={pack?.author?.image} alt={"Author"} />
-                  <Stack direction={"column"} spacing={0} fontSize={"sm"}>
-                    <Text fontWeight={600}>
-                      {pack?.author?.name.toUpperCase()}
+                      {pack.price && pack.price > 0
+                        ? `$ ${pack.price} CAD`
+                        : "Free"}
                     </Text>
-                    <Text color={"gray.500"}>
-                      role: {pack.author.role || "user"}
-                    </Text>
+
+                    <Text color={"gray.500"}>{pack?.description}</Text>
                   </Stack>
-                </Stack>
-              </Box>
-            )}
-          </Box>
-          <Box mt={10}>
-            {pack?.audio?.edges.length === 0 ? (
-              <Box>
-                <Text>No audio Found</Text>
-              </Box>
-            ) : (
-              pack?.audio?.edges.map(({ node }) => (
-                <>
-                  <LoopCard audio={node} key={node.id} packId={pack?.id} refetch={refetch} />
-                </>
-              ))
-            )}
-          </Box>
-        </VStack>
-      </Flex>
+                  <Stack mt={6} direction={"row"} spacing={4} align={"center"}>
+                    <Avatar src={pack?.author?.image} alt={"Author"} />
+                    <Stack direction={"column"} spacing={0} fontSize={"sm"}>
+                      <Text fontWeight={600}>
+                        {pack?.author?.name.toUpperCase()}
+                      </Text>
+                      <Text color={"gray.500"}>
+                        role: {pack.author.role || "user"}
+                      </Text>
+                    </Stack>
+                  </Stack>
+                </Box>
+              )}
+            </VStack>
+            <VStack mt={10} justifyContent="center" w="100%">
+              {pack?.audio?.edges.length === 0 ? (
+                <Box>
+                  <Text>No audio Found</Text>
+                </Box>
+              ) : (
+                pack?.audio?.edges.map(({ node }) => (
+                  <>
+                    <LoopCard
+                      audio={node}
+                      key={node.id}
+                      packId={pack?.id}
+                      refetch={refetch}
+                    />
+                  </>
+                ))
+              )}
+            </VStack>
+          </VStack>
+        </Flex>
+      </Container>
       {pack && (
         <Box w={"full"} position="relative">
           <Modal isOpen={isModelOpen} onClose={onModelClose} size={"full"}>

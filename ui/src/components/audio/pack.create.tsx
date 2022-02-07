@@ -28,15 +28,17 @@ import {
   Text,
   Textarea,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react';
 
 export const packetType = ["FREE", "PAID"];
 
 export const CreatePack: React.FC = () => {
   let history = useNavigate();
-  const [createOnePack, { loading, error }] =
+  const [createOnePack, { loading }] =
     useMutation<{ createOnePack: Pack }>(createPack);
   const [isFree, setFree] = useState(false);
+  const toast = useToast();
   console.log(isFree);
   const {
     handleSubmit,
@@ -65,6 +67,14 @@ export const CreatePack: React.FC = () => {
       console.log(pack);
       history(`/pack/${pack.id}`);
     } catch (err) {
+      toast({
+        title: `Error while creating pack`,
+        description: err.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(err);
     }
   };

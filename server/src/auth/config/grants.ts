@@ -103,6 +103,29 @@ export const grants = {
       'delete:own': ['*'],
     },
   },
+  guest: {
+    loop: {
+      'read:any': ['*'],
+    },
+    job: {
+      'read:any': ['*'],
+    },
+    pack: {
+      'read:any': ['*'],
+    },
+    paymentplan: {
+      'read:any': ['*'],
+    },
+    rave: {
+      'read:any': ['*'],
+    },
+    review: {
+      'read:any': ['*'],
+    },
+    user: {
+      'read:any': ['*'],
+    },
+  },
 };
 
 // resources

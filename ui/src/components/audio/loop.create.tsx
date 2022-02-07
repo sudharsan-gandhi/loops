@@ -114,10 +114,10 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
   };
 
   const submit = async (data) => {
-    // todo: should implement logic here to upload audio and get the file path
     data.tempo = tempoValue;
     data.bpm = data.bpm ? parseInt(data.bpm) : undefined;
     try {
+      // if files are available upload them before saving the audio data.
       if (files.length > 0) {
         const formData = new FormData();
         formData.append("file", files[0].file);
@@ -134,6 +134,14 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
         return false;
       }
     } catch (e) {
+      toast({
+        title: `Error uploading the audio`,
+        description: e.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(e);
       return false;
     }
@@ -185,9 +193,17 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
           position: "top",
         });
         setLoading(false);
-        history(`/pack`, {state: {activeTab: 1}});
+        history(`/pack`, { state: { activeTab: 1 } });
       }
     } catch (e) {
+      toast({
+        title: `Error saving data`,
+        description: e.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
       setLoading(false);
     }
   };
