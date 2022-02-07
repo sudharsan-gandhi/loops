@@ -71,14 +71,16 @@ export const ShowPack: React.FC = () => {
   } = useDisclosure();
 
   useEffect(() => {
-    toast({
-      title: `Error while fetching pack details`,
-      description: error.message,
-      status: "error",
-      duration: 4000,
-      isClosable: true,
-      position: "top",
-    });
+    if (error) {
+      toast({
+        title: `Error while fetching pack details`,
+        description: error.message,
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+        position: "top",
+      });
+    }
   }, [error]);
 
   console.log("data", data);
@@ -203,7 +205,7 @@ export const ShowPack: React.FC = () => {
                 </Box>
               )}
             </VStack>
-            <VStack mt={10} justifyContent="center" w="100%">
+            <VStack pt={10} justifyContent="center" w="100%">
               {pack?.audio?.edges.length === 0 ? (
                 <Box>
                   <Text>No audio Found</Text>

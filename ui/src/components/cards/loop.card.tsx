@@ -14,6 +14,7 @@ import {
 } from 'react-icons/fi';
 import { HiDotsVertical } from 'react-icons/hi';
 import { MdDeleteOutline } from 'react-icons/md';
+import { IsOwn } from 'state/user';
 
 import { useMutation } from '@apollo/client';
 import {
@@ -195,6 +196,7 @@ export const LoopCardWithPack: React.FC<{
         variant: "left-accent",
         position: "top",
       });
+      console.log(e);
     }
   };
 
@@ -296,28 +298,30 @@ export const LoopCardWithPack: React.FC<{
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack w="100%" justifyContent={"center"}>
-              <Box>
-                <Button
-                  leftIcon={<FiEdit />}
-                  onClick={() => {
-                    closeAudioModal();
-                    OpenEdit();
-                  }}
-                >
-                  Edit Audio
-                </Button>
-              </Box>
-              <Box>
-                <Button
-                  leftIcon={<MdDeleteOutline />}
-                  ref={deleteRef}
-                  onClick={openDelete}
-                >
-                  Delete Audio
-                </Button>
-              </Box>
-            </HStack>
+            <IsOwn userId={pack?.author?.id || pack?.authorId}>
+              <HStack w="100%" justifyContent={"center"}>
+                <Box>
+                  <Button
+                    leftIcon={<FiEdit />}
+                    onClick={() => {
+                      closeAudioModal();
+                      OpenEdit();
+                    }}
+                  >
+                    Edit Audio
+                  </Button>
+                </Box>
+                <Box>
+                  <Button
+                    leftIcon={<MdDeleteOutline />}
+                    ref={deleteRef}
+                    onClick={openDelete}
+                  >
+                    Delete Audio
+                  </Button>
+                </Box>
+              </HStack>
+            </IsOwn>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -450,28 +454,30 @@ export const LoopCard: React.FC<{
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <HStack w="100%" justifyContent={"center"}>
-              <Box>
-                <Button
-                  leftIcon={<FiEdit />}
-                  onClick={() => {
-                    closeAudioModal();
-                    OpenEdit();
-                  }}
-                >
-                  Edit Audio
-                </Button>
-              </Box>
-              <Box>
-                <Button
-                  leftIcon={<MdDeleteOutline />}
-                  ref={deleteRef}
-                  onClick={openDelete}
-                >
-                  Delete Audio
-                </Button>
-              </Box>
-            </HStack>
+            <IsOwn userId={audio?.pack?.author?.id || audio?.pack?.authorId}>
+              <HStack w="100%" justifyContent={"center"}>
+                <Box>
+                  <Button
+                    leftIcon={<FiEdit />}
+                    onClick={() => {
+                      closeAudioModal();
+                      OpenEdit();
+                    }}
+                  >
+                    Edit Audio
+                  </Button>
+                </Box>
+                <Box>
+                  <Button
+                    leftIcon={<MdDeleteOutline />}
+                    ref={deleteRef}
+                    onClick={openDelete}
+                  >
+                    Delete Audio
+                  </Button>
+                </Box>
+              </HStack>
+            </IsOwn>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

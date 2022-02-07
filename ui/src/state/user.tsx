@@ -112,10 +112,10 @@ export const IsOwn: React.FC<{
   const [show, setShow] = useState(true);
   useEffect(() => {
     debugger;
-    if (!auth || (auth && currentUser?.id === userId && hide)) {
-      setShow(false);
-    } else {
+    if (auth && currentUser?.id === userId && !hide) {
       setShow(true);
+    } else {
+      setShow(false);
     }
   }, [auth, currentUser?.id, hide, userId]);
 
