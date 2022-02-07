@@ -54,8 +54,7 @@ function labelAndValue(label, value) {
     <>
       <VStack
         justifyContent={"baseline"}
-        display={{ base: "none", lg: "flex" }}
-        flex="1"
+        display={{ base: "none", md: "flex" }}
       >
         <Box>
           <Badge colorScheme={"red"}>{label}</Badge>
@@ -242,16 +241,16 @@ export const LoopCardWithPack: React.FC<{
         boxShadow="2xl"
         w="100%"
       >
-        <HStack alignItems={"center"}>
-          <Center flex="1">
+        <HStack justifyContent="space-between" w="100%">
+          <Center>
             <IconButton aria-label="play" icon={<FiPlay></FiPlay>}></IconButton>
           </Center>
-          <VStack justifyContent={"baseline"} flex="1">
+          <VStack justifyContent={"baseline"} width="30%">
             <Box display={{ base: "none", lg: "flex" }}>
               <Badge colorScheme={"red"}>Name</Badge>
             </Box>
-            <Box fontWeight={"bold"}>
-              <Text maxWidth="" isTruncated>{audio.name}</Text>
+            <Box fontWeight={"bold"} textAlign="center" w="100%">
+              <Text isTruncated>{audio.name.toUpperCase()}</Text>
             </Box>
           </VStack>
           {labelAndValue("BPM", audio.bpm)}
@@ -260,13 +259,13 @@ export const LoopCardWithPack: React.FC<{
           {audio.key && labelAndValue("Note", audio.key)}
           {labelAndValue("Type", audio.audioType)}
           {showPrice(pack)}
-          <Center flex="1">
+          <Center>
             <IconButton
               variant={"ghost"}
               aria-label="extra"
               icon={<HiDotsVertical />}
               onClick={openAudioModal}
-            ></IconButton>
+            />
           </Center>
         </HStack>
       </Box>
@@ -404,7 +403,7 @@ export const LoopCard: React.FC<{
           <Center>
             <IconButton aria-label="play" icon={<FiPlay></FiPlay>}></IconButton>
           </Center>
-          <VStack justifyContent={"center"}>
+          <VStack justifyContent={"center"} w="30%">
             <Box display={{ base: "none", lg: "block" }}>
               <Badge colorScheme={"red"}>Name</Badge>
             </Box>
@@ -437,7 +436,7 @@ export const LoopCard: React.FC<{
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Text fontSize={"xl"} fontWeight={"bold"}>
+            <Text fontSize={{ base: "sm", md: "xl" }} fontWeight={"bold"}>
               {audio.name.toUpperCase()}
             </Text>
           </DrawerHeader>

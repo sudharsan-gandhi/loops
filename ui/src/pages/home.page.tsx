@@ -71,7 +71,7 @@ const Home: React.FC = () => {
       ) as { [any: string]: PackEdge[] };
       // const map = { hello: data.packs.edges };
       setGroup(map);
-      setAudioList({ loops });
+      setAudioList({ "Audio Loops": loops });
       console.log(map);
     }
   }, [data]);
@@ -85,10 +85,34 @@ const Home: React.FC = () => {
         </HStack>
       ) : (
         <>
+          <Text
+            bg="red.400"
+            w="100%"
+            color="white"
+            fontSize="xl"
+            fontWeight="bold"
+            textAlign="center"
+            borderRadius="2"
+            py="5"
+            mt="5"
+          >
+            Kabaflow Kits
+          </Text>
           {group &&
             Object.entries(group).map(([groupName, packs]) => (
               <>
-                <Text>{groupName}</Text>
+                <Text
+                  w="95%"
+                  fontSize="xl"
+                  fontWeight="bold"
+                  pt="3"
+                  pb="3"
+                  color="red.600"
+                  borderBottom="1px var(--chakra-colors-red-400)"
+                  borderBottomStyle="dashed"
+                >
+                  {groupName.toUpperCase()}
+                </Text>
                 <Box>
                   {/* <ChakraCarousel gap={10}> */}
                   <Carousel
@@ -116,9 +140,21 @@ const Home: React.FC = () => {
           {audioList &&
             Object.entries(audioList).map(([groupName, packs]) => (
               <>
-                <Text>{groupName}</Text>
+                <Text
+                  bg="red.400"
+                  w="100%"
+                  color="white"
+                  fontSize="xl"
+                  fontWeight="bold"
+                  textAlign="center"
+                  borderRadius="2"
+                  py="5"
+                  mt="5"
+                >
+                  {groupName}
+                </Text>
                 <VStack justifyContent="center">
-                  {packs?.map(({ node }, index) => (
+                  {packs?.map(({ node }) => (
                     <>
                       <LoopCardWithPack
                         key={node.id}

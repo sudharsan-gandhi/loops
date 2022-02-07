@@ -94,7 +94,7 @@ const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "cyan.400",
+          bg: "red.400",
           color: "white",
         }}
         {...rest}
@@ -208,7 +208,7 @@ export const KabaflowLayout: React.FC = () => {
             fontSize="2xl"
             fontFamily="monospace"
             fontWeight="bold"
-            color={useColorModeValue("black", "white")}
+            color="red.800"
           >
             <Link to="/" replace>
               Kabaflow
@@ -224,7 +224,7 @@ export const KabaflowLayout: React.FC = () => {
               transition="all 0.3s"
               _focus={{ boxShadow: "none" }}
             > */}
-            <HStack ref={btnRight} onClick={onOpenRight}>
+            <HStack ref={btnRight} cursor="pointer" onClick={onOpenRight}>
               <Avatar
                 size={"sm"}
                 src={
@@ -276,7 +276,7 @@ export const KabaflowLayout: React.FC = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Kabaflow</DrawerHeader>
+          <DrawerHeader color="red.600">Kabaflow</DrawerHeader>
 
           <DrawerBody>
             {LinkItems.map((link) => {
@@ -316,18 +316,20 @@ export const KabaflowLayout: React.FC = () => {
             <Flex>
               <VStack w="full" justifyContent="center">
                 <HStack>
-                  <Heading fontSize={"xl"}>
+                  <Heading fontSize={{ base: "lg", md: "xl" }}>
                     {currentUser?.name?.toUpperCase()}{" "}
                   </Heading>
-                  <Link
-                    to={{ pathname: "/profile" }}
-                    state={{ from: location }}
-                    onClick={onCloseRight}
-                  >
-                    <IconButton aria-label="edit user" icon={<FiEdit />} />
-                  </Link>
+                  <Box >
+                    <Link
+                      to={{ pathname: "/profile" }}
+                      state={{ from: location }}
+                      onClick={onCloseRight}
+                    >
+                      <IconButton aria-label="edit user" size="sm" icon={<FiEdit />} />
+                    </Link>
+                  </Box>
                 </HStack>
-                <Box>
+                <Box pt="5">
                   <Avatar
                     size={"xl"}
                     src={

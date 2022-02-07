@@ -205,13 +205,13 @@ export const PackCardV2: React.FC<{ pack: Pack }> = ({ pack }) => {
           </Box>
           <Box w="100%" pb="1">
             <HStack justifyContent={"space-between"}>
-              <Box>
+              <Box w="100%">
                 <Text fontWeight={"bold"} color="black" isTruncated>
-                  {pack.name}
+                  {pack.name.toUpperCase()}
                 </Text>
               </Box>
               <Box>
-                <Text isTruncated color="green" p="0">
+                <Text display={{base: "none", md: "block"}} isTruncated color="green" p="0">
                   {pack.price > 0 ? `$${pack.price}` : "Free"}
                 </Text>
               </Box>
