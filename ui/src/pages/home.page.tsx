@@ -69,7 +69,7 @@ const Home: React.FC = () => {
         packs,
         (pack: PackEdge) => pack?.node?.audio?.edges[0]?.node?.genre
       ) as { [any: string]: PackEdge[] };
-      // const map = { hello: data.packs.edges };
+      // const map = { uncategorized: data.packs.edges };
       setGroup(map);
       setAudioList({ "Audio Loops": loops });
       console.log(map);

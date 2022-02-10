@@ -1,6 +1,11 @@
 import AdminJS, { ResourceWithOptions } from 'adminjs';
 import { GraphQLError } from 'graphql';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
 import { join } from 'path';
+import * as winston from 'winston';
 
 import { AdminModule } from '@adminjs/nestjs';
 import {
@@ -14,6 +19,7 @@ import {
   ConfigService,
 } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import {
   TypeOrmModule,
   TypeOrmModuleAsyncOptions,
@@ -61,7 +67,6 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
       playground: true,
       introspection: true,
       formatError: (error: GraphQLError) => {
-        console.log('sudharsan')
         console.dir(error);
         return error;
       },
@@ -90,7 +95,12 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
                   isVisible: false,
                 },
                 imageUpload: {
-                  isVisible: { list: true, show: true, edit: true, filter: false },
+                  isVisible: {
+                    list: true,
+                    show: true,
+                    edit: true,
+                    filter: false,
+                  },
                 },
                 // imageUpload: {
                 //   isSortable: false,
@@ -133,9 +143,38 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
       isGlobal: true,
     }),
     UploadModule,
-    // ServeStaticModule.forRoot({
-    //   rootPath: join(__dirname,'..', 'static'),
-    // }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
+    WinstonModule.forRoot({
+      format: winston.format.combine(
+        winston.format.timestamp({
+          format: 'dd MMM YY HH:mm:ssZ',
+        }),
+        winston.format.json(),
+        nestWinstonModuleUtilities.format.nestLike('App', {
+          prettyPrint: true,
+        }),
+      ),
+      transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({
+          dirname: join(__dirname, './../log/debug/'), //path to where save loggin result
+          filename: 'debug.log', //name of file where will be saved logging result
+          level: 'debug',
+        }),
+        new winston.transports.File({
+          dirname: join(__dirname, './../log/info/'),
+          filename: 'info.log',
+          level: 'info',
+        }),
+        new winston.transports.File({
+          dirname: join(__dirname, './../log/error/'),
+          filename: 'error.log',
+          level: 'error',
+        }),
+      ],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

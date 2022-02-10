@@ -90,10 +90,11 @@ const SignIn: React.FC = () => {
   };
   const [form, dispatch] = useReducer(reducer, {});
   let backend = "";
-  if (process.env.NODE_ENV !== "production") {
+  if (window.location.href.indexOf("localhost") >= 0) {
     backend = "http://localhost:3000";
+  } else {
+    backend = "";
   }
-  console.log("backend", backend);
   const googleLogin = async () => {
     window.open(`${backend}/auth/google`, "_self");
   };

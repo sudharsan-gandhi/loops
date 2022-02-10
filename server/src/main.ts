@@ -1,4 +1,5 @@
 import * as cookieParser from 'cookie-parser';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { join } from 'path';
 
 import { NestFactory } from '@nestjs/core';
@@ -19,7 +20,9 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
-  app.useStaticAssets(join(__dirname, '..', 'static'), { prefix: '/static' });
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  app.useStaticAssets(join('static'), { prefix: '/static' });
+
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

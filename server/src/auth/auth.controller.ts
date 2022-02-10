@@ -3,6 +3,7 @@ import { Response } from 'express';
 import {
   Controller,
   Get,
+  Logger,
   Post,
   Req,
   Res,
@@ -14,12 +15,14 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {
   private clientUrl;
+  private readonly console = new Logger(AuthController.name);
 
   constructor(protected config: ConfigService) {
+    this.console.debug('Current Enviroment:', config.get<string>('ENV'));
     if (config.get<string>('ENV') === 'DEVELOPMENT') {
       this.clientUrl = 'http://localhost:3001';
     } else {
-      this.clientUrl = '/';
+      this.clientUrl = '';
     }
   }
 
@@ -32,7 +35,7 @@ export class AuthController {
   @Post('/login')
   @UseGuards(AuthGuard('local'))
   async login(@Req() req, @Res() res) {
-    console.log(req.user);
+    this.console.debug(req.user);
     this.attachUserCookie(req, res);
     res.redirect(this.clientUrl);
   }
@@ -44,7 +47,7 @@ export class AuthController {
   @Get('/google/callback')
   @UseGuards(AuthGuard('google'))
   googleRedirect(@Req() req, @Res() res) {
-    console.log(req.user);
+    this.console.debug(req.user);
     this.attachUserCookie(req, res);
     res.redirect(this.clientUrl + '/signin');
   }
@@ -56,9 +59,9 @@ export class AuthController {
   @Get('/facebook/callback')
   @UseGuards(AuthGuard('facebook'))
   facebookRedirect(@Req() req, @Res() res) {
-    console.log(req.user);
+    this.console.debug(req.user);
     this.attachUserCookie(req, res);
-    res.redirect(this.clientUrl + '/signin');
+    res.redirect('/signin');
   }
 
   @Get('/logout')

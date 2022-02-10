@@ -94,7 +94,7 @@ const EditUser: React.FC = () => {
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Edit Profile{" "}
           </Heading>
-          {currentUser?.authorizer.toUpperCase() !== "LOCAL" && (
+          {currentUser?.authorizer?.toUpperCase() !== "LOCAL" && (
               <Badge colorScheme="red" p="1">{currentUser.authorizer} User</Badge>
             )}
         </Stack>
