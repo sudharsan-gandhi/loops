@@ -3,6 +3,7 @@ import { AllPacks } from 'components/audio/pack.all';
 import { useLocation } from 'react-router-dom';
 
 import {
+  Container,
   Tab,
   TabList,
   TabPanel,
@@ -13,19 +14,25 @@ import {
 const PackPage: React.FC = () => {
   let { state: activeTab } = useLocation();
   debugger;
-  if(activeTab === undefined) activeTab = 0;
+  if (activeTab === undefined) activeTab = 0;
   return (
     <>
-      <Tabs isFitted defaultIndex={activeTab as number}>
-        <TabList>
-          <Tab>My Packs</Tab>
-          <Tab>My Loops</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel><AllPacks/></TabPanel>
-          <TabPanel><AllLoops/></TabPanel>
-        </TabPanels>
-      </Tabs>
+      <Container maxW="container.xl" pt="5">
+        <Tabs isFitted defaultIndex={activeTab as number}>
+          <TabList>
+            <Tab>My Packs</Tab>
+            <Tab>My Loops</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <AllPacks />
+            </TabPanel>
+            <TabPanel>
+              <AllLoops />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Container>
     </>
   );
 };

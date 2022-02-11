@@ -70,6 +70,13 @@ export class Paymentplan extends BaseEntity {
   @Column('int')
   postedById: number;
 
+  @FilterableField(() => Int, {
+    description: 'Example filed (placeholder)',
+    allowedComparisons: ['eq'],
+  })
+  @Column('tinyint', { name: 'isActive', width: 1 })
+  isActive: boolean;
+
   @ManyToOne(() => User)
   postedBy: User;
 

@@ -79,7 +79,16 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
           { resource: Audio, options: {} },
           { resource: Job, options: {} },
           { resource: Pack, options: {} },
-          { resource: Paymentplan, options: {} },
+          {
+            resource: Paymentplan,
+            options: {
+              properties: {
+                isActive: {
+                  type: 'boolean'
+                }
+              }
+            },
+          },
           { resource: Payment, options: {} },
           { resource: Rave, options: {} },
           {

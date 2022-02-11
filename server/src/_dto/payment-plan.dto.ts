@@ -1,5 +1,11 @@
 import { FilterableField } from '@nestjs-query/query-graphql';
-import { Field, Float, ID, InputType, Int } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  ID,
+  InputType,
+  Int,
+} from '@nestjs/graphql';
 
 @InputType()
 export class PaymentplanInputDTO {
@@ -14,6 +20,12 @@ export class PaymentplanInputDTO {
 
   @Field(() => Int, { description: 'Example field (placeholder)' })
   month: number;
+
+  @FilterableField(() => Int, {
+    description: 'Example filed (placeholder)',
+    allowedComparisons: ['eq'],
+  })
+  isActive: boolean;
 
   @FilterableField(() => ID)
   postedById: number;

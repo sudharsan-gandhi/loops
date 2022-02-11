@@ -8,6 +8,7 @@ import { KabaflowLayout } from 'layouts/kabaflow.layout';
 import Home from 'pages/home.page';
 import { NewAudioPage } from 'pages/newAudio.page';
 import { PackPage } from 'pages/pack.page';
+import { PayplanPage } from 'pages/payplan.page';
 import SignIn from 'pages/signin.page';
 import SignUp from 'pages/signup.page';
 import {
@@ -86,6 +87,7 @@ export const AppRouter = () => {
           </RequireAuth>
         }
       />
+      <Route path="payplans" element={<PayplanPage />} />
     </Routes>
   );
 };

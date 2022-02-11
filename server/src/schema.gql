@@ -404,6 +404,9 @@ type paymentplan {
   """Example field (placeholder)"""
   updatedAt: Timestamp!
   postedById: ID!
+
+  """Example filed (placeholder)"""
+  isActive: Int!
   postedBy: user!
   payments(
     """Limit or page results."""
@@ -903,6 +906,9 @@ type PaymentplanDeleteResponse {
   """Example field (placeholder)"""
   updatedAt: Timestamp
   postedById: ID
+
+  """Example filed (placeholder)"""
+  isActive: Int
 }
 
 type paymentplanEdge {
@@ -925,12 +931,14 @@ type paymentplanAggregateGroupBy {
   id: ID
   amount: Float
   postedById: ID
+  isActive: Int
 }
 
 type paymentplanCountAggregate {
   id: Int
   amount: Int
   postedById: Int
+  isActive: Int
 }
 
 type paymentplanSumAggregate {
@@ -1417,6 +1425,11 @@ input paymentplanFilter {
   id: IDFilterComparison
   amount: FloatFieldComparison
   postedById: IDFilterComparison
+  isActive: PaymentplanIsActiveFilterComparison
+}
+
+input PaymentplanIsActiveFilterComparison {
+  eq: Int
 }
 
 input paymentplanSort {
@@ -1429,6 +1442,7 @@ enum paymentplanSortFields {
   id
   amount
   postedById
+  isActive
 }
 
 input userFilter {
@@ -1766,6 +1780,9 @@ input PaymentplanInputDTO {
 
   """Example field (placeholder)"""
   month: Int!
+
+  """Example filed (placeholder)"""
+  isActive: Int!
   postedById: ID!
 }
 

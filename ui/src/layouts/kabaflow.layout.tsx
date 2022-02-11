@@ -14,6 +14,7 @@ import {
   User,
 } from 'queries';
 import { IconType } from 'react-icons';
+import { AiOutlineDollarCircle } from 'react-icons/ai';
 import { CgFolderAdd } from 'react-icons/cg';
 import {
   FiEdit,
@@ -21,11 +22,16 @@ import {
   FiMenu,
   FiStar,
 } from 'react-icons/fi';
-import { MdOutlineMusicVideo } from 'react-icons/md';
+import {
+  MdOutlineMusicVideo,
+  MdOutlineWorkOutline,
+} from 'react-icons/md';
 import {
   Link,
   useLocation,
+  useMatch,
   useNavigate,
+  useResolvedPath,
 } from 'react-router-dom';
 import {
   IsAuth,
@@ -51,6 +57,7 @@ import {
   HStack,
   Icon,
   IconButton,
+  Spacer,
   Stack,
   Stat,
   StatGroup,
@@ -58,7 +65,6 @@ import {
   StatLabel,
   StatNumber,
   Text,
-  useColorModeValue,
   useDisclosure,
   useToast,
   VStack,
@@ -84,15 +90,20 @@ interface NavItemProps extends FlexProps {
   children: ReactText;
 }
 const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
+  let resolved = useResolvedPath(link);
+  let match = useMatch({ path: resolved.pathname });
   return (
-    <Link to={link}>
+    <Link to={link} className={match && "active"}>
       <Flex
         align="center"
         p="4"
         mx="4"
-        borderRadius="lg"
+        borderRadius="2"
         role="group"
         cursor="pointer"
+        bg={match && "white"}
+        color={match && "red.400"}
+        textDecorationLine={match && "overline"}
         _hover={{
           bg: "red.400",
           color: "white",
@@ -110,6 +121,44 @@ const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
           />
         )}
         {children}
+      </Flex>
+    </Link>
+  );
+};
+
+const TopNavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
+  let resolved = useResolvedPath(link);
+  let match = useMatch({ path: resolved.pathname });
+  return (
+    <Link to={link} className={match && "active"}>
+      <Flex
+        w="100%"
+        align="center"
+        p="2"
+        mx="1"
+        borderRadius="5"
+        role="group"
+        cursor="pointer"
+        bg={match && "white"}
+        color={match && "red.400"}
+        textDecorationLine={match && "overline"}
+        _hover={{
+          bg: "red.400",
+          color: "white",
+        }}
+        {...rest}
+      >
+        {icon && (
+          <Icon
+            mr={{ base: "none", md: 2 }}
+            fontSize="16"
+            _groupHover={{
+              color: "white",
+            }}
+            as={icon}
+          />
+        )}
+        <Box display={{ base: "none", md: "block" }}>{children}</Box>
       </Flex>
     </Link>
   );
@@ -194,7 +243,8 @@ export const KabaflowLayout: React.FC = () => {
       <Flex
         p={{ base: "5", md: "3" }}
         justifyContent={"space-between"}
-        bg={useColorModeValue("white", "gray.800")}
+        // bg={useColorModeValue("white", "gray.800")}
+        boxShadow="xl"
       >
         <HStack>
           <IconButton
@@ -215,7 +265,15 @@ export const KabaflowLayout: React.FC = () => {
             </Link>
           </Text>
         </HStack>
-
+        <Spacer />
+        <HStack px="10" display={{ base: "none", md: "flex" }}>
+          <TopNavItem icon={AiOutlineDollarCircle} link="payplans">
+            Payplans
+          </TopNavItem>
+          <TopNavItem icon={MdOutlineWorkOutline} link="jobs">
+            Jobs
+          </TopNavItem>
+        </HStack>
         {auth ? (
           <Flex alignItems={"center"} p={1}>
             {/* <Menu>
@@ -296,6 +354,14 @@ export const KabaflowLayout: React.FC = () => {
                 );
               }
             })}
+            <Box display={{ base: "block", md: "none" }}>
+              <NavItem icon={AiOutlineDollarCircle} link="payplans">
+                Payplans
+              </NavItem>
+              <NavItem icon={MdOutlineWorkOutline} link="jobs">
+                Jobs
+              </NavItem>
+            </Box>
           </DrawerBody>
 
           <DrawerFooter></DrawerFooter>
@@ -319,13 +385,17 @@ export const KabaflowLayout: React.FC = () => {
                   <Heading fontSize={{ base: "lg", md: "xl" }}>
                     {currentUser?.name?.toUpperCase()}{" "}
                   </Heading>
-                  <Box >
+                  <Box>
                     <Link
                       to={{ pathname: "/profile" }}
                       state={{ from: location }}
                       onClick={onCloseRight}
                     >
-                      <IconButton aria-label="edit user" size="sm" icon={<FiEdit />} />
+                      <IconButton
+                        aria-label="edit user"
+                        size="sm"
+                        icon={<FiEdit />}
+                      />
                     </Link>
                   </Box>
                 </HStack>

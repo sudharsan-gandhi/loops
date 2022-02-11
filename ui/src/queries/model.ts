@@ -384,6 +384,8 @@ export type Paymentplan = {
   /** Example field (placeholder) */
   updatedAt: Scalars["Timestamp"]
   postedById: Scalars["ID"]
+  /** Example filed (placeholder) */
+  isActive: Scalars["Int"]
   postedBy: User
   payments: PaymentplanPaymentsConnection
 }
@@ -853,6 +855,8 @@ export type PaymentplanDeleteResponse = {
   /** Example field (placeholder) */
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
+  /** Example filed (placeholder) */
+  isActive?: Maybe<Scalars["Int"]>
 }
 
 export type PaymentplanEdge = {
@@ -876,6 +880,7 @@ export type PaymentplanAggregateGroupBy = {
   id?: Maybe<Scalars["ID"]>
   amount?: Maybe<Scalars["Float"]>
   postedById?: Maybe<Scalars["ID"]>
+  isActive?: Maybe<Scalars["Int"]>
 }
 
 export type PaymentplanCountAggregate = {
@@ -883,6 +888,7 @@ export type PaymentplanCountAggregate = {
   id?: Maybe<Scalars["Int"]>
   amount?: Maybe<Scalars["Int"]>
   postedById?: Maybe<Scalars["Int"]>
+  isActive?: Maybe<Scalars["Int"]>
 }
 
 export type PaymentplanSumAggregate = {
@@ -1376,6 +1382,11 @@ export type PaymentplanFilter = {
   id?: Maybe<IdFilterComparison>
   amount?: Maybe<FloatFieldComparison>
   postedById?: Maybe<IdFilterComparison>
+  isActive?: Maybe<PaymentplanIsActiveFilterComparison>
+}
+
+export type PaymentplanIsActiveFilterComparison = {
+  eq?: Maybe<Scalars["Int"]>
 }
 
 export type PaymentplanSort = {
@@ -1387,7 +1398,8 @@ export type PaymentplanSort = {
 export enum PaymentplanSortFields {
   Id = "id",
   Amount = "amount",
-  PostedById = "postedById"
+  PostedById = "postedById",
+  IsActive = "isActive"
 }
 
 export type UserFilter = {
@@ -1723,7 +1735,25 @@ export type UpdateOneLoopInput = {
   /** The id of the record to update */
   id: Scalars["ID"]
   /** The update to apply. */
-  update: AudioInputDto
+  update: AudioUpdateDto
+}
+
+export type AudioUpdateDto = {
+  /** Example field (placeholder) */
+  name?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  genre?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  bpm?: Maybe<Scalars["Int"]>
+  /** Example field (placeholder) */
+  path?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  audioType?: Maybe<AudioType>
+  /** Example field (placeholder) */
+  key?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  tempo?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["ID"]>
 }
 
 export type DeleteOneLoopInput = {
@@ -1836,7 +1866,20 @@ export type UpdateOnePackInput = {
   /** The id of the record to update */
   id: Scalars["ID"]
   /** The update to apply. */
-  update: PackInputDto
+  update: PackUpdateDto
+}
+
+export type PackUpdateDto = {
+  /** Example field (placeholder) */
+  name?: Maybe<Scalars["String"]>
+  description?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  price?: Maybe<Scalars["Float"]>
+  isLoop?: Maybe<Scalars["Boolean"]>
+  /** Example field (placeholder) */
+  type?: Maybe<PacketType>
+  authorId?: Maybe<Scalars["ID"]>
+  audio?: Maybe<Array<Maybe<AudioInputDto>>>
 }
 
 export type DeleteOnePackInput = {
@@ -1879,6 +1922,8 @@ export type PaymentplanInputDto = {
   amount: Scalars["Float"]
   /** Example field (placeholder) */
   month: Scalars["Int"]
+  /** Example filed (placeholder) */
+  isActive: Scalars["Int"]
   postedById: Scalars["ID"]
 }
 
