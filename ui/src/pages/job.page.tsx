@@ -6,7 +6,10 @@ import {
 } from 'react';
 
 import { PaginationButton } from 'components/button/pagination.button';
-import { KBRadioGroup } from 'components/radio/RadioGroup';
+import {
+  FilterUI,
+  KBFilterInterface,
+} from 'components/pagination';
 import {
   CursorPaging,
   Job,
@@ -16,43 +19,24 @@ import {
   SortDirection,
   UserJobsArgs,
 } from 'queries';
-import { useForm } from 'react-hook-form';
-import {
-  AiOutlineCalendar,
-  AiOutlineClear,
-} from 'react-icons/ai';
-import { FiFilter } from 'react-icons/fi';
+import { AiOutlineCalendar } from 'react-icons/ai';
 import { GoLocation } from 'react-icons/go';
 import { GrContact } from 'react-icons/gr';
-import { MdSearch } from 'react-icons/md';
 import { TiArrowMaximise } from 'react-icons/ti';
 
 import { useLazyQuery } from '@apollo/client';
 import {
   Box,
-  Button,
   Container,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  FormControl,
-  FormLabel,
   Heading,
   HStack,
   IconButton,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  Select,
   SimpleGrid,
   Spacer,
   Text,
@@ -157,129 +141,6 @@ const JobModal: React.FC<{ job: Job; isModalOpen: any; closeModal: any }> = ({
   );
 };
 
-const JobFilterUI: React.FC<{ formReducer: any }> = ({ formReducer }) => {
-  const {
-    isOpen: isDrawerOpen,
-    onOpen: openDrawer,
-    onClose: closeDrawer,
-  } = useDisclosure();
-
-  const pagination = [1, 10, 20, 50];
-  const searchFields = [
-    { key: "title", label: "title" },
-    { key: "location", label: "location" },
-  ];
-  const sortFields = [
-    { key: "title", label: "title" },
-    { key: "expirationDate", label: "expiration date" },
-  ];
-  const { handleSubmit, register, control } = useForm();
-
-  const handleSearch = (form: any) => {
-    formReducer(form);
-    // Object.entries(form).forEach(([key, value]) => {
-    //   Object.entries(value).forEach(([k, v]) => {
-    //     dispatch({ type: key, key: k, value: v });
-    //   });
-    // });
-  };
-  return (
-    <>
-      <Box>
-        <IconButton
-          colorScheme="white"
-          aria-label="filter"
-          icon={<FiFilter />}
-          onClick={openDrawer}
-        />
-      </Box>
-
-      <Drawer
-        isOpen={isDrawerOpen}
-        placement="right"
-        onClose={closeDrawer}
-        size={"sm"}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <HStack justifyContent="center" alignItems="baseline">
-              <Text fontSize={"xl"} fontWeight={"bold"}>
-                Filter/Sort
-              </Text>
-            </HStack>
-          </DrawerHeader>
-          <DrawerBody>
-            <FormControl>
-              <FormLabel>Per page</FormLabel>
-              <Select
-                id=""
-                name=""
-                defaultValue={pagination[0]}
-                {...register("paging.first")}
-              >
-                {pagination.map((count) => (
-                  <option key={count} value={count}>
-                    {count}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-            {searchFields.length > 0 && (
-              <Text mt="4" fontSize="lg" textAlign="center">
-                filter
-              </Text>
-            )}
-            {searchFields.map((node) => (
-              <FormControl isRequired>
-                <FormLabel>{node.label}</FormLabel>
-                <Input
-                  type="text"
-                  id={node.key}
-                  name={node.key}
-                  {...register(`filter.${node.key}`)}
-                />
-              </FormControl>
-            ))}
-
-            {sortFields.length > 0 && (
-              <Text mt="4" fontSize="lg" textAlign="center">
-                Sort/Order by
-              </Text>
-            )}
-            {sortFields.map((node) => (
-              <KBRadioGroup control={control} label={`sorting.${node.key}`}>
-                <HStack spacing="2">
-                  <Text mb="0">{node.label}</Text>
-                  <Spacer />
-                  <Radio value="ASC">Asc</Radio>
-                  <Radio value="DESC">Desc</Radio>
-                </HStack>
-              </KBRadioGroup>
-            ))}
-          </DrawerBody>
-          <DrawerFooter>
-            <Button
-              leftIcon={<AiOutlineClear />}
-              onClick={() => formReducer({ type: "clear" })}
-              mr="2"
-            >
-              Clear filter
-            </Button>
-            <Button
-              leftIcon={<MdSearch />}
-              onClick={handleSubmit(handleSearch)}
-            >
-              Search
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </>
-  );
-};
-
 function JobsPage(): JSX.Element {
   const [getJobs, { loading, fetchMore }] =
     useLazyQuery<{ jobs: JobConnection }>(JOBS);
@@ -291,6 +152,16 @@ function JobsPage(): JSX.Element {
     onOpen: OpenModal,
     onClose: closeModal,
   } = useDisclosure();
+
+  const pagination = [10, 20, 50];
+  const searchFields: KBFilterInterface[] = [
+    { key: "title", label: "title" },
+    { key: "location", label: "location" },
+  ];
+  const sortFields: KBFilterInterface[] = [
+    { key: "title", label: "title" },
+    { key: "expirationDate", label: "expiration date" },
+  ];
 
   const listData = (d) =>
     d?.edges?.map(({ node }) => (
@@ -386,7 +257,7 @@ function JobsPage(): JSX.Element {
 
   const initialJobVariables: UserJobsArgs = {
     paging: {
-      first: 1,
+      first: pagination[0],
     },
     filter: {},
     sorting: [],
@@ -532,7 +403,12 @@ function JobsPage(): JSX.Element {
               Jobs Search
             </Text>
             <Box display={data?.edges?.length > 0 ? "block" : "none"}>
-              <JobFilterUI formReducer={formReducer} />
+              <FilterUI
+                formReducer={formReducer}
+                pagination={pagination}
+                searchFields={searchFields}
+                sortFields={sortFields}
+              />
             </Box>
           </HStack>
         </VStack>

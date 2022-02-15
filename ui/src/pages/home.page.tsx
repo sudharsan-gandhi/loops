@@ -13,13 +13,20 @@ import {
   PackConnection,
   PackEdge,
 } from 'queries';
+import {
+  MdArrowRight,
+  MdArrowRightAlt,
+} from 'react-icons/md';
 
 import { useQuery } from '@apollo/client';
 import {
   Box,
+  Button,
   Container,
   HStack,
+  IconButton,
   Skeleton,
+  Spacer,
   Text,
   useBreakpointValue,
   VStack,
@@ -85,20 +92,37 @@ const Home: React.FC = () => {
         </HStack>
       ) : (
         <>
-          <Text
+          <HStack
             bg="gray.700"
             w="100%"
             color="white"
-            fontSize="xl"
-            fontWeight="bold"
-            textAlign="center"
             borderRadius="2"
             boxShadow="lg"
+            alignItems="center"
             py="5"
             mt="5"
           >
-            Kabaflow Kits
-          </Text>
+            <Text px="5" m="0" fontSize="xl" fontWeight="bold">
+              Kabaflow Kits
+            </Text>
+            <Spacer />
+            <Box px="5">
+              <Button
+                display={{ base: "none", sm: "flex" }}
+                colorScheme="white"
+                rightIcon={<MdArrowRight />}
+              >
+                find more
+              </Button>
+              <IconButton
+                fontSize="3xl"
+                aria-label="more"
+                display={{ base: "flex", sm: "none" }}
+                colorScheme="white"
+                icon={<MdArrowRightAlt />}
+              />
+            </Box>
+          </HStack>
           {group &&
             Object.entries(group).map(([groupName, packs]) => (
               <>
@@ -141,20 +165,37 @@ const Home: React.FC = () => {
           {audioList &&
             Object.entries(audioList).map(([groupName, packs]) => (
               <>
-                <Text
+                <HStack
                   bg="gray.700"
                   w="100%"
                   color="white"
-                  fontSize="xl"
-                  fontWeight="bold"
-                  textAlign="center"
                   borderRadius="2"
                   boxShadow="lg"
+                  alignItems="center"
                   py="5"
                   mt="5"
                 >
-                  {groupName}
-                </Text>
+                  <Text fontSize="xl" fontWeight="bold" px="5" m="0">
+                    {groupName}
+                  </Text>
+                  <Spacer />
+                  <Box px="5">
+                    <Button
+                      display={{ base: "none", sm: "flex" }}
+                      colorScheme="white"
+                      rightIcon={<MdArrowRight />}
+                    >
+                      find more
+                    </Button>
+                    <IconButton
+                      fontSize="3xl"
+                      aria-label="more"
+                      display={{ base: "flex", sm: "none" }}
+                      colorScheme="white"
+                      icon={<MdArrowRightAlt />}
+                    />
+                  </Box>
+                </HStack>
                 <VStack justifyContent="center">
                   {packs?.map(({ node }) => (
                     <>

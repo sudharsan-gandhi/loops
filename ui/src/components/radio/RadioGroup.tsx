@@ -15,7 +15,7 @@ export const KBRadioGroup: React.FC<{
     defaultValue,
   });
   return (
-    <RadioGroup onChange={onChange} value={value}>
+    <RadioGroup onChange={onChange} value={value} defaultValue={defaultValue}>
       {children}
     </RadioGroup>
   );
