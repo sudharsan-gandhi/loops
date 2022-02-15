@@ -6,6 +6,7 @@ import EditUser from 'components/user/user.edit';
 import theme from 'definitions/chakra/theme';
 import { KabaflowLayout } from 'layouts/kabaflow.layout';
 import Home from 'pages/home.page';
+import JobsPage from 'pages/job.page';
 import { NewAudioPage } from 'pages/newAudio.page';
 import { PackPage } from 'pages/pack.page';
 import { PayplanPage } from 'pages/payplan.page';
@@ -88,6 +89,7 @@ export const AppRouter = () => {
         }
       />
       <Route path="payplans" element={<PayplanPage />} />
+      <Route path="jobs" element={<JobsPage />} />
     </Routes>
   );
 };

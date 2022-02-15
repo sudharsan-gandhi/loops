@@ -86,13 +86,14 @@ const Home: React.FC = () => {
       ) : (
         <>
           <Text
-            bg="red.400"
+            bg="gray.700"
             w="100%"
             color="white"
             fontSize="xl"
             fontWeight="bold"
             textAlign="center"
             borderRadius="2"
+            boxShadow="lg"
             py="5"
             mt="5"
           >
@@ -141,13 +142,14 @@ const Home: React.FC = () => {
             Object.entries(audioList).map(([groupName, packs]) => (
               <>
                 <Text
-                  bg="red.400"
+                  bg="gray.700"
                   w="100%"
                   color="white"
                   fontSize="xl"
                   fontWeight="bold"
                   textAlign="center"
                   borderRadius="2"
+                  boxShadow="lg"
                   py="5"
                   mt="5"
                 >

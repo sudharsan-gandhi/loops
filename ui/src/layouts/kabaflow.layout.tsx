@@ -252,13 +252,15 @@ export const KabaflowLayout: React.FC = () => {
             display={{ base: "flex" }}
             onClick={onOpen}
             aria-label="open menu"
+            colorScheme="black"
+            variant="ghost"
             icon={<FiMenu />}
           />
           <Text
             fontSize="2xl"
             fontFamily="monospace"
             fontWeight="bold"
-            color="red.800"
+            color="gray.700"
           >
             <Link to="/" replace>
               Kabaflow
@@ -334,7 +336,7 @@ export const KabaflowLayout: React.FC = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader color="red.600">Kabaflow</DrawerHeader>
+          <DrawerHeader color="gray.700">Kabaflow</DrawerHeader>
 
           <DrawerBody>
             {LinkItems.map((link) => {

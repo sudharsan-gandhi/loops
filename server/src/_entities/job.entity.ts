@@ -55,6 +55,14 @@ export class Job extends BaseEntity {
   @Column('datetime', { name: 'expirationDate' })
   expirationDate: Date;
 
+  @Column('varchar', { name: 'contact', length: '50' })
+  @Field()
+  contact: string;
+
+  @Column('varchar', { name: 'location', length: '50' })
+  @FilterableField()
+  location: string;
+
   @UpdateDateColumn()
   @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', { name: 'updatedAt' })

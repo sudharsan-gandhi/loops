@@ -31,6 +31,8 @@ export type Job = {
   postDate: Scalars["Timestamp"]
   /** Example field (placeholder) */
   expirationDate: Scalars["Timestamp"]
+  contact: Scalars["String"]
+  location: Scalars["String"]
   /** Example field (placeholder) */
   updatedAt: Scalars["Timestamp"]
   postedById: Scalars["ID"]
@@ -653,6 +655,8 @@ export type JobDeleteResponse = {
   postDate?: Maybe<Scalars["Timestamp"]>
   /** Example field (placeholder) */
   expirationDate?: Maybe<Scalars["Timestamp"]>
+  contact?: Maybe<Scalars["String"]>
+  location?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
@@ -1780,6 +1784,8 @@ export type JobInputDto = {
   description: Scalars["String"]
   /** Example field (placeholder) */
   expirationDate: Scalars["Timestamp"]
+  contact: Scalars["String"]
+  location: Scalars["String"]
   postedById: Scalars["ID"]
 }
 

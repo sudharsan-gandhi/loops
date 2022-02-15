@@ -17,6 +17,8 @@ type job {
 
   """Example field (placeholder)"""
   expirationDate: Timestamp!
+  contact: String!
+  location: String!
 
   """Example field (placeholder)"""
   updatedAt: Timestamp!
@@ -152,6 +154,7 @@ input jobFilter {
   title: StringFieldComparison
   postDate: TimestampFieldComparison
   expirationDate: TimestampFieldComparison
+  location: StringFieldComparison
   postedById: IDFilterComparison
 }
 
@@ -220,6 +223,7 @@ enum jobSortFields {
   title
   postDate
   expirationDate
+  location
   postedById
 }
 
@@ -707,6 +711,8 @@ type JobDeleteResponse {
 
   """Example field (placeholder)"""
   expirationDate: Timestamp
+  contact: String
+  location: String
 
   """Example field (placeholder)"""
   updatedAt: Timestamp
@@ -734,6 +740,7 @@ type jobAggregateGroupBy {
   title: String
   postDate: Timestamp
   expirationDate: Timestamp
+  location: String
   postedById: ID
 }
 
@@ -742,6 +749,7 @@ type jobCountAggregate {
   title: Int
   postDate: Int
   expirationDate: Int
+  location: Int
   postedById: Int
 }
 
@@ -760,6 +768,7 @@ type jobMinAggregate {
   title: String
   postDate: Timestamp
   expirationDate: Timestamp
+  location: String
   postedById: ID
 }
 
@@ -768,6 +777,7 @@ type jobMaxAggregate {
   title: String
   postDate: Timestamp
   expirationDate: Timestamp
+  location: String
   postedById: ID
 }
 
@@ -1619,6 +1629,8 @@ input JobInputDTO {
 
   """Example field (placeholder)"""
   expirationDate: Timestamp!
+  contact: String!
+  location: String!
   postedById: ID!
 }
 

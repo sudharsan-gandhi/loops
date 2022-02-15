@@ -1,5 +1,10 @@
 import { FilterableField } from '@nestjs-query/query-graphql';
-import { Field, GraphQLTimestamp, ID, InputType } from '@nestjs/graphql';
+import {
+  Field,
+  GraphQLTimestamp,
+  ID,
+  InputType,
+} from '@nestjs/graphql';
 
 @InputType()
 export class JobInputDTO {
@@ -13,6 +18,12 @@ export class JobInputDTO {
     description: 'Example field (placeholder)',
   })
   expirationDate: Date;
+
+  @FilterableField()
+  contact: string;
+
+  @FilterableField()
+  location: string;
 
   @FilterableField(() => ID)
   postedById: number;
