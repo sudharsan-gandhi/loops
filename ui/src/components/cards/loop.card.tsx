@@ -6,7 +6,9 @@ import {
   deleteOnePack,
   deleteOneVariable,
   Loop,
+  MakeOptional,
   Pack,
+  User,
 } from 'queries';
 import {
   FiEdit,
@@ -147,7 +149,8 @@ export const LoopCardWithPack: React.FC<{
   pack: Pack;
   packId: string;
   refetch: any;
-}> = ({ pack, packId, refetch }) => {
+  user?: MakeOptional<User, keyof User>;
+}> = ({ pack, packId, refetch, user }) => {
   const {
     isOpen: isAudioModalOpen,
     onOpen: openAudioModal,
@@ -298,7 +301,7 @@ export const LoopCardWithPack: React.FC<{
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <IsOwn userId={pack?.author?.id || pack?.authorId}>
+            <IsOwn userId={user?.id}>
               <HStack w="100%" justifyContent={"center"}>
                 <Box>
                   <Button
@@ -347,8 +350,9 @@ export const LoopCardWithPack: React.FC<{
 export const LoopCard: React.FC<{
   audio: Loop;
   packId: string;
+  user?: MakeOptional<User, keyof User>;
   refetch: any;
-}> = ({ audio, packId, refetch }) => {
+}> = ({ audio, packId, refetch, user }) => {
   const {
     isOpen: isAudioModalOpen,
     onOpen: openAudioModal,
@@ -454,7 +458,7 @@ export const LoopCard: React.FC<{
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <IsOwn userId={audio?.pack?.author?.id || audio?.pack?.authorId}>
+            <IsOwn userId={user?.id}>
               <HStack w="100%" justifyContent={"center"}>
                 <Box>
                   <Button

@@ -80,7 +80,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: FiHome, link: "/" },
   { name: "Add Packs", icon: CgFolderAdd, link: "/new-pack", isAuth: true },
   { name: "My Packs", icon: MdOutlineMusicVideo, link: "/pack", isAuth: true },
-  { name: "WishList", icon: FiStar, link: "/", isAuth: true },
+  { name: "WishList", icon: FiStar, link: "/wishlist", isAuth: true },
   // { name: "Settings", icon: FiSettings, link: "/" },
 ];
 

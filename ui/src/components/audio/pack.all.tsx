@@ -10,6 +10,7 @@ import {
   getAllPacks,
   getAllPacksVariables,
   Maybe,
+  PackConnection,
   PackFilter,
   PackSort,
 } from 'queries';
@@ -30,7 +31,8 @@ export const AllPacks: React.FC = () => {
   const { cookies } = useContext(AppContext);
   const userId = cookies.get("userId");
   const toast = useToast();
-  const [loadPacks, { called, loading, data }] = useLazyQuery(getAllPacks);
+  const [loadPacks, { called, loading, data }] =
+    useLazyQuery<{ packs: PackConnection }>(getAllPacks);
 
   const paging: CursorPaging = {
     first: 10,
@@ -87,6 +89,29 @@ export const AllPacks: React.FC = () => {
           </Box>
         </VStack>
       </Flex>
+    </>
+  );
+};
+
+export const AllPacksWithCards: React.FC<{ packs: PackConnection }> = ({
+  packs,
+}) => {
+  return (
+    <>
+        <SimpleGrid
+          columns={{ base: 2, md: 3, lg: 4 }}
+          spacing={{ base: 4, md: 5 }}
+          px={{ base: 5, md: 10 }}
+          py={{ base: 5, md: 4 }}
+        >
+          {packs?.edges.map(({ node }, index) => (
+            <>
+              <Link key={index} to={`/pack/${node.id}`}>
+                <PackCard key={node.id} pack={node} />
+              </Link>
+            </>
+          ))}
+        </SimpleGrid>
     </>
   );
 };

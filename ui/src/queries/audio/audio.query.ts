@@ -85,6 +85,7 @@ export const getPackWithAudiosById = gql`
       type
       isLoop
       author {
+        id
         name
         email
         image

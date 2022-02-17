@@ -47,34 +47,12 @@ import {
   FileItem,
 } from '@dropzone-ui/react';
 
+import {
+  audioTypes,
+  genres,
+  musicalNotes,
+} from './audio.model';
 import { packetType } from './pack.create';
-
-export const audioTypes = ["oneshot", "loop"];
-export const musicalNotes = [
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-];
-const genres = [
-  "Punk",
-  "Rock",
-  "folk",
-  "Lo-fi",
-  "Blues",
-  "Reggae",
-  "R&B",
-  "Dubstep",
-  "Electro",
-];
 
 const EditLoop: React.FC<{
   packId: string;

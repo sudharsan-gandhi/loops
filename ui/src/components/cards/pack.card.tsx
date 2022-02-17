@@ -16,6 +16,7 @@ import {
   Flex,
   Heading,
   HStack,
+  Icon,
   IconButton,
   Image,
   SimpleGrid,
@@ -157,19 +158,10 @@ export const PackCard: React.FC<{ pack: Pack }> = ({ pack }) => {
             objectFit={"cover"}
             src={IMAGE}
           />
-          <Box _groupHover={{ display: "block" }} pos="absolute">
-            <IconButton
-              fontSize={{ base: "lg", md: "xl", lg: "3xl" }}
-              colorScheme="white"
-              variant="solid"
-              aria-label="play"
-              icon={<FaPlay />}
-            />
-          </Box>
         </Box>
         <HStack pt={2} justifyContent={"space-between"} alignItems={"flex-end"}>
-          <Box display={{ base: "none", md: "flex" }}>
-            <TiUserOutline />
+          <Box display={{ base: "none", md: "block" }}>
+            <Icon as={TiUserOutline} />
           </Box>
           <Box display={{ base: "none", md: "flex" }}>
             <Text p="0" m="0" fontWeight={"thin"} fontSize={"xs"}>
@@ -211,7 +203,12 @@ export const PackCardV2: React.FC<{ pack: Pack }> = ({ pack }) => {
                 </Text>
               </Box>
               <Box>
-                <Text display={{base: "none", md: "block"}} isTruncated color="green" p="0">
+                <Text
+                  display={{ base: "none", md: "block" }}
+                  isTruncated
+                  color="green"
+                  p="0"
+                >
                   {pack.price > 0 ? `$${pack.price}` : "Free"}
                 </Text>
               </Box>

@@ -126,55 +126,53 @@ export const ShowPack: React.FC = () => {
                       >
                         {pack.name.toUpperCase()}
                       </Heading>
-                      <IsOwn
-                        children={
-                          <>
-                            <HStack display={{ base: "none", md: "block" }}>
-                              <Button
-                                aria-label="Edit Pack"
-                                leftIcon={<FiEdit />}
-                                onClick={OpenEdit}
-                              >
-                                {pack?.isLoop ? "Edit Loop" : "Edit Pack"}
-                              </Button>
-                              <Button
-                                aria-label="add audio"
-                                leftIcon={
-                                  <>
-                                    <FiMusic />
-                                    <sup>
-                                      <MdAdd />
-                                    </sup>
-                                  </>
-                                }
-                                onClick={onModelOpen}
-                              >
-                                Add Audio
-                              </Button>
-                            </HStack>
-                            <HStack display={{ base: "block", md: "none" }}>
-                              <IconButton
-                                aria-label="add audio"
-                                leftIcon={<FiEdit />}
-                                onClick={onModelOpen}
-                              />
-                              <IconButton
-                                aria-label="add audio"
-                                leftIcon={
-                                  <>
-                                    <FiMusic />
-                                    <sup>
-                                      <MdAdd />
-                                    </sup>
-                                  </>
-                                }
-                                onClick={onModelOpen}
-                              />
-                            </HStack>
-                          </>
-                        }
-                        userId={pack.author.id || pack.authorId || userId}
-                      />
+                      <Text>{pack.author.id}</Text>
+                      <IsOwn userId={pack.author.id || pack.authorId}>
+                        <>
+                          <HStack display={{ base: "none", md: "block" }}>
+                            <Button
+                              aria-label="Edit Pack"
+                              leftIcon={<FiEdit />}
+                              onClick={OpenEdit}
+                            >
+                              {pack?.isLoop ? "Edit Loop" : "Edit Pack"}
+                            </Button>
+                            <Button
+                              aria-label="add audio"
+                              leftIcon={
+                                <>
+                                  <FiMusic />
+                                  <sup>
+                                    <MdAdd />
+                                  </sup>
+                                </>
+                              }
+                              onClick={onModelOpen}
+                            >
+                              Add Audio
+                            </Button>
+                          </HStack>
+                          <HStack display={{ base: "block", md: "none" }}>
+                            <IconButton
+                              aria-label="add audio"
+                              leftIcon={<FiEdit />}
+                              onClick={onModelOpen}
+                            />
+                            <IconButton
+                              aria-label="add audio"
+                              leftIcon={
+                                <>
+                                  <FiMusic />
+                                  <sup>
+                                    <MdAdd />
+                                  </sup>
+                                </>
+                              }
+                              onClick={onModelOpen}
+                            />
+                          </HStack>
+                        </>
+                      </IsOwn>
                     </HStack>
 
                     <Text
@@ -217,6 +215,7 @@ export const ShowPack: React.FC = () => {
                       audio={node}
                       key={node.id}
                       packId={pack?.id}
+                      user={pack.author}
                       refetch={refetch}
                     />
                   </>

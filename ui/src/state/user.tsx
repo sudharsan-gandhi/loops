@@ -112,7 +112,13 @@ export const IsOwn: React.FC<{
   const [show, setShow] = useState(true);
   useEffect(() => {
     debugger;
-    if (auth && currentUser?.id === userId && !hide) {
+    if (
+      auth &&
+      userId &&
+      currentUser?.id &&
+      parseInt(currentUser?.id) === parseInt(userId) &&
+      !hide
+    ) {
       setShow(true);
     } else {
       setShow(false);

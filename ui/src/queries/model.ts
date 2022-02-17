@@ -139,6 +139,7 @@ export type JobFilter = {
   title?: Maybe<StringFieldComparison>
   postDate?: Maybe<TimestampFieldComparison>
   expirationDate?: Maybe<TimestampFieldComparison>
+  location?: Maybe<StringFieldComparison>
   postedById?: Maybe<IdFilterComparison>
 }
 
@@ -207,6 +208,7 @@ export enum JobSortFields {
   Title = "title",
   PostDate = "postDate",
   ExpirationDate = "expirationDate",
+  Location = "location",
   PostedById = "postedById"
 }
 
@@ -684,6 +686,7 @@ export type JobAggregateGroupBy = {
   title?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   expirationDate?: Maybe<Scalars["Timestamp"]>
+  location?: Maybe<Scalars["String"]>
   postedById?: Maybe<Scalars["ID"]>
 }
 
@@ -693,6 +696,7 @@ export type JobCountAggregate = {
   title?: Maybe<Scalars["Int"]>
   postDate?: Maybe<Scalars["Int"]>
   expirationDate?: Maybe<Scalars["Int"]>
+  location?: Maybe<Scalars["Int"]>
   postedById?: Maybe<Scalars["Int"]>
 }
 
@@ -714,6 +718,7 @@ export type JobMinAggregate = {
   title?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   expirationDate?: Maybe<Scalars["Timestamp"]>
+  location?: Maybe<Scalars["String"]>
   postedById?: Maybe<Scalars["ID"]>
 }
 
@@ -723,6 +728,7 @@ export type JobMaxAggregate = {
   title?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   expirationDate?: Maybe<Scalars["Timestamp"]>
+  location?: Maybe<Scalars["String"]>
   postedById?: Maybe<Scalars["ID"]>
 }
 

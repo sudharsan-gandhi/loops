@@ -9,14 +9,15 @@ import { PaginationButton } from 'components/button/pagination.button';
 import {
   FilterUI,
   KBFilterInterface,
+  KBSortInterface,
 } from 'components/pagination';
+import { reducer } from 'components/pagination/paginate.reducer';
 import {
-  CursorPaging,
   Job,
   JobConnection,
+  JobFilter,
   JOBS,
   JobSortFields,
-  SortDirection,
   UserJobsArgs,
 } from 'queries';
 import { AiOutlineCalendar } from 'react-icons/ai';
@@ -154,13 +155,13 @@ function JobsPage(): JSX.Element {
   } = useDisclosure();
 
   const pagination = [10, 20, 50];
-  const searchFields: KBFilterInterface[] = [
+  const searchFields: KBFilterInterface<Omit<JobFilter, "or" | "and">>[] = [
     { key: "title", label: "title" },
     { key: "location", label: "location" },
   ];
-  const sortFields: KBFilterInterface[] = [
-    { key: "title", label: "title" },
-    { key: "expirationDate", label: "expiration date" },
+  const sortFields: KBSortInterface<JobSortFields>[] = [
+    { key: JobSortFields.Title, label: "title" },
+    { key: JobSortFields.ExpirationDate, label: "expiration date" },
   ];
 
   const listData = (d) =>
@@ -273,72 +274,19 @@ function JobsPage(): JSX.Element {
     };
     Object.entries(form).forEach(([key, value]) => {
       Object.entries(value).forEach(([k, v]) => {
-        newState = reducer(newState, {
-          type: key as keyof UserJobsArgs | "clear",
-          key: k,
-          value: v,
-        });
+        newState = reducer<UserJobsArgs>(
+          newState,
+          data?.pageInfo,
+          {
+            type: key as keyof UserJobsArgs | "clear",
+            key: k,
+            value: v,
+          },
+          initialJobVariables
+        );
       });
     });
     dispatch(newState);
-  };
-
-  const reducer = (
-    state: UserJobsArgs,
-    payload: { type: keyof UserJobsArgs | "clear"; key: string; value: any }
-  ) => {
-    const key = payload.key;
-    const value = payload.value;
-    if (!value && value === "") {
-      return { ...state };
-    }
-    switch (payload.type) {
-      case "paging": {
-        debugger;
-        const key = payload.key;
-        let paging: CursorPaging = { first: state.paging.first };
-        if (key === "before" || key === "after") {
-          const cursor =
-            key === "before"
-              ? data?.pageInfo?.startCursor
-              : data?.pageInfo?.endCursor;
-          paging = {
-            [key]: cursor,
-            ...paging,
-          };
-        }
-        return { ...state, paging };
-      }
-      case "filter": {
-        const filter = { ...state.filter, [key]: { like: `%${value}%` } };
-        return { ...state, filter };
-      }
-      case "sorting": {
-        if (!value) {
-          return state;
-        }
-        const index = state?.sorting?.findIndex((v) => v.field === key);
-        if (index && index > -1) {
-          state.sorting.splice(index, 1);
-        }
-        state.sorting = [
-          ...(state.sorting || []),
-          ...[
-            {
-              field: key as JobSortFields,
-              direction: value as SortDirection,
-            },
-          ],
-        ];
-        return { ...state };
-      }
-      case "clear": {
-        return { ...initialJobVariables };
-      }
-      default: {
-        return state;
-      }
-    }
   };
 
   useEffect(() => {

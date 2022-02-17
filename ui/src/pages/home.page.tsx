@@ -17,6 +17,7 @@ import {
   MdArrowRight,
   MdArrowRightAlt,
 } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
 import {
@@ -107,20 +108,22 @@ const Home: React.FC = () => {
             </Text>
             <Spacer />
             <Box px="5">
-              <Button
-                display={{ base: "none", sm: "flex" }}
-                colorScheme="white"
-                rightIcon={<MdArrowRight />}
-              >
-                find more
-              </Button>
-              <IconButton
-                fontSize="3xl"
-                aria-label="more"
-                display={{ base: "flex", sm: "none" }}
-                colorScheme="white"
-                icon={<MdArrowRightAlt />}
-              />
+              <Link to="explore">
+                <Button
+                  display={{ base: "none", sm: "flex" }}
+                  colorScheme="white"
+                  rightIcon={<MdArrowRight />}
+                >
+                  find more
+                </Button>
+                <IconButton
+                  fontSize="3xl"
+                  aria-label="more"
+                  display={{ base: "flex", sm: "none" }}
+                  colorScheme="white"
+                  icon={<MdArrowRightAlt />}
+                />
+              </Link>
             </Box>
           </HStack>
           {group &&
