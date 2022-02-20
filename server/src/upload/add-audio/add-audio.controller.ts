@@ -30,7 +30,7 @@ export class AddAudioController {
   @UseInterceptors(
     FileInterceptor('file', {
       // dest: './static/avatars',
-      limits: { files: 1 },
+      limits: { files: 1, fileSize: 100 * 1024 * 1024},
     }),
   )
   async uploadAudio(

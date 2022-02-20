@@ -534,6 +534,18 @@ input loopFilter {
   key: StringFieldComparison
   tempo: IntFieldComparison
   packId: IDFilterComparison
+  pack: loopFilterpackFilter
+}
+
+input loopFilterpackFilter {
+  and: [loopFilterpackFilter!]
+  or: [loopFilterpackFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  price: FloatFieldComparison
+  description: StringFieldComparison
+  isLoop: BooleanFieldComparison
+  authorId: IDFilterComparison
 }
 
 input loopSort {
@@ -583,6 +595,11 @@ type loop {
 enum AudioType {
   oneshot
   loop
+}
+
+type DeleteManyResponse {
+  """The number of records deleted."""
+  deletedCount: Int!
 }
 
 type LoopDeleteResponse {
@@ -1480,6 +1497,7 @@ type Mutation {
   createOneLoop(input: CreateOneLoopInput!): loop!
   updateOneLoop(input: UpdateOneLoopInput!): loop!
   deleteOneLoop(input: DeleteOneLoopInput!): LoopDeleteResponse!
+  deleteManyLoops(input: DeleteManyLoopsInput!): DeleteManyResponse!
   setPostedByOnJob(input: SetPostedByOnJobInput!): job!
   createOneJob(input: CreateOneJobInput!): job!
   updateOneJob(input: UpdateOneJobInput!): job!
@@ -1605,6 +1623,23 @@ input AudioUpdateDTO {
 input DeleteOneLoopInput {
   """The id of the record to delete."""
   id: ID!
+}
+
+input DeleteManyLoopsInput {
+  """Filter to find records to delete"""
+  filter: loopDeleteFilter!
+}
+
+input loopDeleteFilter {
+  and: [loopDeleteFilter!]
+  or: [loopDeleteFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  genre: StringFieldComparison
+  bpm: IntFieldComparison
+  key: StringFieldComparison
+  tempo: IntFieldComparison
+  packId: IDFilterComparison
 }
 
 input SetPostedByOnJobInput {

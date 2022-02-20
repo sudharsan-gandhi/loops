@@ -21,6 +21,7 @@ export class JwtNoauthGuard implements CanActivate {
     const token = this.getToken(req);
     if (token) {
       req.user = await this.authService.verifyToken(token);
+      req.session.adminUser = req.user;
     }
     return true;
   }

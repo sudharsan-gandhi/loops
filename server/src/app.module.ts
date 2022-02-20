@@ -1,4 +1,9 @@
-import AdminJS, { ResourceWithOptions } from 'adminjs';
+import AdminJS, {
+  CurrentAdmin,
+  ForbiddenError,
+  ResourceWithOptions,
+} from 'adminjs';
+import axios from 'axios';
 import { GraphQLError } from 'graphql';
 import {
   utilities as nestWinstonModuleUtilities,
@@ -38,6 +43,7 @@ import {
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { JwtNoauthGuard } from './auth/guards/jwt-noauth.guard';
 import { ResolverModule } from './resolver/resolver.module';
 import { StorageEngineService } from './upload/services/storage-engine.service';
 import { UploadModule } from './upload/upload.module';
@@ -72,21 +78,43 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
       },
     }),
     AdminModule.createAdminAsync({
-      imports: [UploadModule],
-      inject: [StorageEngineService],
-      useFactory: (storage: StorageEngineService) => {
+      imports: [UploadModule, AuthModule],
+      inject: [StorageEngineService, JwtNoauthGuard],
+      useFactory: (
+        storage: StorageEngineService,
+        jwtGuardLoader: JwtNoauthGuard,
+      ) => {
         const RESOURCES_ADMIN: ResourceWithOptions[] = [
           { resource: Audio, options: {} },
-          { resource: Job, options: {} },
+          {
+            resource: Job,
+            options: {
+              properties: {
+                title: {
+                  type: 'string',
+                  isTitle: true,
+                },
+              },
+              actions: {
+                new: {
+                  isAccessible: ({ currentAdmin, ...all }) => {
+                    console.log('all', all);
+                    console.log('currentadmin', currentAdmin);
+                    return false;
+                  },
+                },
+              },
+            },
+          },
           { resource: Pack, options: {} },
           {
             resource: Paymentplan,
             options: {
               properties: {
                 isActive: {
-                  type: 'boolean'
-                }
-              }
+                  type: 'boolean',
+                },
+              },
             },
           },
           { resource: Payment, options: {} },
@@ -140,8 +168,38 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
               softwareBrothers: false,
               logo: false,
             },
+            locale: {
+              language: 'en',
+              translations: {
+                messages: {
+                  loginWelcome: 'Admin Dashboard login',
+                },
+              },
+            },
+            dashboard: {
+              component: AdminJS.bundle('../../ui/src/admin/dashboard'),
+            },
             rootPath: '/admin',
             resources: RESOURCES_ADMIN,
+          },
+          auth: {
+            authenticate: async (email, password) => {
+              try {
+                const user: CurrentAdmin = await axios.post(
+                  'http://localhost:3000/auth/login/admin',
+                  {
+                    email: email,
+                    password: password,
+                  },
+                );
+                console.log('adminlogin', user);
+                return user;
+              } catch (err) {
+                throw new ForbiddenError(err.message);
+              }
+            },
+            cookieName: 'adminjs',
+            cookiePassword: 'kabaflowadminjs',
           },
         };
       },

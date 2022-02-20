@@ -491,6 +491,18 @@ export type LoopFilter = {
   key?: Maybe<StringFieldComparison>
   tempo?: Maybe<IntFieldComparison>
   packId?: Maybe<IdFilterComparison>
+  pack?: Maybe<LoopFilterpackFilter>
+}
+
+export type LoopFilterpackFilter = {
+  and?: Maybe<Array<LoopFilterpackFilter>>
+  or?: Maybe<Array<LoopFilterpackFilter>>
+  id?: Maybe<IdFilterComparison>
+  name?: Maybe<StringFieldComparison>
+  price?: Maybe<FloatFieldComparison>
+  description?: Maybe<StringFieldComparison>
+  isLoop?: Maybe<BooleanFieldComparison>
+  authorId?: Maybe<IdFilterComparison>
 }
 
 export type LoopSort = {
@@ -534,6 +546,12 @@ export type Loop = {
 export enum AudioType {
   Oneshot = "oneshot",
   Loop = "loop"
+}
+
+export type DeleteManyResponse = {
+  __typename?: "DeleteManyResponse"
+  /** The number of records deleted. */
+  deletedCount: Scalars["Int"]
 }
 
 export type LoopDeleteResponse = {
@@ -1438,6 +1456,7 @@ export type Mutation = {
   createOneLoop: Loop
   updateOneLoop: Loop
   deleteOneLoop: LoopDeleteResponse
+  deleteManyLoops: DeleteManyResponse
   setPostedByOnJob: Job
   createOneJob: Job
   updateOneJob: Job
@@ -1505,6 +1524,10 @@ export type MutationUpdateOneLoopArgs = {
 
 export type MutationDeleteOneLoopArgs = {
   input: DeleteOneLoopInput
+}
+
+export type MutationDeleteManyLoopsArgs = {
+  input: DeleteManyLoopsInput
 }
 
 export type MutationSetPostedByOnJobArgs = {
@@ -1769,6 +1792,23 @@ export type AudioUpdateDto = {
 export type DeleteOneLoopInput = {
   /** The id of the record to delete. */
   id: Scalars["ID"]
+}
+
+export type DeleteManyLoopsInput = {
+  /** Filter to find records to delete */
+  filter: LoopDeleteFilter
+}
+
+export type LoopDeleteFilter = {
+  and?: Maybe<Array<LoopDeleteFilter>>
+  or?: Maybe<Array<LoopDeleteFilter>>
+  id?: Maybe<IdFilterComparison>
+  name?: Maybe<StringFieldComparison>
+  genre?: Maybe<StringFieldComparison>
+  bpm?: Maybe<IntFieldComparison>
+  key?: Maybe<StringFieldComparison>
+  tempo?: Maybe<IntFieldComparison>
+  packId?: Maybe<IdFilterComparison>
 }
 
 export type SetPostedByOnJobInput = {

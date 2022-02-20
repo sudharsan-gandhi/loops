@@ -38,6 +38,7 @@ export class AudioInputDTO {
 
   @FilterableField(() => ID)
   packId: number;
+
 }
 
 @InputType()

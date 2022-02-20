@@ -33,11 +33,11 @@ export class Job extends BaseEntity {
   id: number;
 
   @FilterableField({ description: 'Example field (placeholder)' })
-  @Column('varchar', { name: 'title', length: 191 })
+  @Column('varchar', { name: 'title', length: 191, nullable: false })
   title: string;
 
   @Field({ description: 'Example field (placeholder)' })
-  @Column('mediumtext', { name: 'description' })
+  @Column('varchar', { name: 'description', length: 500})
   description: string;
 
   @FilterableField(() => GraphQLTimestamp, {
@@ -55,11 +55,11 @@ export class Job extends BaseEntity {
   @Column('datetime', { name: 'expirationDate' })
   expirationDate: Date;
 
-  @Column('varchar', { name: 'contact', length: '50' })
+  @Column('varchar', { name: 'contact', length: '50', nullable: false })
   @Field()
   contact: string;
 
-  @Column('varchar', { name: 'location', length: '50' })
+  @Column('varchar', { name: 'location', length: '50', nullable: false })
   @FilterableField()
   location: string;
 

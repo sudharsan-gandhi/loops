@@ -183,20 +183,22 @@ const Home: React.FC = () => {
                   </Text>
                   <Spacer />
                   <Box px="5">
-                    <Button
-                      display={{ base: "none", sm: "flex" }}
-                      colorScheme="white"
-                      rightIcon={<MdArrowRight />}
-                    >
-                      find more
-                    </Button>
-                    <IconButton
-                      fontSize="3xl"
-                      aria-label="more"
-                      display={{ base: "flex", sm: "none" }}
-                      colorScheme="white"
-                      icon={<MdArrowRightAlt />}
-                    />
+                    <Link to="explore/audio">
+                      <Button
+                        display={{ base: "none", sm: "flex" }}
+                        colorScheme="white"
+                        rightIcon={<MdArrowRight />}
+                      >
+                        find more
+                      </Button>
+                      <IconButton
+                        fontSize="3xl"
+                        aria-label="more"
+                        display={{ base: "flex", sm: "none" }}
+                        colorScheme="white"
+                        icon={<MdArrowRightAlt />}
+                      />
+                    </Link>
                   </Box>
                 </HStack>
                 <VStack justifyContent="center">

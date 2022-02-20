@@ -33,3 +33,40 @@ export const explorePacks = gql`
     }
   }
 `;
+
+
+export const exploreLoops = gql`query Edges($paging: CursorPaging, $filter: loopFilter, $sorting: [loopSort!]) {
+  loops(paging: $paging, filter: $filter, sorting: $sorting) {
+    edges {
+      node {
+        id
+        name
+        genre
+        path
+        bpm
+        audioType
+        key
+        tempo
+        pack {
+          id
+          name
+          description
+          price
+          type
+          isLoop
+          author {
+            id
+            name
+            image
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}`

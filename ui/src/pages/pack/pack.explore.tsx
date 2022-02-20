@@ -25,6 +25,7 @@ import {
   Box,
   Container,
   HStack,
+  Skeleton,
   Spacer,
   Text,
   useToast,
@@ -181,7 +182,9 @@ export const ExplorePacks: React.FC = () => {
         </Box>
       </HStack>
       <Box pt="5">
-        <AllPacksWithCards packs={packs} />
+        <Skeleton isLoaded={!loading}>
+          <AllPacksWithCards packs={packs} />
+        </Skeleton>
       </Box>
     </Container>
   );

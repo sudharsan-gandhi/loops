@@ -3,8 +3,12 @@ import {
   useState,
 } from 'react';
 
-import { AllPacksWithCards } from 'components/audio/pack.all';
+import {
+  genres,
+  musicalNotes,
+} from 'components/audio/audio.model';
 import { PaginationButton } from 'components/button/pagination.button';
+import { LoopCard } from 'components/cards';
 import {
   FilterUI,
   KBFilterInterface,
@@ -12,17 +16,17 @@ import {
 } from 'components/pagination';
 import { reducer } from 'components/pagination/paginate.reducer';
 import {
+  LoopConnection,
   LoopFilter,
-  PackConnection,
-  PackFilter,
-  PackSortFields,
-  UserPacksArgs,
+  LoopSortFields,
+  PackAudioArgs,
 } from 'queries';
-import { explorePacks } from 'queries/explore';
+import { exploreLoops } from 'queries/explore';
 
 import { useLazyQuery } from '@apollo/client';
 import {
   Box,
+  Center,
   Container,
   HStack,
   Spacer,
@@ -34,34 +38,49 @@ import {
 export const ExploreAudio: React.FC = () => {
   const pagination = [10, 20, 50];
   const searchFields: KBFilterInterface<
-    Omit<PackFilter & LoopFilter, "or" | "and" | "id">
+    Omit<LoopFilter, "or" | "and" | "id">
   >[] = [
-    { key: "name", label: "pack name" },
-    { key: "price", label: "price", type: "number" },
-    // { key: "genre", label: "Genre", type: "select", options: genres, parent: "audio" },
+    { key: "name", label: "Audio Name" },
+    { key: "genre", label: "Genre", type: "select", options: genres },
+    { key: "key", label: "Audio Notes", type: "select", options: musicalNotes },
+    { key: "tempo", label: "Tempo", type: "number" },
+    { key: "bpm", label: "BPM", type: "number" },
   ];
-  const sortFields: KBSortInterface<PackSortFields>[] = [
-    { key: PackSortFields.Name, label: "Pack Name" },
-    { key: PackSortFields.Price, label: "Price" },
+  const sortFields: KBSortInterface<LoopSortFields>[] = [
+    { key: LoopSortFields.Name, label: "Pack Name" },
+    { key: LoopSortFields.Genre, label: "Genre" },
+    { key: LoopSortFields.Tempo, label: "Tempo" },
+    { key: LoopSortFields.Bpm, label: "BPM" },
   ];
 
-  const initialPackVariables: UserPacksArgs = {
+  const initialLoopVariables: PackAudioArgs = {
     paging: {
       first: pagination[0],
     },
     filter: {},
     sorting: [],
   };
+
+  const alwaysReducePackVariables: PackAudioArgs = {
+    filter: {
+      pack: {
+        // isLoop: {
+        //   is: true,
+        // },
+      },
+    },
+  };
+
   const toast = useToast();
-  const [getPacks, { loading, fetchMore }] =
-    useLazyQuery<{ packs: PackConnection }>(explorePacks);
-  const [packs, setPacks] = useState<PackConnection>();
-  const [packVariables, dispatch] = useState(initialPackVariables);
+  const [getLoops, { loading, fetchMore }] =
+    useLazyQuery<{ loops: LoopConnection }>(exploreLoops);
+  const [loops, setLoops] = useState<LoopConnection>();
+  const [loopVariables, dispatch] = useState({...initialLoopVariables, ...alwaysReducePackVariables});
 
   useEffect(() => {
     try {
-      getPacks({ variables: packVariables }).then((packs) => {
-        setPacks(packs.data.packs);
+      getLoops({ variables: loopVariables }).then((resp) => {
+        setLoops(resp.data.loops);
       });
     } catch (e) {
       console.error(e);
@@ -75,12 +94,12 @@ export const ExploreAudio: React.FC = () => {
       });
     }
   }, []);
-  // whenever packVariables fetchMore data from backend
+  // whenever loopVariables fetchMore data from backend
   useEffect(() => {
-    console.log("variables", packVariables);
+    console.log("variables", loopVariables);
     try {
-      fetchMore({ variables: packVariables }).then((packs) => {
-        setPacks(packs.data.packs);
+      fetchMore({ variables: loopVariables }).then((resp) => {
+        setLoops(resp.data.loops);
       });
     } catch (e) {
       console.error(e);
@@ -93,30 +112,44 @@ export const ExploreAudio: React.FC = () => {
         status: "error",
       });
     }
-  }, [packVariables]);
+  }, [loopVariables]);
 
   const formReducer = (form: any) => {
     if (form?.paging?.first) {
       form.paging.first = parseInt(form.paging.first);
     }
-    let newState: UserPacksArgs = {
-      paging: { ...packVariables.paging, ...(form.paging || {}) },
+    let newState: PackAudioArgs = {
+      paging: { ...loopVariables.paging, ...(form.paging || {}) },
     };
     Object.entries(form).forEach(([key, value]) => {
       Object.entries(value).forEach(([k, v]) => {
-        newState = reducer<UserPacksArgs>(
+        newState = reducer<PackAudioArgs>(
           newState,
-          packs?.pageInfo,
+          loops?.pageInfo,
           {
-            type: key as keyof UserPacksArgs | "clear",
+            type: key as keyof PackAudioArgs | "clear",
             key: k,
             value: v,
           },
-          initialPackVariables
+          initialLoopVariables
         );
       });
     });
-    dispatch(newState);
+    // add default filters here
+    dispatch({
+      filter: {
+        ...(newState.filter || {}),
+        ...(alwaysReducePackVariables.filter || {}),
+      },
+      paging: {
+        ...(newState.paging || {}),
+        ...(alwaysReducePackVariables.paging || {}),
+      },
+      sorting: [
+        ...(newState.sorting || []),
+        ...(alwaysReducePackVariables.sorting || []),
+      ],
+    });
   };
 
   return (
@@ -131,7 +164,7 @@ export const ExploreAudio: React.FC = () => {
         p="2"
       >
         <Box
-          visibility={!packs?.pageInfo?.hasPreviousPage ? "hidden" : "visible"}
+          visibility={!loops?.pageInfo?.hasPreviousPage ? "hidden" : "visible"}
         >
           <PaginationButton dispatch={formReducer} isPrev />
         </Box>
@@ -139,9 +172,9 @@ export const ExploreAudio: React.FC = () => {
         <VStack>
           <HStack alignItem="baseline">
             <Text fontSize={{ base: "lg", md: "2xl" }} m="0">
-              Explore Packs
+              Explore Audio
             </Text>
-            <Box display={packs?.edges?.length > 0 ? "block" : "none"}>
+            <Box display={loops?.edges?.length > 0 ? "block" : "none"}>
               <FilterUI
                 formReducer={formReducer}
                 pagination={pagination}
@@ -152,13 +185,23 @@ export const ExploreAudio: React.FC = () => {
           </HStack>
         </VStack>
         <Spacer />
-        <Box visibility={!packs?.pageInfo?.hasNextPage ? "hidden" : "visible"}>
+        <Box visibility={!loops?.pageInfo?.hasNextPage ? "hidden" : "visible"}>
           <PaginationButton dispatch={formReducer} />
         </Box>
       </HStack>
-      <Box pt="5">
-        <AllPacksWithCards packs={packs} />
-      </Box>
+      <Center pt="5" w="100%">
+        <VStack>
+          {loops?.edges?.map(({ node: loop }) => (
+            <LoopCard
+              audio={loop}
+              user={loop.pack.author}
+              packId={loop.pack.id}
+              refetch={undefined}
+              showPackLink = {true}
+            />
+          ))}
+        </VStack>
+      </Center>
     </Container>
   );
 };

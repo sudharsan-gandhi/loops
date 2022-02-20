@@ -9,6 +9,7 @@ import Home from 'pages/home.page';
 import JobsPage from 'pages/job.page';
 import { NewAudioPage } from 'pages/newAudio.page';
 import { PackPage } from 'pages/pack.page';
+import { ExploreAudio } from 'pages/pack/audio.explore';
 import { ExplorePacks } from 'pages/pack/pack.explore';
 import { PayplanPage } from 'pages/payplan.page';
 import SignIn from 'pages/signin.page';
@@ -57,6 +58,7 @@ export const AppRouter = () => {
       <Route path="signup" element={<SignUp />} />
       <Route path="signin" element={<SignIn />} />
       <Route path="explore" element={<ExplorePacks />} />
+      <Route path="explore/audio" element={<ExploreAudio />} />
       <Route
         path="profile"
         element={

@@ -40,6 +40,14 @@ export class AuthController {
     res.redirect(this.clientUrl);
   }
 
+  @Post('/login/admin')
+  @UseGuards(AuthGuard('local'))
+  async loginAdmin(@Req() req, @Res() res) {
+    this.console.debug(req.user);
+    this.attachUserCookie(req, res);
+    return req.user;
+  }
+
   @Get('/google')
   @UseGuards(AuthGuard('google'))
   google(@Req() req) {}

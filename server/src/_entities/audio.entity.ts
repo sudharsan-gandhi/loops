@@ -11,8 +11,8 @@ import {
 import {
   Authorize,
   FilterableField,
+  FilterableRelation,
   IDField,
-  Relation,
 } from '@nestjs-query/query-graphql';
 import {
   Field,
@@ -31,7 +31,7 @@ registerEnumType(AudioType, { name: 'AudioType' });
 
 @ObjectType('loop')
 @Entity('audio')
-@Relation('pack', () => Pack, { disableRemove: true })
+@FilterableRelation('pack', () => Pack, { disableRemove: true })
 @Authorize(AudioAuthorizer)
 export class Audio extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })

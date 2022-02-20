@@ -10,12 +10,14 @@ import {
   Pack,
   User,
 } from 'queries';
+import { FaFileAudio } from 'react-icons/fa';
 import {
   FiEdit,
   FiPlay,
 } from 'react-icons/fi';
 import { HiDotsVertical } from 'react-icons/hi';
 import { MdDeleteOutline } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 import { IsOwn } from 'state/user';
 
 import { useMutation } from '@apollo/client';
@@ -351,8 +353,9 @@ export const LoopCard: React.FC<{
   audio: Loop;
   packId: string;
   user?: MakeOptional<User, keyof User>;
+  showPackLink?: boolean;
   refetch: any;
-}> = ({ audio, packId, refetch, user }) => {
+}> = ({ audio, packId, refetch, user, showPackLink = false }) => {
   const {
     isOpen: isAudioModalOpen,
     onOpen: openAudioModal,
@@ -458,30 +461,47 @@ export const LoopCard: React.FC<{
             </VStack>
           </DrawerBody>
           <DrawerFooter>
-            <IsOwn userId={user?.id}>
-              <HStack w="100%" justifyContent={"center"}>
+            <HStack w="100%" justifyContent={"center"}>
+              {showPackLink && !audio.pack.isLoop && (
                 <Box>
                   <Button
-                    leftIcon={<FiEdit />}
+                    as={Link}
+                    to={`/pack/${audio.packId || audio.pack.id}`}
+                    leftIcon={<FaFileAudio />}
                     onClick={() => {
                       closeAudioModal();
                       OpenEdit();
                     }}
                   >
-                    Edit Audio
+                    Go to Pack
                   </Button>
                 </Box>
-                <Box>
-                  <Button
-                    leftIcon={<MdDeleteOutline />}
-                    ref={deleteRef}
-                    onClick={openDelete}
-                  >
-                    Delete Audio
-                  </Button>
-                </Box>
-              </HStack>
-            </IsOwn>
+              )}
+              <IsOwn userId={user?.id}>
+                <>
+                  <Box>
+                    <Button
+                      leftIcon={<FiEdit />}
+                      onClick={() => {
+                        closeAudioModal();
+                        OpenEdit();
+                      }}
+                    >
+                      Edit Audio
+                    </Button>
+                  </Box>
+                  <Box>
+                    <Button
+                      leftIcon={<MdDeleteOutline />}
+                      ref={deleteRef}
+                      onClick={openDelete}
+                    >
+                      Delete Audio
+                    </Button>
+                  </Box>
+                </>
+              </IsOwn>
+            </HStack>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

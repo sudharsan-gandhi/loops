@@ -37,7 +37,7 @@ export class AudioAuthorizer implements CustomAuthorizer<AudioInputDTO> {
     // check first global access
     const action = authorizationContext.operationGroup;
     let allowed = this.acl.allowed(
-      user.role || 'guest',
+      user?.role || 'guest',
       this.NAME,
       action,
       AuthPossesion.ANY,
@@ -46,7 +46,7 @@ export class AudioAuthorizer implements CustomAuthorizer<AudioInputDTO> {
       return {};
     }
 
-    allowed = this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
+    allowed = this.acl.allowed(user?.role || 'guest', this.NAME, action, AuthPossesion.OWN);
     if (allowed) {
       // if not check if owned resource can be edited
       let resource;
