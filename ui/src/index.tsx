@@ -1,6 +1,12 @@
 import React, { createContext } from 'react';
 import ReactDOM from 'react-dom';
 
+import JobResource from 'admin/job.admin';
+import LoopResource from 'admin/loop.admin';
+import PackResource from 'admin/pack.admin';
+import PaymentResource from 'admin/payment.admin';
+import PaymentplanResource from 'admin/paymentplan.admin';
+import UserResource from 'admin/user.admin';
 import { ShowPack } from 'components/audio/pack.show';
 import EditUser from 'components/user/user.edit';
 import theme from 'definitions/chakra/theme';
@@ -94,6 +100,56 @@ export const AppRouter = () => {
       />
       <Route path="payplans" element={<PayplanPage />} />
       <Route path="jobs" element={<JobsPage />} />
+      <Route path="admin">
+        <Route
+          path="users"
+          element={
+            <RequireAuth>
+              <UserResource />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="packs"
+          element={
+            <RequireAuth>
+              <PackResource />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="loops"
+          element={
+            <RequireAuth>
+              <LoopResource />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="jobs"
+          element={
+            <RequireAuth>
+              <JobResource />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="payplans"
+          element={
+            <RequireAuth>
+              <PaymentplanResource />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="payments"
+          element={
+            <RequireAuth>
+              <PaymentResource />
+            </RequireAuth>
+          }
+        />
+      </Route>
     </Routes>
   );
 };

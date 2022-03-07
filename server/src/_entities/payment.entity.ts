@@ -1,3 +1,4 @@
+import { GraphQLBoolean } from 'graphql';
 import { Pack } from 'src/_entities/pack.entity';
 import { Paymentplan } from 'src/_entities/payment-plan.entity';
 import { PaymentAuthorizer } from 'src/resolver/authorizer';
@@ -8,6 +9,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import {
@@ -30,6 +32,7 @@ import { User } from './';
 export enum PaymentModel {
   PayPal = 'PayPal',
   MoPay = 'MoPay',
+  Gift = 'Gift',
 }
 
 export enum PlanType {
@@ -51,7 +54,7 @@ export class Payment extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Field(() => PlanType, {
+  @FilterableField(() => PlanType, {
     description: 'Example field (placeholder)',
   })
   @Column('enum', { name: 'PlanType', enum: PlanType })
@@ -60,13 +63,6 @@ export class Payment extends BaseEntity {
   @FilterableField(() => Int, { description: 'Example filed (placeholder)' })
   @Column('int', { name: 'price' })
   price: number;
-
-  @FilterableField(() => GraphQLTimestamp, {
-    description: 'Example filed (placeholder)',
-  })
-  @Column('datetime', { name: 'date' })
-  @CreateDateColumn()
-  date: Date;
 
   @FilterableField(() => GraphQLTimestamp, {
     description: 'Example filed (placeholder)',
@@ -80,22 +76,38 @@ export class Payment extends BaseEntity {
   @Column('datetime', { name: 'planEndDate' })
   planEndDate: Date;
 
-  @Field(() => PaymentModel, {
+  @FilterableField(() => PaymentModel, {
     description: 'Example filed (placeholder)',
   })
   @Column('enum', { name: 'paymentMode', enum: PaymentModel })
   paymentMode: PaymentModel;
 
-  @Field({ description: 'Example filed (placeholder)' })
-  @Column('varchar', { name: 'confirmationToken', length: 191 })
+  @Field({ description: 'Example filed (placeholder)', nullable: true })
+  @Column('varchar', { name: 'confirmationToken', nullable: true, length: 191 })
   confirmationToken: string;
 
-  @FilterableField(() => Int, {
+  @FilterableField(() => GraphQLBoolean, {
     description: 'Example filed (placeholder)',
     allowedComparisons: ['eq'],
   })
-  @Column('tinyint', { name: 'isActive', width: 1 })
+  @Column('boolean', { name: 'isActive', nullable: true, default: true })
   isActive: boolean;
+
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
+  @Column('datetime', {
+    name: 'postDate',
+  })
+  @CreateDateColumn()
+  postDate: Date;
+
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
+  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @FilterableField(() => ID)
   @Column('int')

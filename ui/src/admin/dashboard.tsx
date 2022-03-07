@@ -1,19 +1,25 @@
-import { IsAuth } from 'state/user';
+import { AppRouter } from 'index';
 
-import {
-  Box,
-  Header,
-} from '@adminjs/design-system';
-
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
+  // useEffect(() => {
+  //   axios({
+  //     method: "get",
+  //     url: "/auth/isLoggedIn",
+  //     withCredentials: true,
+  //   })
+  //     .then((response) => {
+  //       debugger;
+  //       console.log(response.data);
+  //       setCurrentAdmin(response.data);
+  //     })
+  //     .catch((err) => console.error(err));
+  // }, []);
 
   return (
-    <Header p="10px">
-      Kabaflow Dashboard
-      <IsAuth userId="1">
-        <Box>not logged in</Box>
-      </IsAuth>
-    </Header>
+    <>
+      <h4>Kabaflow Dashboard</h4>
+      <AppRouter />
+    </>
   );
 };
 

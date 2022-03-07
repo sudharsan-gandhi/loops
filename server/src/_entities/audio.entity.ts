@@ -3,9 +3,11 @@ import { AudioAuthorizer } from 'src/resolver/authorizer/audio.authorizer';
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import {
@@ -16,6 +18,7 @@ import {
 } from '@nestjs-query/query-graphql';
 import {
   Field,
+  GraphQLTimestamp,
   ID,
   Int,
   ObjectType,
@@ -54,17 +57,17 @@ export class Audio extends BaseEntity {
   @Column('varchar', { name: 'path', length: 191 })
   path: string;
 
-  @Field(() => AudioType, {
+  @FilterableField(() => AudioType, {
     description: 'Example field (placeholder)',
   })
   @Column('enum', { name: 'audioType', enum: ['oneshot', 'loop'] })
   audioType: AudioType;
 
   @FilterableField({ description: 'Example field (placeholder)' })
-  @Column('char', { name: 'key', length: 2 , nullable: true, default: '' })
+  @Column('char', { name: 'key', length: 2, nullable: true, default: '' })
   key?: string;
 
-  @FilterableField(() => Int, { description: 'Example field (placeholder)'})
+  @FilterableField(() => Int, { description: 'Example field (placeholder)' })
   @Column('int', { name: 'tempo' })
   tempo: number;
 
@@ -77,4 +80,20 @@ export class Audio extends BaseEntity {
     onUpdate: 'NO ACTION',
   })
   pack: Pack;
+
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
+  @Column('datetime', {
+    name: 'postDate',
+  })
+  @CreateDateColumn()
+  postDate: Date;
+
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
+  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

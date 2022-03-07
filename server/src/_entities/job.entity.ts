@@ -43,11 +43,7 @@ export class Job extends BaseEntity {
   @FilterableField(() => GraphQLTimestamp, {
     description: 'Example field (placeholder)',
   })
-  @Column('datetime', {
-    name: 'postDate',
-  })
-  @CreateDateColumn()
-  postDate: Date;
+
 
   @FilterableField(() => GraphQLTimestamp, {
     description: 'Example field (placeholder)',
@@ -63,9 +59,16 @@ export class Job extends BaseEntity {
   @FilterableField()
   location: string;
 
-  @UpdateDateColumn()
-  @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @Column('datetime', {
+    name: 'postDate',
+  })
+  @CreateDateColumn()
+  postDate: Date;
+
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @FilterableField(() => ID)

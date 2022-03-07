@@ -1,3 +1,5 @@
+import { GraphQLBoolean } from 'graphql';
+
 import { FilterableField } from '@nestjs-query/query-graphql';
 import {
   Field,
@@ -9,7 +11,7 @@ import {
 
 @InputType()
 export class PaymentplanInputDTO {
-  @Field({ description: 'Example field (placeholder)' })
+  @FilterableField({ description: 'Example field (placeholder)' })
   title: string;
 
   @Field({ description: 'Example field (placeholder)' })
@@ -21,7 +23,7 @@ export class PaymentplanInputDTO {
   @Field(() => Int, { description: 'Example field (placeholder)' })
   month: number;
 
-  @FilterableField(() => Int, {
+  @FilterableField(() => GraphQLBoolean, {
     description: 'Example filed (placeholder)',
     allowedComparisons: ['eq'],
   })

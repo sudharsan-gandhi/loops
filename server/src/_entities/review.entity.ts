@@ -2,9 +2,11 @@ import { ReviewAuthorizer } from 'src/resolver/authorizer';
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import {
@@ -15,6 +17,7 @@ import {
 } from '@nestjs-query/query-graphql';
 import {
   Field,
+  GraphQLTimestamp,
   ID,
   ObjectType,
 } from '@nestjs/graphql';
@@ -37,6 +40,18 @@ export class Review extends BaseEntity {
   @Column('varchar', { name: 'about', nullable: true, length: 255 })
   @Field()
   review: string | null;
+
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @Column('datetime', {
+    name: 'postDate',
+  })
+  @CreateDateColumn()
+  postDate: Date;
+
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @FilterableField(() => ID)
   @Column('int')

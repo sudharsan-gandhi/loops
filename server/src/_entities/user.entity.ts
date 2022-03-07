@@ -9,10 +9,12 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import {
@@ -23,6 +25,7 @@ import {
 } from '@nestjs-query/query-graphql';
 import {
   Field,
+  GraphQLTimestamp,
   ID,
   ObjectType,
   registerEnumType,
@@ -120,6 +123,18 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.user)
   reviews?: Review[];
+
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @Column('datetime', {
+    name: 'postDate',
+  })
+  @CreateDateColumn()
+  postDate: Date;
+
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

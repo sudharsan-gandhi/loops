@@ -1,5 +1,10 @@
+import { KBDatePicker } from 'components/date/date';
 import { KBRadioGroup } from 'components/radio/RadioGroup';
-import { useForm } from 'react-hook-form';
+import {
+  Control,
+  FieldValues,
+  useForm,
+} from 'react-hook-form';
 import { AiOutlineClear } from 'react-icons/ai';
 import { FiFilter } from 'react-icons/fi';
 import { MdSearch } from 'react-icons/md';
@@ -30,7 +35,14 @@ export interface KBFilterInterface<T> {
   key: keyof T;
   label: string;
   defaultValue?: string;
-  type?: "input" | "number" | "select" | "checkbox" | "radio";
+  type?:
+    | "input"
+    | "number"
+    | "select"
+    | "checkbox"
+    | "radio"
+    | "date"
+    | "datetime";
   options?: (string | number)[];
   parent?: string;
 }
@@ -65,6 +77,7 @@ export const FilterUI: React.FC<{
   const { handleSubmit, register, control } = useForm();
 
   const handleSearch = (form: any) => {
+    
     formReducer(form);
     // Object.entries(form).forEach(([key, value]) => {
     //   Object.entries(value).forEach(([k, v]) => {
@@ -120,7 +133,9 @@ export const FilterUI: React.FC<{
                 filter
               </Text>
             )}
-            {searchFields.map((node, i) => getFilterField(node, register, i))}
+            {searchFields.map((node, i) =>
+              getFilterField(node, control, register, i)
+            )}
 
             {sortFields.length > 0 && (
               <Text mt="4" fontSize="lg" textAlign="center">
@@ -166,14 +181,15 @@ export const FilterUI: React.FC<{
 
 const getFilterField = (
   node: KBFilterInterface<any>,
+  control: Control<FieldValues, object>,
   register: any,
   key: number
 ) => {
-  const parent = node?.parent ? node.parent + '.' : '';
+  const parent = node?.parent ? node.parent + "." : "";
   switch (node.type) {
     case "select":
       return (
-        <FormControl>
+        <FormControl key={key}>
           <FormLabel>{node.label}</FormLabel>
           <Select
             name={node.key}
@@ -194,7 +210,7 @@ const getFilterField = (
     case "number":
       return (
         <>
-          <FormControl>
+          <FormControl key={key + "1"}>
             <FormLabel>{node.label} above</FormLabel>
             <Input
               type="number"
@@ -204,7 +220,7 @@ const getFilterField = (
               {...register(`gte.${parent}${String(node.key)}`)}
             />
           </FormControl>
-          <FormControl>
+          <FormControl key={key+"2"}>
             <FormLabel>{node.label} below</FormLabel>
             <Input
               type="number"
@@ -216,9 +232,30 @@ const getFilterField = (
           </FormControl>
         </>
       );
+    case "date":
+      return (
+        <>
+          <FormControl  key={key + "1"}>
+            <FormLabel>{node.label} from</FormLabel>
+            <KBDatePicker
+              key={key}
+              label={`gte.${String(node.key)}`}
+              control={control}
+            />
+          </FormControl>
+          <FormControl  key={key + "2"}>
+            <FormLabel>{node.label} to</FormLabel>
+            <KBDatePicker
+              key={key}
+              label={`lte.${String(node.key)}`}
+              control={control}
+            />
+          </FormControl>
+        </>
+      );
     default:
       return (
-        <FormControl>
+        <FormControl  key={key}>
           <FormLabel>{node.label}</FormLabel>
           <Input
             type="text"

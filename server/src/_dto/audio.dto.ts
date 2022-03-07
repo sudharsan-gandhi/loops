@@ -43,6 +43,7 @@ export class AudioInputDTO {
 
 @InputType()
 export class AudioUpdateDTO {
+
   @FilterableField({
     description: 'Example field (placeholder)',
     nullable: true,

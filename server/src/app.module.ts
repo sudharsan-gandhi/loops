@@ -1,9 +1,4 @@
-import AdminJS, {
-  CurrentAdmin,
-  ForbiddenError,
-  ResourceWithOptions,
-} from 'adminjs';
-import axios from 'axios';
+import AdminJS from 'adminjs';
 import { GraphQLError } from 'graphql';
 import {
   utilities as nestWinstonModuleUtilities,
@@ -12,12 +7,12 @@ import {
 import { join } from 'path';
 import * as winston from 'winston';
 
-import { AdminModule } from '@adminjs/nestjs';
+// import { AdminModule } from '@adminjs/nestjs';
 import {
   Database,
   Resource,
 } from '@adminjs/typeorm';
-import uploadFileFeature from '@adminjs/upload';
+// import uploadFileFeature from '@adminjs/upload';
 import { Module } from '@nestjs/common';
 import {
   ConfigModule,
@@ -43,9 +38,7 @@ import {
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { JwtNoauthGuard } from './auth/guards/jwt-noauth.guard';
 import { ResolverModule } from './resolver/resolver.module';
-import { StorageEngineService } from './upload/services/storage-engine.service';
 import { UploadModule } from './upload/upload.module';
 
 AdminJS.registerAdapter({ Database, Resource });
@@ -77,133 +70,127 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
         return error;
       },
     }),
-    AdminModule.createAdminAsync({
-      imports: [UploadModule, AuthModule],
-      inject: [StorageEngineService, JwtNoauthGuard],
-      useFactory: (
-        storage: StorageEngineService,
-        jwtGuardLoader: JwtNoauthGuard,
-      ) => {
-        const RESOURCES_ADMIN: ResourceWithOptions[] = [
-          { resource: Audio, options: {} },
-          {
-            resource: Job,
-            options: {
-              properties: {
-                title: {
-                  type: 'string',
-                  isTitle: true,
-                },
-              },
-              actions: {
-                new: {
-                  isAccessible: ({ currentAdmin, ...all }) => {
-                    console.log('all', all);
-                    console.log('currentadmin', currentAdmin);
-                    return false;
-                  },
-                },
-              },
-            },
-          },
-          { resource: Pack, options: {} },
-          {
-            resource: Paymentplan,
-            options: {
-              properties: {
-                isActive: {
-                  type: 'boolean',
-                },
-              },
-            },
-          },
-          { resource: Payment, options: {} },
-          { resource: Rave, options: {} },
-          {
-            resource: User,
-            options: {
-              properties: {
-                authorizer: {
-                  // will be always local authorizer
-                  // google and fb not possible
-                  isDisabled: true,
-                },
-                image: {
-                  isVisible: false,
-                },
-                imageUpload: {
-                  isVisible: {
-                    list: true,
-                    show: true,
-                    edit: true,
-                    filter: false,
-                  },
-                },
-                // imageUpload: {
-                //   isSortable: false,
-                //   components: {
-                //     edit: AdminJS.bundle('../../ui/src/admin/user-avatar'),
-                //   },
-                // },
-              },
-            },
-            features: [
-              uploadFileFeature({
-                provider: storage,
-                properties: {
-                  file: 'imageUpload',
-                  key: 'image',
-                  bucket: 'bucket',
-                },
-                validation: { mimeTypes: ['image/*'] },
-              }),
-            ],
-          },
-          { resource: Review, options: {} },
-        ];
-        return {
-          adminJsOptions: {
-            branding: {
-              companyName: 'Kabaflow',
-              softwareBrothers: false,
-              logo: false,
-            },
-            locale: {
-              language: 'en',
-              translations: {
-                messages: {
-                  loginWelcome: 'Admin Dashboard login',
-                },
-              },
-            },
-            dashboard: {
-              component: AdminJS.bundle('../../ui/src/admin/dashboard'),
-            },
-            rootPath: '/admin',
-            resources: RESOURCES_ADMIN,
-          },
-          auth: {
-            authenticate: async (email, password) => {
-              try {
-                const user: CurrentAdmin = await axios.post(
-                  'http://localhost:3000/auth/login/admin',
-                  {
-                    email: email,
-                    password: password,
-                  },
-                );
-                console.log('adminlogin', user);
-                return user;
-              } catch (err) {
-                throw new ForbiddenError(err.message);
-              }
-            },
-            cookieName: 'adminjs',
-            cookiePassword: 'kabaflowadminjs',
-          },
-        };
-      },
-    }),
+    // AdminModule.createAdminAsync({
+    //   imports: [UploadModule, AuthModule],
+    //   inject: [StorageEngineService, JwtNoauthGuard],
+    //   useFactory: (
+    //     storage: StorageEngineService,
+    //     jwtGuardLoader: JwtNoauthGuard,
+    //   ) => {
+    //     const RESOURCES_ADMIN: ResourceWithOptions[] = [
+    //       { resource: Audio, options: {} },
+    //       {
+    //         resource: Job,
+    //         options: {
+    //           properties: {
+    //             title: {
+    //               type: 'string',
+    //               isTitle: true,
+    //             },
+    //           },
+    //           actions: {
+    //             new: {
+    //               isAccessible: ({ currentAdmin, ...all }) => {
+    //                 debugger;
+    //                 console.log('all', all);
+    //                 console.log('currentadmin', currentAdmin?.role);
+    //                 return false;
+    //               },
+    //             },
+    //           },
+    //         },
+    //       },
+    //       { resource: Pack, options: {} },
+    //       {
+    //         resource: Paymentplan,
+    //         options: {
+    //           properties: {
+    //             isActive: {
+    //               type: 'boolean',
+    //             },
+    //           },
+    //         },
+    //       },
+    //       { resource: Payment, options: {} },
+    //       { resource: Rave, options: {} },
+    //       {
+    //         resource: User,
+    //         options: {
+    //           properties: {
+    //             authorizer: {
+    //               // will be always local authorizer
+    //               // google and fb not possible
+    //               isDisabled: true,
+    //             },
+    //             image: {
+    //               isVisible: false,
+    //             },
+    //             imageUpload: {
+    //               isVisible: {
+    //                 list: true,
+    //                 show: true,
+    //                 edit: true,
+    //                 filter: false,
+    //               },
+    //             },
+    //             // imageUpload: {
+    //             //   isSortable: false,
+    //             //   components: {
+    //             //     edit: AdminJS.bundle('../../ui/src/admin/user-avatar'),
+    //             //   },
+    //             // },
+    //           },
+    //         },
+    //         features: [
+    //           uploadFileFeature({
+    //             provider: storage,
+    //             properties: {
+    //               file: 'imageUpload',
+    //               key: 'image',
+    //               bucket: 'bucket',
+    //             },
+    //             validation: { mimeTypes: ['image/*'] },
+    //           }),
+    //         ],
+    //       },
+    //       { resource: Review, options: {} },
+    //     ];
+    //     return {
+    //       adminJsOptions: {
+    //         branding: {
+    //           companyName: 'Kabaflow',
+    //           softwareBrothers: false,
+    //           logo: false,
+    //         },
+    //         locale: {
+    //           language: 'en',
+    //           translations: {
+    //             messages: {
+    //               loginWelcome: 'Admin Dashboard login',
+    //             },
+    //           },
+    //         },
+    //         dashboard: {
+    //           component: AdminJS.bundle('./admin/ui/home'),
+    //           // component: AdminJS.bundle('../../ui/src/admin/dashboard'),
+    //         },
+    //         rootPath: '/admin',
+    //         resources: RESOURCES_ADMIN,
+    //       },
+          // auth: {
+          //   authenticate: async (email, password) => {
+          //     try {
+          //       return { email: 'admin@gmail.com', roles: ['root'] } as CurrentAdmin;
+          //     } catch (err) {
+          //       throw new ForbiddenError(err.message);
+          //     }
+          //   },
+          //   cookieName: 'adminjs',
+          //   cookiePassword: 'kabaflowadminjs',
+          // },
+    //     };
+    //   },
+    // }),
     ResolverModule,
     AuthModule,
     ConfigModule.forRoot({

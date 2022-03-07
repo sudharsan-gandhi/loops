@@ -13,12 +13,12 @@ type job {
   description: String!
 
   """Example field (placeholder)"""
-  postDate: Timestamp!
-
-  """Example field (placeholder)"""
   expirationDate: Timestamp!
   contact: String!
   location: String!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
 
   """Example field (placeholder)"""
   updatedAt: Timestamp!
@@ -46,6 +46,12 @@ type rave {
 type Review {
   id: ID!
   review: String!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
   userId: ID!
   packId: ID!
   user: user!
@@ -62,6 +68,12 @@ type user {
   about: String!
   authorizer: Authorizer!
   role: String!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
   jobs(
     """Limit or page results."""
     paging: CursorPaging = {first: 10}
@@ -152,9 +164,10 @@ input jobFilter {
   or: [jobFilter!]
   id: IDFilterComparison
   title: StringFieldComparison
-  postDate: TimestampFieldComparison
   expirationDate: TimestampFieldComparison
   location: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
   postedById: IDFilterComparison
 }
 
@@ -221,9 +234,10 @@ input jobSort {
 enum jobSortFields {
   id
   title
-  postDate
   expirationDate
   location
+  postDate
+  updatedAt
   postedById
 }
 
@@ -245,8 +259,10 @@ input packFilter {
   id: IDFilterComparison
   name: StringFieldComparison
   price: FloatFieldComparison
-  description: StringFieldComparison
+  type: PacketTypeFilterComparison
   isLoop: BooleanFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
   authorId: IDFilterComparison
 }
 
@@ -270,6 +286,28 @@ input FloatFieldComparisonBetween {
   upper: Float!
 }
 
+input PacketTypeFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: PacketType
+  neq: PacketType
+  gt: PacketType
+  gte: PacketType
+  lt: PacketType
+  lte: PacketType
+  like: PacketType
+  notLike: PacketType
+  iLike: PacketType
+  notILike: PacketType
+  in: [PacketType!]
+  notIn: [PacketType!]
+}
+
+enum PacketType {
+  FREE
+  PAID
+}
+
 input BooleanFieldComparison {
   is: Boolean
   isNot: Boolean
@@ -285,8 +323,10 @@ enum packSortFields {
   id
   name
   price
-  description
+  type
   isLoop
+  postDate
+  updatedAt
   authorId
 }
 
@@ -334,18 +374,66 @@ input paymentFilter {
   and: [paymentFilter!]
   or: [paymentFilter!]
   id: IDFilterComparison
+  type: PlanTypeFilterComparison
   price: IntFieldComparison
-  date: TimestampFieldComparison
   planStartDate: TimestampFieldComparison
   planEndDate: TimestampFieldComparison
+  paymentMode: PaymentModelFilterComparison
   isActive: PaymentIsActiveFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
   packId: IDFilterComparison
   paymentPlanId: IDFilterComparison
   userId: IDFilterComparison
 }
 
+input PlanTypeFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: PlanType
+  neq: PlanType
+  gt: PlanType
+  gte: PlanType
+  lt: PlanType
+  lte: PlanType
+  like: PlanType
+  notLike: PlanType
+  iLike: PlanType
+  notILike: PlanType
+  in: [PlanType!]
+  notIn: [PlanType!]
+}
+
+enum PlanType {
+  subscription
+  buy
+}
+
+input PaymentModelFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: PaymentModel
+  neq: PaymentModel
+  gt: PaymentModel
+  gte: PaymentModel
+  lt: PaymentModel
+  lte: PaymentModel
+  like: PaymentModel
+  notLike: PaymentModel
+  iLike: PaymentModel
+  notILike: PaymentModel
+  in: [PaymentModel!]
+  notIn: [PaymentModel!]
+}
+
+enum PaymentModel {
+  PayPal
+  MoPay
+  Gift
+}
+
 input PaymentIsActiveFilterComparison {
-  eq: Int
+  eq: Boolean
 }
 
 input paymentSort {
@@ -356,11 +444,14 @@ input paymentSort {
 
 enum paymentSortFields {
   id
+  type
   price
-  date
   planStartDate
   planEndDate
+  paymentMode
   isActive
+  postDate
+  updatedAt
   packId
   paymentPlanId
   userId
@@ -370,6 +461,8 @@ input ReviewFilter {
   and: [ReviewFilter!]
   or: [ReviewFilter!]
   id: IDFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
   userId: IDFilterComparison
   packId: IDFilterComparison
 }
@@ -382,6 +475,8 @@ input ReviewSort {
 
 enum ReviewSortFields {
   id
+  postDate
+  updatedAt
   userId
   packId
 }
@@ -410,7 +505,7 @@ type paymentplan {
   postedById: ID!
 
   """Example filed (placeholder)"""
-  isActive: Int!
+  isActive: Boolean!
   postedBy: user!
   payments(
     """Limit or page results."""
@@ -435,9 +530,6 @@ type payment {
   price: Int!
 
   """Example filed (placeholder)"""
-  date: Timestamp!
-
-  """Example filed (placeholder)"""
   planStartDate: Timestamp!
 
   """Example filed (placeholder)"""
@@ -447,26 +539,22 @@ type payment {
   paymentMode: PaymentModel!
 
   """Example filed (placeholder)"""
-  confirmationToken: String!
+  confirmationToken: String
 
   """Example filed (placeholder)"""
-  isActive: Int!
+  isActive: Boolean!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
   packId: ID!
   paymentPlanId: ID!
   userId: ID!
   pack: pack!
   paymentPlan: paymentplan!
   user: user!
-}
-
-enum PlanType {
-  subscription
-  buy
-}
-
-enum PaymentModel {
-  PayPal
-  MoPay
 }
 
 type pack {
@@ -485,6 +573,12 @@ type pack {
   """Example field (placeholder)"""
   type: PacketType!
   isLoop: Boolean!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
   authorId: ID!
   author: user!
   audio(
@@ -519,11 +613,6 @@ type pack {
   ): PackReviewsConnection!
 }
 
-enum PacketType {
-  FREE
-  PAID
-}
-
 input loopFilter {
   and: [loopFilter!]
   or: [loopFilter!]
@@ -531,10 +620,35 @@ input loopFilter {
   name: StringFieldComparison
   genre: StringFieldComparison
   bpm: IntFieldComparison
+  audioType: AudioTypeFilterComparison
   key: StringFieldComparison
   tempo: IntFieldComparison
   packId: IDFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
   pack: loopFilterpackFilter
+}
+
+input AudioTypeFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: AudioType
+  neq: AudioType
+  gt: AudioType
+  gte: AudioType
+  lt: AudioType
+  lte: AudioType
+  like: AudioType
+  notLike: AudioType
+  iLike: AudioType
+  notILike: AudioType
+  in: [AudioType!]
+  notIn: [AudioType!]
+}
+
+enum AudioType {
+  oneshot
+  loop
 }
 
 input loopFilterpackFilter {
@@ -543,8 +657,10 @@ input loopFilterpackFilter {
   id: IDFilterComparison
   name: StringFieldComparison
   price: FloatFieldComparison
-  description: StringFieldComparison
+  type: PacketTypeFilterComparison
   isLoop: BooleanFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
   authorId: IDFilterComparison
 }
 
@@ -559,9 +675,12 @@ enum loopSortFields {
   name
   genre
   bpm
+  audioType
   key
   tempo
   packId
+  postDate
+  updatedAt
 }
 
 type loop {
@@ -589,12 +708,13 @@ type loop {
   """Example field (placeholder)"""
   tempo: Int!
   packId: ID!
-  pack: pack!
-}
 
-enum AudioType {
-  oneshot
-  loop
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
+  pack: pack!
 }
 
 type DeleteManyResponse {
@@ -627,6 +747,12 @@ type LoopDeleteResponse {
   """Example field (placeholder)"""
   tempo: Int
   packId: ID
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
 }
 
 type loopEdge {
@@ -664,9 +790,12 @@ type loopAggregateGroupBy {
   name: String
   genre: String
   bpm: Int
+  audioType: AudioType
   key: String
   tempo: Int
   packId: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
 }
 
 type loopCountAggregate {
@@ -674,9 +803,12 @@ type loopCountAggregate {
   name: Int
   genre: Int
   bpm: Int
+  audioType: Int
   key: Int
   tempo: Int
   packId: Int
+  postDate: Int
+  updatedAt: Int
 }
 
 type loopSumAggregate {
@@ -698,9 +830,12 @@ type loopMinAggregate {
   name: String
   genre: String
   bpm: Int
+  audioType: AudioType
   key: String
   tempo: Int
   packId: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
 }
 
 type loopMaxAggregate {
@@ -708,9 +843,12 @@ type loopMaxAggregate {
   name: String
   genre: String
   bpm: Int
+  audioType: AudioType
   key: String
   tempo: Int
   packId: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
 }
 
 type JobDeleteResponse {
@@ -724,12 +862,12 @@ type JobDeleteResponse {
   description: String
 
   """Example field (placeholder)"""
-  postDate: Timestamp
-
-  """Example field (placeholder)"""
   expirationDate: Timestamp
   contact: String
   location: String
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
 
   """Example field (placeholder)"""
   updatedAt: Timestamp
@@ -755,18 +893,20 @@ type JobConnection {
 type jobAggregateGroupBy {
   id: ID
   title: String
-  postDate: Timestamp
   expirationDate: Timestamp
   location: String
+  postDate: Timestamp
+  updatedAt: Timestamp
   postedById: ID
 }
 
 type jobCountAggregate {
   id: Int
   title: Int
-  postDate: Int
   expirationDate: Int
   location: Int
+  postDate: Int
+  updatedAt: Int
   postedById: Int
 }
 
@@ -783,18 +923,20 @@ type jobAvgAggregate {
 type jobMinAggregate {
   id: ID
   title: String
-  postDate: Timestamp
   expirationDate: Timestamp
   location: String
+  postDate: Timestamp
+  updatedAt: Timestamp
   postedById: ID
 }
 
 type jobMaxAggregate {
   id: ID
   title: String
-  postDate: Timestamp
   expirationDate: Timestamp
   location: String
+  postDate: Timestamp
+  updatedAt: Timestamp
   postedById: ID
 }
 
@@ -814,6 +956,12 @@ type PackDeleteResponse {
   """Example field (placeholder)"""
   type: PacketType
   isLoop: Boolean
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
   authorId: ID
 }
 
@@ -837,8 +985,10 @@ type packAggregateGroupBy {
   id: ID
   name: String
   price: Float
-  description: String
+  type: PacketType
   isLoop: Boolean
+  postDate: Timestamp
+  updatedAt: Timestamp
   authorId: ID
 }
 
@@ -846,8 +996,10 @@ type packCountAggregate {
   id: Int
   name: Int
   price: Int
-  description: Int
+  type: Int
   isLoop: Int
+  postDate: Int
+  updatedAt: Int
   authorId: Int
 }
 
@@ -867,7 +1019,9 @@ type packMinAggregate {
   id: ID
   name: String
   price: Float
-  description: String
+  type: PacketType
+  postDate: Timestamp
+  updatedAt: Timestamp
   authorId: ID
 }
 
@@ -875,7 +1029,9 @@ type packMaxAggregate {
   id: ID
   name: String
   price: Float
-  description: String
+  type: PacketType
+  postDate: Timestamp
+  updatedAt: Timestamp
   authorId: ID
 }
 
@@ -935,7 +1091,7 @@ type PaymentplanDeleteResponse {
   postedById: ID
 
   """Example filed (placeholder)"""
-  isActive: Int
+  isActive: Boolean
 }
 
 type paymentplanEdge {
@@ -956,14 +1112,20 @@ type PaymentplanConnection {
 
 type paymentplanAggregateGroupBy {
   id: ID
+  title: String
   amount: Float
+  postDate: Timestamp
+  updatedAt: Timestamp
   postedById: ID
-  isActive: Int
+  isActive: Boolean
 }
 
 type paymentplanCountAggregate {
   id: Int
+  title: Int
   amount: Int
+  postDate: Int
+  updatedAt: Int
   postedById: Int
   isActive: Int
 }
@@ -982,13 +1144,19 @@ type paymentplanAvgAggregate {
 
 type paymentplanMinAggregate {
   id: ID
+  title: String
   amount: Float
+  postDate: Timestamp
+  updatedAt: Timestamp
   postedById: ID
 }
 
 type paymentplanMaxAggregate {
   id: ID
+  title: String
   amount: Float
+  postDate: Timestamp
+  updatedAt: Timestamp
   postedById: ID
 }
 
@@ -1011,9 +1179,6 @@ type PaymentDeleteResponse {
   price: Int
 
   """Example filed (placeholder)"""
-  date: Timestamp
-
-  """Example filed (placeholder)"""
   planStartDate: Timestamp
 
   """Example filed (placeholder)"""
@@ -1026,7 +1191,13 @@ type PaymentDeleteResponse {
   confirmationToken: String
 
   """Example filed (placeholder)"""
-  isActive: Int
+  isActive: Boolean
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
   packId: ID
   paymentPlanId: ID
   userId: ID
@@ -1042,11 +1213,14 @@ type PaymentConnection {
 
 type paymentAggregateGroupBy {
   id: ID
+  type: PlanType
   price: Int
-  date: Timestamp
   planStartDate: Timestamp
   planEndDate: Timestamp
-  isActive: Int
+  paymentMode: PaymentModel
+  isActive: Boolean
+  postDate: Timestamp
+  updatedAt: Timestamp
   packId: ID
   paymentPlanId: ID
   userId: ID
@@ -1054,11 +1228,14 @@ type paymentAggregateGroupBy {
 
 type paymentCountAggregate {
   id: Int
+  type: Int
   price: Int
-  date: Int
   planStartDate: Int
   planEndDate: Int
+  paymentMode: Int
   isActive: Int
+  postDate: Int
+  updatedAt: Int
   packId: Int
   paymentPlanId: Int
   userId: Int
@@ -1082,10 +1259,13 @@ type paymentAvgAggregate {
 
 type paymentMinAggregate {
   id: ID
+  type: PlanType
   price: Int
-  date: Timestamp
   planStartDate: Timestamp
   planEndDate: Timestamp
+  paymentMode: PaymentModel
+  postDate: Timestamp
+  updatedAt: Timestamp
   packId: ID
   paymentPlanId: ID
   userId: ID
@@ -1093,10 +1273,13 @@ type paymentMinAggregate {
 
 type paymentMaxAggregate {
   id: ID
+  type: PlanType
   price: Int
-  date: Timestamp
   planStartDate: Timestamp
   planEndDate: Timestamp
+  paymentMode: PaymentModel
+  postDate: Timestamp
+  updatedAt: Timestamp
   packId: ID
   paymentPlanId: ID
   userId: ID
@@ -1174,6 +1357,12 @@ type UserDeleteResponse {
   about: String
   authorizer: Authorizer
   role: String
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
 }
 
 type userEdge {
@@ -1196,12 +1385,16 @@ type userAggregateGroupBy {
   id: ID
   email: String
   name: String
+  postDate: Timestamp
+  updatedAt: Timestamp
 }
 
 type userCountAggregate {
   id: Int
   email: Int
   name: Int
+  postDate: Int
+  updatedAt: Int
 }
 
 type userSumAggregate {
@@ -1216,12 +1409,16 @@ type userMinAggregate {
   id: ID
   email: String
   name: String
+  postDate: Timestamp
+  updatedAt: Timestamp
 }
 
 type userMaxAggregate {
   id: ID
   email: String
   name: String
+  postDate: Timestamp
+  updatedAt: Timestamp
 }
 
 type ReviewEdge {
@@ -1283,6 +1480,12 @@ type UserJobsConnection {
 type ReviewDeleteResponse {
   id: ID
   review: String
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
   userId: ID
   packId: ID
 }
@@ -1297,12 +1500,16 @@ type ReviewConnection {
 
 type ReviewAggregateGroupBy {
   id: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
   userId: ID
   packId: ID
 }
 
 type ReviewCountAggregate {
   id: Int
+  postDate: Int
+  updatedAt: Int
   userId: Int
   packId: Int
 }
@@ -1321,12 +1528,16 @@ type ReviewAvgAggregate {
 
 type ReviewMinAggregate {
   id: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
   userId: ID
   packId: ID
 }
 
 type ReviewMaxAggregate {
   id: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
   userId: ID
   packId: ID
 }
@@ -1450,13 +1661,16 @@ input paymentplanFilter {
   and: [paymentplanFilter!]
   or: [paymentplanFilter!]
   id: IDFilterComparison
+  title: StringFieldComparison
   amount: FloatFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
   postedById: IDFilterComparison
   isActive: PaymentplanIsActiveFilterComparison
 }
 
 input PaymentplanIsActiveFilterComparison {
-  eq: Int
+  eq: Boolean
 }
 
 input paymentplanSort {
@@ -1467,7 +1681,10 @@ input paymentplanSort {
 
 enum paymentplanSortFields {
   id
+  title
   amount
+  postDate
+  updatedAt
   postedById
   isActive
 }
@@ -1478,6 +1695,8 @@ input userFilter {
   id: IDFilterComparison
   email: StringFieldComparison
   name: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
 }
 
 input userSort {
@@ -1490,6 +1709,8 @@ enum userSortFields {
   id
   email
   name
+  postDate
+  updatedAt
 }
 
 type Mutation {
@@ -1502,6 +1723,7 @@ type Mutation {
   createOneJob(input: CreateOneJobInput!): job!
   updateOneJob(input: UpdateOneJobInput!): job!
   deleteOneJob(input: DeleteOneJobInput!): JobDeleteResponse!
+  deleteManyJobs(input: DeleteManyJobsInput!): DeleteManyResponse!
   setAuthorOnPack(input: SetAuthorOnPackInput!): pack!
   addAudioToPack(input: AddAudioToPackInput!): pack!
   setAudioOnPack(input: SetAudioOnPackInput!): pack!
@@ -1512,23 +1734,27 @@ type Mutation {
   createOnePack(input: CreateOnePackInput!): pack!
   updateOnePack(input: UpdateOnePackInput!): pack!
   deleteOnePack(input: DeleteOnePackInput!): PackDeleteResponse!
+  deleteManyPacks(input: DeleteManyPacksInput!): DeleteManyResponse!
   setPostedByOnPaymentplan(input: SetPostedByOnPaymentplanInput!): paymentplan!
   addPaymentsToPaymentplan(input: AddPaymentsToPaymentplanInput!): paymentplan!
   setPaymentsOnPaymentplan(input: SetPaymentsOnPaymentplanInput!): paymentplan!
   createOnePaymentplan(input: CreateOnePaymentplanInput!): paymentplan!
   updateOnePaymentplan(input: UpdateOnePaymentplanInput!): paymentplan!
   deleteOnePaymentplan(input: DeleteOnePaymentplanInput!): PaymentplanDeleteResponse!
+  deleteManyPaymentplans(input: DeleteManyPaymentplansInput!): DeleteManyResponse!
   setPackOnPayment(input: SetPackOnPaymentInput!): payment!
   setPaymentPlanOnPayment(input: SetPaymentPlanOnPaymentInput!): payment!
   setUserOnPayment(input: SetUserOnPaymentInput!): payment!
   createOnePayment(input: CreateOnePaymentInput!): payment!
   updateOnePayment(input: UpdateOnePaymentInput!): payment!
   deleteOnePayment(input: DeleteOnePaymentInput!): PaymentDeleteResponse!
+  deleteManyPayments(input: DeleteManyPaymentsInput!): DeleteManyResponse!
   setFollowerOnRave(input: SetFollowerOnRaveInput!): rave!
   setFollowingOnRave(input: SetFollowingOnRaveInput!): rave!
   createOneRave(input: CreateOneRaveInput!): rave!
   updateOneRave(input: UpdateOneRaveInput!): rave!
   deleteOneRave(input: DeleteOneRaveInput!): RaveDeleteResponse!
+  deleteManyRaves(input: DeleteManyRavesInput!): DeleteManyResponse!
   addJobsToUser(input: AddJobsToUserInput!): user!
   setJobsOnUser(input: SetJobsOnUserInput!): user!
   addPacksToUser(input: AddPacksToUserInput!): user!
@@ -1544,11 +1770,13 @@ type Mutation {
   createOneUser(input: CreateOneUserInput!): user!
   updateOneUser(input: UpdateOneUserInput!): user!
   deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
+  deleteManyUsers(input: DeleteManyUsersInput!): DeleteManyResponse!
   setUserOnReview(input: SetUserOnReviewInput!): Review!
   setPackOnReview(input: SetPackOnReviewInput!): Review!
   createOneReview(input: CreateOneReviewInput!): Review!
   updateOneReview(input: UpdateOneReviewInput!): Review!
   deleteOneReview(input: DeleteOneReviewInput!): ReviewDeleteResponse!
+  deleteManyReviews(input: DeleteManyReviewsInput!): DeleteManyResponse!
 }
 
 input SetPackOnLoopInput {
@@ -1637,9 +1865,12 @@ input loopDeleteFilter {
   name: StringFieldComparison
   genre: StringFieldComparison
   bpm: IntFieldComparison
+  audioType: AudioTypeFilterComparison
   key: StringFieldComparison
   tempo: IntFieldComparison
   packId: IDFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
 }
 
 input SetPostedByOnJobInput {
@@ -1680,6 +1911,23 @@ input UpdateOneJobInput {
 input DeleteOneJobInput {
   """The id of the record to delete."""
   id: ID!
+}
+
+input DeleteManyJobsInput {
+  """Filter to find records to delete"""
+  filter: jobDeleteFilter!
+}
+
+input jobDeleteFilter {
+  and: [jobDeleteFilter!]
+  or: [jobDeleteFilter!]
+  id: IDFilterComparison
+  title: StringFieldComparison
+  expirationDate: TimestampFieldComparison
+  location: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  postedById: IDFilterComparison
 }
 
 input SetAuthorOnPackInput {
@@ -1786,6 +2034,24 @@ input DeleteOnePackInput {
   id: ID!
 }
 
+input DeleteManyPacksInput {
+  """Filter to find records to delete"""
+  filter: packDeleteFilter!
+}
+
+input packDeleteFilter {
+  and: [packDeleteFilter!]
+  or: [packDeleteFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  price: FloatFieldComparison
+  type: PacketTypeFilterComparison
+  isLoop: BooleanFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  authorId: IDFilterComparison
+}
+
 input SetPostedByOnPaymentplanInput {
   """The id of the record."""
   id: ID!
@@ -1829,7 +2095,7 @@ input PaymentplanInputDTO {
   month: Int!
 
   """Example filed (placeholder)"""
-  isActive: Int!
+  isActive: Boolean!
   postedById: ID!
 }
 
@@ -1844,6 +2110,23 @@ input UpdateOnePaymentplanInput {
 input DeleteOnePaymentplanInput {
   """The id of the record to delete."""
   id: ID!
+}
+
+input DeleteManyPaymentplansInput {
+  """Filter to find records to delete"""
+  filter: paymentplanDeleteFilter!
+}
+
+input paymentplanDeleteFilter {
+  and: [paymentplanDeleteFilter!]
+  or: [paymentplanDeleteFilter!]
+  id: IDFilterComparison
+  title: StringFieldComparison
+  amount: FloatFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  postedById: IDFilterComparison
+  isActive: PaymentplanIsActiveFilterComparison
 }
 
 input SetPackOnPaymentInput {
@@ -1892,10 +2175,10 @@ input PaymentInputDTO {
   paymentMode: PaymentModel!
 
   """Example filed (placeholder)"""
-  confirmationToken: String!
+  confirmationToken: String
 
   """Example filed (placeholder)"""
-  isActive: Int!
+  isActive: Boolean!
   packId: ID!
   paymentPlanId: ID!
   userId: ID!
@@ -1912,6 +2195,28 @@ input UpdateOnePaymentInput {
 input DeleteOnePaymentInput {
   """The id of the record to delete."""
   id: ID!
+}
+
+input DeleteManyPaymentsInput {
+  """Filter to find records to delete"""
+  filter: paymentDeleteFilter!
+}
+
+input paymentDeleteFilter {
+  and: [paymentDeleteFilter!]
+  or: [paymentDeleteFilter!]
+  id: IDFilterComparison
+  type: PlanTypeFilterComparison
+  price: IntFieldComparison
+  planStartDate: TimestampFieldComparison
+  planEndDate: TimestampFieldComparison
+  paymentMode: PaymentModelFilterComparison
+  isActive: PaymentIsActiveFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  packId: IDFilterComparison
+  paymentPlanId: IDFilterComparison
+  userId: IDFilterComparison
 }
 
 input SetFollowerOnRaveInput {
@@ -1954,6 +2259,19 @@ input UpdateOneRaveInput {
 input DeleteOneRaveInput {
   """The id of the record to delete."""
   id: ID!
+}
+
+input DeleteManyRavesInput {
+  """Filter to find records to delete"""
+  filter: raveDeleteFilter!
+}
+
+input raveDeleteFilter {
+  and: [raveDeleteFilter!]
+  or: [raveDeleteFilter!]
+  id: IDFilterComparison
+  followerId: IntFieldComparison
+  followingId: IntFieldComparison
 }
 
 input AddJobsToUserInput {
@@ -2088,6 +2406,21 @@ input DeleteOneUserInput {
   id: ID!
 }
 
+input DeleteManyUsersInput {
+  """Filter to find records to delete"""
+  filter: userDeleteFilter!
+}
+
+input userDeleteFilter {
+  and: [userDeleteFilter!]
+  or: [userDeleteFilter!]
+  id: IDFilterComparison
+  email: StringFieldComparison
+  name: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+}
+
 input SetUserOnReviewInput {
   """The id of the record."""
   id: ID!
@@ -2126,4 +2459,19 @@ input UpdateOneReviewInput {
 input DeleteOneReviewInput {
   """The id of the record to delete."""
   id: ID!
+}
+
+input DeleteManyReviewsInput {
+  """Filter to find records to delete"""
+  filter: ReviewDeleteFilter!
+}
+
+input ReviewDeleteFilter {
+  and: [ReviewDeleteFilter!]
+  or: [ReviewDeleteFilter!]
+  id: IDFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  userId: IDFilterComparison
+  packId: IDFilterComparison
 }

@@ -1,0 +1,162 @@
+Validations tracker.
+
+
+=================  Notes ====================================
+
+1. Dont worry about password field and email field validations
+2. Only fill which ever validations are required. leave the others.
+3. My description are only on few fields which are mandatory validations for those fields. 
+    There can be more validation rules than I have mentioned description.
+4. If you think there is more validation required on any field please do mention them.
+5. I have removed few other fields which are not necessary 
+    for this list so dont think fields are missing. :)
+
+=================== End of Notes ==============================
+
+====================Description of Validation rules=============================
+RESOURCE:
+================================================================================
+    fieldname:
+        min: 10 => only for number field. only accepts if value is above or equal to 10.
+        max: 100 => only for number field. only accepts if the value is below or equal 100.
+        minlength: 5 => minimum number of characters allowed. 'boat' is not allowed bcoz of 4 characters but 'boats' is allowed.
+        maxlength: 10 => maximum number of characters allowed.
+        optional: is the value of the field always necessary.
+        fileSize: if upload type mention the max file size allowed to be uploaded.
+
+
+=====================End of Description of Validation rules========================
+        
+
+=================================================
+USER:
+=================================================
+    image: file upload specify the filesize.
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    name:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    about:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+
+=================================================
+PACK:
+=================================================
+    name:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    price: min and max of allowed price.
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    description:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+
+=================================================
+LOOP:
+=================================================
+    name:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    genre: Also give all genre names that needs to available in the ui dropdown.
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    bpm: min and max values required for BPM
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    path: file upload specify the filesize.
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    tempo: min and max values required for tempo.
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+
+=================================================
+PAYPLANS:
+=================================================
+    title:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    description:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    amount:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+    month: number of months for payplan.
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+
+=================================================
+PACK REVIEWS:
+=================================================
+    description:
+        min:
+        max:
+        minlength: 
+        maxlength: 
+        optional: 
+        fileSize: 
+

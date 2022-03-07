@@ -128,7 +128,7 @@ const EditModal: React.FC<{
     <Box w={"full"} position="relative">
       <Modal isOpen={isEditOpen} onClose={closeEdit} size={"full"}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent> 
           <ModalHeader>
             <Heading
               w="full"

@@ -49,7 +49,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
         AuthPossesion.OWN,
       );
       const resource = await User.findOne(resourceId);
-      if (allowed && user.id == resource[this.OWNERKEY]) {
+      if (allowed && user?.id == resource[this.OWNERKEY]) {
         return {};
       }
     }

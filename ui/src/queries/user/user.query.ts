@@ -1,10 +1,10 @@
 import {
   CursorPaging,
-  PaymentFilter,
-  PaymentSort,
-  PaymentSortFields,
   Scalars,
   SortDirection,
+  UserFilter,
+  UserSort,
+  UserSortFields,
 } from 'queries';
 
 import { gql } from '@apollo/client';
@@ -46,8 +46,8 @@ export const getUserWithPayPlanVariables = (
   userId: Scalars["ID"],
   options?: {
     paging: CursorPaging;
-    sorting: PaymentSort[];
-    filter: PaymentFilter;
+    sorting: UserSort[];
+    filter: UserFilter;
   }
 ) => {
   const defaultOptions = {
@@ -56,7 +56,7 @@ export const getUserWithPayPlanVariables = (
     },
     sorting: [
       {
-        field: PaymentSortFields.Date,
+        field: UserSortFields.PostDate,
         direction: SortDirection.Desc,
       },
     ],

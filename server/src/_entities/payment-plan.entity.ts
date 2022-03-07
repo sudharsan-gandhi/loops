@@ -1,3 +1,4 @@
+import { GraphQLBoolean } from 'graphql';
 import { Payment } from 'src/_entities/payment.entity';
 import { User } from 'src/_entities/user.entity';
 import { PaymentPlanAuthorizer } from 'src/resolver/authorizer';
@@ -38,7 +39,7 @@ export class Paymentplan extends BaseEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Field({ description: 'Example field (placeholder)' })
+  @FilterableField({ description: 'Example field (placeholder)' })
   @Column('varchar', { name: 'title', length: 191 })
   title: string;
 
@@ -54,14 +55,14 @@ export class Paymentplan extends BaseEntity {
   @Column('int', { name: 'month' })
   month: number;
 
-  @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', {
     name: 'postDate',
   })
   @CreateDateColumn()
   postDate: Date;
 
-  @Field(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
   @Column('datetime', { name: 'updatedAt' })
   @UpdateDateColumn()
   updatedAt: Date;
@@ -70,11 +71,11 @@ export class Paymentplan extends BaseEntity {
   @Column('int')
   postedById: number;
 
-  @FilterableField(() => Int, {
+  @FilterableField(() => GraphQLBoolean, {
     description: 'Example filed (placeholder)',
     allowedComparisons: ['eq'],
   })
-  @Column('tinyint', { name: 'isActive', width: 1 })
+  @Column('boolean', { name: 'isActive', nullable: true, default: true })
   isActive: boolean;
 
   @ManyToOne(() => User)

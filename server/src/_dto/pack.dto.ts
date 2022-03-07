@@ -31,7 +31,7 @@ export class PackInputDTO {
   })
   isLoop?: boolean;
 
-  @Field(() => PacketType, {
+  @FilterableField(() => PacketType, {
     description: 'Example field (placeholder)',
   })
   type: PacketType;

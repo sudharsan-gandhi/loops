@@ -6,10 +6,12 @@ import { PackAuthorizer } from 'src/resolver/authorizer';
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import {
@@ -22,6 +24,7 @@ import {
 import {
   Field,
   Float,
+  GraphQLTimestamp,
   ID,
   ObjectType,
   registerEnumType,
@@ -59,11 +62,11 @@ export class Pack extends BaseEntity {
   @Column('int', { name: 'price' })
   price: number;
 
-  @FilterableField(() => String, { description: 'Example field (placeholder)' })
+  @Field(() => String, { description: 'Example field (placeholder)' })
   @Column('varchar', { nullable: false, length: 200 })
   description: string;
 
-  @Field(() => PacketType, {
+  @FilterableField(() => PacketType, {
     description: 'Example field (placeholder)',
   })
   @Column('enum', { name: 'packetType', enum: PacketType })
@@ -72,6 +75,18 @@ export class Pack extends BaseEntity {
   @FilterableField(() => GraphQLBoolean)
   @Column('boolean', { default: false })
   isLoop: boolean;
+
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @Column('datetime', {
+    name: 'postDate',
+  })
+  @CreateDateColumn()
+  postDate: Date;
+
+  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @Column('datetime', { name: 'updatedAt' })
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToMany(() => Audio, (audio) => audio.pack)
   audio: Audio[];

@@ -1,20 +1,22 @@
+import { GraphQLBoolean } from 'graphql';
 import {
-  FilterableField
-} from '@nestjs-query/query-graphql';
+  PaymentModel,
+  PlanType,
+} from 'src/_entities';
+
+import { FilterableField } from '@nestjs-query/query-graphql';
 import {
   Field,
   GraphQLTimestamp,
   ID,
   InputType,
-  Int
+  Int,
 } from '@nestjs/graphql';
-import { PaymentModel, PlanType } from 'src/_entities';
 
-  
-  @InputType()
+@InputType()
   export class PaymentInputDTO {
 
-    @Field(() => PlanType, {
+    @FilterableField(() => PlanType, {
       description: 'Example field (placeholder)',
     })
     type: PlanType;
@@ -32,15 +34,15 @@ import { PaymentModel, PlanType } from 'src/_entities';
     })
     planEndDate: Date;
   
-    @Field(() => PaymentModel, {
+    @FilterableField(() => PaymentModel, {
       description: `possible values are (${PaymentModel.MoPay}) and (${PaymentModel.PayPal})`,
     })
     paymentMode: PaymentModel;
   
-    @Field({ description: 'Example filed (placeholder)' })
+    @Field({ description: 'Example filed (placeholder)', nullable: true })
     confirmationToken: string;
   
-    @FilterableField(() => Int, {
+    @FilterableField(() => GraphQLBoolean, {
       description: 'Example filed (placeholder)',
       allowedComparisons: ['eq'],
     })
