@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import { KBDatePicker } from 'components/date/date';
 import { KBRadioGroup } from 'components/radio/RadioGroup';
 import {
@@ -77,7 +79,6 @@ export const FilterUI: React.FC<{
   const { handleSubmit, register, control } = useForm();
 
   const handleSearch = (form: any) => {
-    
     formReducer(form);
     // Object.entries(form).forEach(([key, value]) => {
     //   Object.entries(value).forEach(([k, v]) => {
@@ -85,6 +86,7 @@ export const FilterUI: React.FC<{
     //   });
     // });
   };
+  const ref = useRef<HTMLFormElement>();
   return (
     <>
       <Box>
@@ -113,55 +115,65 @@ export const FilterUI: React.FC<{
             </HStack>
           </DrawerHeader>
           <DrawerBody>
-            <FormControl>
-              <FormLabel>Per page</FormLabel>
-              <Select
-                id=""
-                name=""
-                defaultValue={pagination[0]}
-                {...register("paging.first")}
-              >
-                {pagination.map((count) => (
-                  <option key={count} value={count}>
-                    {count}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-            {searchFields.length > 0 && (
-              <Text mt="4" fontSize="lg" textAlign="center" key="filterHeader">
-                filter
-              </Text>
-            )}
-            {searchFields.map((node, i) =>
-              getFilterField(node, control, register, i)
-            )}
+            <form ref={ref}>
+              <FormControl>
+                <FormLabel>Per page</FormLabel>
+                <Select
+                  id=""
+                  name=""
+                  defaultValue={pagination[0]}
+                  {...register("paging.first")}
+                >
+                  {pagination.map((count) => (
+                    <option key={count} value={count}>
+                      {count}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              {searchFields.length > 0 && (
+                <Text
+                  mt="4"
+                  fontSize="lg"
+                  textAlign="center"
+                  key="filterHeader"
+                >
+                  filter
+                </Text>
+              )}
+              {searchFields.map((node, i) =>
+                getFilterField(node, control, register, i)
+              )}
 
-            {sortFields.length > 0 && (
-              <Text mt="4" fontSize="lg" textAlign="center">
-                Sort/Order by
-              </Text>
-            )}
-            {sortFields.map((node, i) => (
-              <KBRadioGroup
-                key={i}
-                control={control}
-                label={`sorting.${node.key}`}
-                defaultValue={node.defaultValue}
-              >
-                <HStack spacing="2">
-                  <Text mb="0">{node.label}</Text>
-                  <Spacer />
-                  <Radio value="ASC">Asc</Radio>
-                  <Radio value="DESC">Desc</Radio>
-                </HStack>
-              </KBRadioGroup>
-            ))}
+              {sortFields.length > 0 && (
+                <Text mt="4" fontSize="lg" textAlign="center">
+                  Sort/Order by
+                </Text>
+              )}
+              {sortFields.map((node, i) => (
+                <KBRadioGroup
+                  key={i}
+                  control={control}
+                  label={`sorting.${node.key}`}
+                  defaultValue={node.defaultValue}
+                >
+                  <HStack spacing="2">
+                    <Text mb="0">{node.label}</Text>
+                    <Spacer />
+                    <Radio value="ASC">Asc</Radio>
+                    <Radio value="DESC">Desc</Radio>
+                  </HStack>
+                </KBRadioGroup>
+              ))}
+            </form>
           </DrawerBody>
           <DrawerFooter>
             <Button
               leftIcon={<AiOutlineClear />}
-              onClick={() => formReducer({ type: "clear" })}
+              onClick={() => {
+                if (ref && ref.current) ref.current.reset();
+                formReducer({ type: "clear" });
+              }}
               mr="2"
             >
               Clear filter
@@ -220,7 +232,7 @@ const getFilterField = (
               {...register(`gte.${parent}${String(node.key)}`)}
             />
           </FormControl>
-          <FormControl key={key+"2"}>
+          <FormControl key={key + "2"}>
             <FormLabel>{node.label} below</FormLabel>
             <Input
               type="number"
@@ -235,7 +247,7 @@ const getFilterField = (
     case "date":
       return (
         <>
-          <FormControl  key={key + "1"}>
+          <FormControl key={key + "1"}>
             <FormLabel>{node.label} from</FormLabel>
             <KBDatePicker
               key={key}
@@ -243,7 +255,7 @@ const getFilterField = (
               control={control}
             />
           </FormControl>
-          <FormControl  key={key + "2"}>
+          <FormControl key={key + "2"}>
             <FormLabel>{node.label} to</FormLabel>
             <KBDatePicker
               key={key}
@@ -255,7 +267,7 @@ const getFilterField = (
       );
     default:
       return (
-        <FormControl  key={key}>
+        <FormControl key={key}>
           <FormLabel>{node.label}</FormLabel>
           <Input
             type="text"
