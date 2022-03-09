@@ -72,7 +72,7 @@ export type User = {
   emailVerified?: Maybe<Scalars["Boolean"]>
   image?: Maybe<Scalars["String"]>
   name: Scalars["String"]
-  about: Scalars["String"]
+  about?: Maybe<Scalars["String"]>
   authorizer: Authorizer
   role: Scalars["String"]
   /** Example field (placeholder) */
@@ -2511,6 +2511,7 @@ export type UserInputDto = {
   image?: Maybe<Scalars["String"]>
   name: Scalars["String"]
   about?: Maybe<Scalars["String"]>
+  role?: Maybe<Scalars["String"]>
 }
 
 export type UpdateOneUserInput = {
@@ -2527,6 +2528,7 @@ export type UserUpdateDto = {
   image?: Maybe<Scalars["String"]>
   name?: Maybe<Scalars["String"]>
   about?: Maybe<Scalars["String"]>
+  role?: Maybe<Scalars["String"]>
 }
 
 export type DeleteOneUserInput = {

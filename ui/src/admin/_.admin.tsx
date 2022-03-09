@@ -303,7 +303,7 @@ const Resource: React.FC<{
             </Box>
             <Spacer />
             <VStack>
-              <HStack alignItem="baseline">
+              <HStack alignItems="baseline">
                 <Text fontSize={{ base: "lg", md: "2xl" }} m="0">
                   {`${pluralize(resource)}`}
                 </Text>
@@ -709,7 +709,6 @@ const BuildForm: React.FC<{
     acc[field.field] = "";
     return acc;
   }, {});
-  debugger;
   if (!update) {
     mutationFields.forEach((field) => {
       if (field.type === "ref") {
@@ -915,8 +914,9 @@ const BuildForm: React.FC<{
     const uploadFields = mutationFields.filter(
       (field) => field.type === "upload"
     );
+    debugger;
     try {
-      uploadFields.forEach(async ({ field, fileOptions }) => {
+      for (const { field, fileOptions } of uploadFields) {
         const files = fileOptions.files;
         const url = fileOptions.uploadLink;
         if (files.length > 0) {
@@ -938,7 +938,10 @@ const BuildForm: React.FC<{
           duration: 2000,
           status: "success",
         });
-      });
+      }
+      // uploadFields.forEach(async ({ field, fileOptions }) => {
+
+      // });
       let response;
       if (update) {
         response = await updateOne({

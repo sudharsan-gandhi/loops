@@ -65,7 +65,7 @@ type user {
   emailVerified: Boolean
   image: String
   name: String!
-  about: String!
+  about: String
   authorizer: Authorizer!
   role: String!
 
@@ -2382,6 +2382,7 @@ input UserInputDTO {
   image: String
   name: String!
   about: String
+  role: String = "user"
 }
 
 input UpdateOneUserInput {
@@ -2399,6 +2400,7 @@ input UserUpdateDTO {
   image: String
   name: String
   about: String
+  role: String = "user"
 }
 
 input DeleteOneUserInput {

@@ -91,7 +91,7 @@ export const grants = {
       'delete:own': ['*'],
     },
     user: {
-      'create:any': ['*'],
+      'create:any': ['*', '!role'],
       'read:own': ['*'],
       'update:own': ['*'],
       'delete:own': ['*'],

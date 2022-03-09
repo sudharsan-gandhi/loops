@@ -10,6 +10,7 @@ import { Filter } from '@nestjs-query/core';
 import {
   AuthorizationContext,
   CustomAuthorizer,
+  OperationGroup,
 } from '@nestjs-query/query-graphql';
 import {
   Injectable,
@@ -32,6 +33,36 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
     const user = context.req.user;
     const resourceId = context.req?.body?.variables?.input?.id;
     const action = authorizationContext.operationGroup;
+
+    if (
+      action === OperationGroup.UPDATE &&
+      context.req?.body?.variables?.input?.update
+    ) {
+      const input = context.req?.body?.variables?.input?.update;
+      context.req.body.variables.input.update = this.acl.filter(
+        user?.role || 'user',
+        this.NAME,
+        action,
+        AuthPossesion.ANY,
+        input,
+      );
+    }
+    if (
+      action === OperationGroup.CREATE &&
+      context.req?.body?.variables?.input[this.NAME.toLowerCase()] !== undefined
+    ) {
+      const input =
+        context.req?.body?.variables?.input[this.NAME.toLowerCase()];
+      context.req.body.variables.input[this.NAME.toLowerCase()] =
+        this.acl.filter(
+          user?.role || 'user',
+          this.NAME,
+          action,
+          AuthPossesion.ANY,
+          input,
+        );
+    }
+
     let allowed = this.acl.allowed(
       user?.role || 'user',
       this.NAME,
@@ -48,6 +79,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
         action,
         AuthPossesion.OWN,
       );
+
       const resource = await User.findOne(resourceId);
       if (allowed && user?.id == resource[this.OWNERKEY]) {
         return {};

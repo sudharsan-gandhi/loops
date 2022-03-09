@@ -119,7 +119,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
     UpdateDTOClass: UserUpdateDTO,
     // pagingStrategy: PagingStrategies.OFFSET,
     read: { guards: [JwtNoauthGuard] },
-    create: { guards: [GqlJwtGuard], many: { disabled: true } },
+    create: { guards: [JwtNoauthGuard], many: { disabled: true } },
     update: { guards: [GqlJwtGuard], many: { disabled: true } },
     delete: { guards: [GqlJwtGuard], many: { guards: [GqlJwtGuard] } },
   },

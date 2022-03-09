@@ -17,36 +17,39 @@ export class UserInputDTO {
   @Field(() => GraphQLBoolean, { nullable: true })
   emailVerified: boolean | null;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   image: string | null;
 
   @FilterableField()
   name: string | null;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   about?: string | null;
 
+  @Field({ defaultValue: 'user' })
+  role: string;
 }
 
 @InputType()
 export class UserUpdateDTO {
-  @FilterableField({nullable: true})
+  @FilterableField({ nullable: true })
   email?: string | null;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   password?: string | null;
 
   @Field(() => GraphQLBoolean, { nullable: true })
   emailVerified: boolean | null;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   image?: string | null;
 
-  @FilterableField({nullable: true})
+  @FilterableField({ nullable: true })
   name?: string | null;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   about?: string | null;
 
+  @Field({ defaultValue: 'user', nullable: true })
+  role?: string;
 }
-

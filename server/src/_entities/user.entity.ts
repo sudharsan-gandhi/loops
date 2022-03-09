@@ -83,7 +83,7 @@ export class User extends BaseEntity {
   name: string | null;
 
   @Column('mediumtext', { name: 'about', nullable: true })
-  @Field()
+  @Field({ nullable: true })
   about?: string | null;
 
   @Column('enum', {
@@ -99,7 +99,7 @@ export class User extends BaseEntity {
     name: 'role',
     default: 'user',
   })
-  @Field({defaultValue: 'user'})
+  @Field({ defaultValue: 'user' })
   role: string;
 
   // @OneToMany(() => Account, (account) => account.user)
@@ -124,14 +124,18 @@ export class User extends BaseEntity {
   @OneToMany(() => Review, (review) => review.user)
   reviews?: Review[];
 
-  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
   @Column('datetime', {
     name: 'postDate',
   })
   @CreateDateColumn()
   postDate: Date;
 
-  @FilterableField(() => GraphQLTimestamp, { description: 'Example field (placeholder)' })
+  @FilterableField(() => GraphQLTimestamp, {
+    description: 'Example field (placeholder)',
+  })
   @Column('datetime', { name: 'updatedAt' })
   @UpdateDateColumn()
   updatedAt: Date;
