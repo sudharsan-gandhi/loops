@@ -52,9 +52,12 @@ const JobResource: React.FC = () => {
     {
       field: "postedById",
       label: "User Id",
-      type: "string",
+      type: "ref",
       isRequired: true,
       validations: {},
+      refFn: (user, _) => {
+        return user.id;
+      },
     },
 
     // {

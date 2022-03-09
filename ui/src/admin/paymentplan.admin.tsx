@@ -58,6 +58,9 @@ const PaymentplanResource: React.FC = () => {
     {
       field: "postedById",
       label: "User Id",
+      refFn: (user, _) => {
+        return user.id;
+      },
       type: "string",
       isRequired: true,
       validations: {},

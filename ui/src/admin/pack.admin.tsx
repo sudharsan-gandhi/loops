@@ -55,8 +55,11 @@ const PackResource: React.FC = () => {
     {
       field: "authorId",
       label: "User ID",
-      type: "string",
+      type: "ref",
       isRequired: true,
+      refFn: (user, _) => {
+        return user.id;
+      },
       validations: {},
     },
   ];

@@ -1,4 +1,8 @@
 import pluralize from 'pluralize';
+import {
+  MakeOptional,
+  User,
+} from 'queries/model';
 import { RegisterOptions } from 'react-hook-form';
 
 import { gql } from '@apollo/client';
@@ -23,7 +27,8 @@ export type MutationField = {
     | "select"
     | "radio"
     | "textarea"
-    | "password";
+    | "password"
+    | "ref";
   isRequired: boolean;
   validations: RegisterOptions;
   mimeType?: string;
@@ -32,6 +37,7 @@ export type MutationField = {
     setFiles: any;
     uploadLink: string;
   };
+  refFn?: (user: MakeOptional<User, keyof User>, resp: any) => any;
   options?: { label: string; value: string | number }[] | (string | number)[];
 };
 

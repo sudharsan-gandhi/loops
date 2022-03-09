@@ -15,6 +15,7 @@ import {
 import pluralize from 'pluralize';
 import {
   DeleteManyResponse,
+  MakeOptional,
   User,
   UserConnection,
 } from 'queries';
@@ -28,6 +29,7 @@ import {
   MdRemoveRedEye,
   MdVisibility,
 } from 'react-icons/md';
+import { useUser } from 'state/user';
 import create from 'zustand';
 
 import {
@@ -702,10 +704,21 @@ const BuildForm: React.FC<{
   close,
   setViewData,
 }) => {
+  const currentUser = useUser((state) => state.currentUser);
   const defaultObj = mutationFields.reduce((acc, field) => {
     acc[field.field] = "";
     return acc;
   }, {});
+  debugger;
+  if (!update) {
+    mutationFields.forEach((field) => {
+      if (field.type === "ref") {
+        defaultObj[field.field] = field.refFn
+          ? field.refFn(currentUser, undefined)
+          : undefined;
+      }
+    });
+  }
 
   const passwordFields = mutationFields
     .filter((field) => field.type === "password")
@@ -740,6 +753,146 @@ const BuildForm: React.FC<{
 
   const [updateOne] = useMutation(AdminQueries.updateOne(resource));
 
+  const renderField = (
+    register,
+    field: string,
+    update: boolean,
+    isRequired: boolean,
+    validations,
+    index: number,
+    control,
+    defaultValue: any,
+    options: { label: string; value: string | number }[] | (string | number)[],
+    showPassword: boolean,
+    setShowPassword,
+    fileOptions: { files: any; setFiles: any; uploadLink: string },
+    mimeType: string,
+    onDelete: (id: any, files: any, setFiles: any) => void,
+    refFn: (user: MakeOptional<User, keyof User>, resp: any) => any,
+    type: string
+  ) => {
+    switch (type) {
+      case "string":
+        return (
+          <Input
+            {...register(field, {
+              ...(!update && isRequired ? ValidationHelper.required() : {}),
+              ...validations,
+            })}
+          />
+        );
+      case "number":
+        return (
+          <Input
+            {...register(field, {
+              ...(!update && isRequired ? ValidationHelper.required() : {}),
+              ...validations,
+            })}
+            type="number"
+          />
+        );
+      case "date":
+        return <KBDatePicker key={index} label={field} control={control} />;
+      case "textarea":
+        return (
+          <Textarea
+            {...register(field, {
+              ...(!update && isRequired ? ValidationHelper.required() : {}),
+              ...validations,
+            })}
+          />
+        );
+      case "checkbox":
+        return (
+          <KBCheckbox
+            control={control}
+            label={field}
+            defaultValue={
+              defaultValue && defaultValue[field] ? defaultValue[field] : false
+            }
+          />
+        );
+      case "select":
+        return (
+          <Select
+            defaultValue={
+              defaultValue && defaultValue[field] ? defaultValue[field] : ""
+            }
+            {...register(field)}
+          >
+            {options && options.length > 0 && (options[0] as any)?.label
+              ? (
+                  options as unknown as {
+                    label: string;
+                    value: string | number;
+                  }[]
+                )?.map(({ label, value }, i) => (
+                  <option key={i} value={value}>
+                    {label}
+                  </option>
+                ))
+              : (options as (string | number)[])?.map((value, i) => (
+                  <option key={i} value={value}>
+                    {value}
+                  </option>
+                ))}
+          </Select>
+        );
+      case "password":
+        return (
+          <InputGroup>
+            <Input
+              {...register(field, {
+                ...(!update && isRequired ? ValidationHelper.required() : {}),
+                ...validations,
+              })}
+              type={showPassword ? "text" : "password"}
+            />
+            <InputRightElement h={"full"}>
+              <Button
+                variant={"ghost"}
+                onClick={() => setShowPassword((showPassword) => !showPassword)}
+              >
+                {showPassword ? <MdRemoveRedEye /> : <MdOutlinePassword />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        );
+      case "upload":
+        return (
+          fileOptions?.setFiles && (
+            <Box pb={10}>
+              <Dropzone
+                onChange={(files) => fileOptions.setFiles(files)}
+                value={fileOptions.files}
+                maxFiles={1}
+                behaviour={"replace"}
+                accept={mimeType || "*/*"}
+                label={"Drop Files here or click to browse"}
+                minHeight={"195px"}
+                maxHeight={"500px"}
+                disableScroll
+              >
+                {fileOptions.files?.map((file) => (
+                  <FileItem
+                    {...file}
+                    key={file.id}
+                    onDelete={(id) =>
+                      onDelete(id, fileOptions.files, fileOptions.setFiles)
+                    }
+                    alwaysActive
+                    preview
+                    info
+                    resultOnTooltip
+                  />
+                ))}
+              </Dropzone>
+            </Box>
+          )
+        );
+    }
+  };
+
   const toast = useToast();
 
   const submit = async (data) => {
@@ -759,7 +912,6 @@ const BuildForm: React.FC<{
       acc[curr.field] = value;
       return acc;
     }, {});
-    debugger;
     const uploadFields = mutationFields.filter(
       (field) => field.type === "upload"
     );
@@ -787,7 +939,6 @@ const BuildForm: React.FC<{
           status: "success",
         });
       });
-      debugger;
       let response;
       if (update) {
         response = await updateOne({
@@ -849,6 +1000,7 @@ const BuildForm: React.FC<{
                 fileOptions,
                 isRequired,
                 options,
+                refFn,
               },
               index
             ) => (
@@ -857,154 +1009,29 @@ const BuildForm: React.FC<{
                 isInvalid={errors[field]}
                 isRequired={!update && isRequired}
                 pt="2"
+                hidden={type === "ref" ? true : false}
               >
                 <FormLabel>
                   {label?.toUpperCase() || field.toUpperCase()}
                 </FormLabel>
-                {
-                  {
-                    string: (
-                      <Input
-                        {...register(field, {
-                          ...(!update && isRequired
-                            ? ValidationHelper.required()
-                            : {}),
-                          ...validations,
-                        })}
-                      />
-                    ),
-                    number: (
-                      <Input
-                        {...register(field, {
-                          ...(!update && isRequired
-                            ? ValidationHelper.required()
-                            : {}),
-                          ...validations,
-                        })}
-                        type="number"
-                      />
-                    ),
-                    date: (
-                      <KBDatePicker
-                        key={index}
-                        label={field}
-                        control={control}
-                      />
-                    ),
-                    textarea: (
-                      <Textarea
-                        {...register(field, {
-                          ...(!update && isRequired
-                            ? ValidationHelper.required()
-                            : {}),
-                          ...validations,
-                        })}
-                      />
-                    ),
-                    checkbox: (
-                      <KBCheckbox
-                        control={control}
-                        label={field}
-                        defaultValue={
-                          defaultValue && defaultValue[field]
-                            ? defaultValue[field]
-                            : false
-                        }
-                      />
-                    ),
-                    select: (
-                      <Select
-                        defaultValue={
-                          defaultValue && defaultValue[field]
-                            ? defaultValue[field]
-                            : ""
-                        }
-                        {...register(field)}
-                      >
-                        {options &&
-                        options.length > 0 &&
-                        (options[0] as any)?.label
-                          ? (
-                              options as unknown as {
-                                label: string;
-                                value: string | number;
-                              }[]
-                            )?.map(({ label, value }, i) => (
-                              <option key={i} value={value}>
-                                {label}
-                              </option>
-                            ))
-                          : (options as (string | number)[])?.map(
-                              (value, i) => (
-                                <option key={i} value={value}>
-                                  {value}
-                                </option>
-                              )
-                            )}
-                      </Select>
-                    ),
-                    password: (
-                      <InputGroup>
-                        <Input
-                          {...register(field, {
-                            ...(!update && isRequired
-                              ? ValidationHelper.required()
-                              : {}),
-                            ...validations,
-                          })}
-                          type={showPassword ? "text" : "password"}
-                        />
-                        <InputRightElement h={"full"}>
-                          <Button
-                            variant={"ghost"}
-                            onClick={() =>
-                              setShowPassword((showPassword) => !showPassword)
-                            }
-                          >
-                            {showPassword ? (
-                              <MdRemoveRedEye />
-                            ) : (
-                              <MdOutlinePassword />
-                            )}
-                          </Button>
-                        </InputRightElement>
-                      </InputGroup>
-                    ),
-                    upload: fileOptions?.setFiles && (
-                      <Box pb={10}>
-                        <Dropzone
-                          onChange={(files) => fileOptions.setFiles(files)}
-                          value={fileOptions.files}
-                          maxFiles={1}
-                          behaviour={"replace"}
-                          accept={mimeType || "*/*"}
-                          label={"Drop Files here or click to browse"}
-                          minHeight={"195px"}
-                          maxHeight={"500px"}
-                          disableScroll
-                        >
-                          {fileOptions.files?.map((file) => (
-                            <FileItem
-                              {...file}
-                              key={file.id}
-                              onDelete={(id) =>
-                                onDelete(
-                                  id,
-                                  fileOptions.files,
-                                  fileOptions.setFiles
-                                )
-                              }
-                              alwaysActive
-                              preview
-                              info
-                              resultOnTooltip
-                            />
-                          ))}
-                        </Dropzone>
-                      </Box>
-                    ),
-                  }[type || "string"]
-                }
+                {renderField(
+                  register,
+                  field,
+                  update,
+                  isRequired,
+                  validations,
+                  index,
+                  control,
+                  defaultValue,
+                  options,
+                  showPassword,
+                  setShowPassword,
+                  fileOptions,
+                  mimeType,
+                  onDelete,
+                  refFn,
+                  type
+                )}
                 <FormErrorMessage>
                   {errors[field] && errors[field]?.message}
                 </FormErrorMessage>

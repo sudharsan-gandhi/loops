@@ -103,7 +103,10 @@ const PaymentResource: React.FC = () => {
     {
         field: "userId",
         label: "User ID",
-        type: "string",
+        type: "ref",
+        refFn: (user, _) => {
+          return user.id;
+        },
         isRequired: true,
         validations: {},
     }
