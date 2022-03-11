@@ -6,7 +6,6 @@ import {
 } from 'react';
 
 import axios from 'axios';
-import { AppRouter } from 'index';
 import {
   getUserWithPayPlan,
   getUserWithPayPlanVariables,
@@ -23,6 +22,7 @@ import {
   FiStar,
 } from 'react-icons/fi';
 import {
+  MdAdminPanelSettings,
   MdOutlineMusicVideo,
   MdOutlineWorkOutline,
 } from 'react-icons/md';
@@ -38,6 +38,7 @@ import {
   useAuth,
   useUser,
 } from 'state/user';
+import { UserRoutes } from 'user.routes';
 
 import { useLazyQuery } from '@apollo/client';
 import {
@@ -70,7 +71,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-interface LinkItemProps {
+export interface LinkItemProps {
   name: string;
   link: string;
   icon: IconType;
@@ -84,12 +85,12 @@ const LinkItems: Array<LinkItemProps> = [
   // { name: "Settings", icon: FiSettings, link: "/" },
 ];
 
-interface NavItemProps extends FlexProps {
+export interface NavItemProps extends FlexProps {
   icon: IconType;
   link: string;
   children: ReactText;
 }
-const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
+export const NavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
   let resolved = useResolvedPath(link);
   let match = useMatch({ path: resolved.pathname });
   return (
@@ -366,7 +367,15 @@ export const KabaflowLayout: React.FC = () => {
             </Box>
           </DrawerBody>
 
-          <DrawerFooter></DrawerFooter>
+          <DrawerFooter>
+            <>
+              {currentUser?.role !== "user" && (
+                <NavItem icon={MdAdminPanelSettings} link="admin">
+                  Admin Dashboard
+                </NavItem>
+              )}
+            </>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
       <Drawer
@@ -477,7 +486,7 @@ export const KabaflowLayout: React.FC = () => {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-      <AppRouter />
+      <UserRoutes />
     </>
   );
 };

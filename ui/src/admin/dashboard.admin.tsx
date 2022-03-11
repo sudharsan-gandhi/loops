@@ -1,5 +1,3 @@
-import { AppRouter } from 'index';
-
 const Dashboard = () => {
   // useEffect(() => {
   //   axios({
@@ -18,7 +16,6 @@ const Dashboard = () => {
   return (
     <>
       <h4>Kabaflow Dashboard</h4>
-      <AppRouter />
     </>
   );
 };
