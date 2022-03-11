@@ -54,7 +54,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
       const input =
         context.req?.body?.variables?.input[this.NAME.toLowerCase()];
       context.req.body.variables.input[this.NAME.toLowerCase()] =
-        this.acl.filter(
+        await this.acl.filter(
           user?.role || 'user',
           this.NAME,
           action,
@@ -63,7 +63,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
         );
     }
 
-    let allowed = this.acl.allowed(
+    let allowed = await this.acl.allowed(
       user?.role || 'user',
       this.NAME,
       action,
@@ -73,7 +73,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
       return {};
     }
     if (!allowed) {
-      allowed = this.acl.allowed(
+      allowed = await this.acl.allowed(
         user?.role || 'user',
         this.NAME,
         action,

@@ -32,7 +32,7 @@ export class JobAuthorizer implements CustomAuthorizer<JobInputDTO> {
     const resourceId = context.req?.body?.variables?.input?.id;
     // check first global access
     const action = authorizationContext.operationGroup;
-    let allowed = this.acl.allowed(
+    let allowed = await this.acl.allowed(
       user?.role || 'user',
       this.NAME,
       action,
@@ -42,7 +42,7 @@ export class JobAuthorizer implements CustomAuthorizer<JobInputDTO> {
       return {};
     }
 
-    allowed = this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
+    allowed = await this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
     if (allowed) {
       // if not check if owned resource can be edited
       const resource = await Job.findOne(resourceId);

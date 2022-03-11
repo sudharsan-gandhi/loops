@@ -25,25 +25,15 @@ import {
   TypeOrmModuleAsyncOptions,
 } from '@nestjs/typeorm';
 
-import {
-  Audio,
-  Job,
-  Pack,
-  Payment,
-  Paymentplan,
-  Rave,
-  Review,
-  User,
-} from './_entities';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { ENTITIES } from './entities';
 import { ResolverModule } from './resolver/resolver.module';
 import { UploadModule } from './upload/upload.module';
 
 AdminJS.registerAdapter({ Database, Resource });
 
-const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -177,17 +167,17 @@ const ENTITIES = [Audio, Job, Pack, Paymentplan, Payment, Rave, User, Review];
     //         rootPath: '/admin',
     //         resources: RESOURCES_ADMIN,
     //       },
-          // auth: {
-          //   authenticate: async (email, password) => {
-          //     try {
-          //       return { email: 'admin@gmail.com', roles: ['root'] } as CurrentAdmin;
-          //     } catch (err) {
-          //       throw new ForbiddenError(err.message);
-          //     }
-          //   },
-          //   cookieName: 'adminjs',
-          //   cookiePassword: 'kabaflowadminjs',
-          // },
+    // auth: {
+    //   authenticate: async (email, password) => {
+    //     try {
+    //       return { email: 'admin@gmail.com', roles: ['root'] } as CurrentAdmin;
+    //     } catch (err) {
+    //       throw new ForbiddenError(err.message);
+    //     }
+    //   },
+    //   cookieName: 'adminjs',
+    //   cookiePassword: 'kabaflowadminjs',
+    // },
     //     };
     //   },
     // }),

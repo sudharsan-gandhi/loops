@@ -13,6 +13,7 @@ import {
   MdAttachMoney,
   MdOutlineContactPage,
   MdPayment,
+  MdSecurity,
 } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -60,6 +61,7 @@ const AdminLayout = () => {
     { name: "Payments", icon: MdAttachMoney, link: "/admin/payments" },
     { name: "PayPlans", icon: MdPayment, link: "/admin/payplans" },
     { name: "Jobs", icon: MdPayment, link: "/admin/jobs" },
+    { name: "User Permissions", icon: MdSecurity, link: "/admin/grants" },
     // { name: "Settings", icon: FiSettings, link: "/" },
   ];
 

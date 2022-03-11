@@ -659,6 +659,34 @@ export type Loop = {
   pack: Pack
 }
 
+export type Grant = {
+  __typename?: "grant"
+  /** Example field (placeholder) */
+  id: Scalars["ID"]
+  /** Example field (placeholder) */
+  role: Scalars["String"]
+  /** Example field (placeholder) */
+  resource: Scalars["String"]
+  action: GrantActions
+  /**
+   * all attributes => ['*'],
+   * all attributes except specific fields => ['*', '!id']
+   * only selected attributes => ['id', 'name']
+   */
+  attributes: Scalars["String"]
+}
+
+export enum GrantActions {
+  CreateAny = "createAny",
+  CreateOwn = "createOwn",
+  ReadAny = "readAny",
+  ReadOwn = "readOwn",
+  UpdateAny = "updateAny",
+  UpdateOwn = "updateOwn",
+  DeleteAny = "deleteAny",
+  DeleteOwn = "deleteOwn"
+}
+
 export type DeleteManyResponse = {
   __typename?: "DeleteManyResponse"
   /** The number of records deleted. */
@@ -1497,6 +1525,85 @@ export type ReviewMaxAggregate = {
   packId?: Maybe<Scalars["ID"]>
 }
 
+export type GrantDeleteResponse = {
+  __typename?: "GrantDeleteResponse"
+  /** Example field (placeholder) */
+  id?: Maybe<Scalars["ID"]>
+  /** Example field (placeholder) */
+  role?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  resource?: Maybe<Scalars["String"]>
+  action?: Maybe<GrantActions>
+  /**
+   * all attributes => ['*'],
+   * all attributes except specific fields => ['*', '!id']
+   * only selected attributes => ['id', 'name']
+   */
+  attributes?: Maybe<Scalars["String"]>
+}
+
+export type GrantEdge = {
+  __typename?: "grantEdge"
+  /** The node containing the grant */
+  node: Grant
+  /** Cursor for this node. */
+  cursor: Scalars["ConnectionCursor"]
+}
+
+export type GrantConnection = {
+  __typename?: "GrantConnection"
+  /** Paging information */
+  pageInfo: PageInfo
+  /** Array of edges. */
+  edges: Array<GrantEdge>
+}
+
+export type GrantAggregateGroupBy = {
+  __typename?: "grantAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  role?: Maybe<Scalars["String"]>
+  resource?: Maybe<Scalars["String"]>
+  action?: Maybe<GrantActions>
+  attributes?: Maybe<Scalars["String"]>
+}
+
+export type GrantCountAggregate = {
+  __typename?: "grantCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  role?: Maybe<Scalars["Int"]>
+  resource?: Maybe<Scalars["Int"]>
+  action?: Maybe<Scalars["Int"]>
+  attributes?: Maybe<Scalars["Int"]>
+}
+
+export type GrantSumAggregate = {
+  __typename?: "grantSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+}
+
+export type GrantAvgAggregate = {
+  __typename?: "grantAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+}
+
+export type GrantMinAggregate = {
+  __typename?: "grantMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  role?: Maybe<Scalars["String"]>
+  resource?: Maybe<Scalars["String"]>
+  action?: Maybe<GrantActions>
+  attributes?: Maybe<Scalars["String"]>
+}
+
+export type GrantMaxAggregate = {
+  __typename?: "grantMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  role?: Maybe<Scalars["String"]>
+  resource?: Maybe<Scalars["String"]>
+  action?: Maybe<GrantActions>
+  attributes?: Maybe<Scalars["String"]>
+}
+
 export type Query = {
   __typename?: "Query"
   loop?: Maybe<Loop>
@@ -1515,6 +1622,8 @@ export type Query = {
   users: UserConnection
   review?: Maybe<Review>
   reviews: ReviewConnection
+  grant?: Maybe<Grant>
+  grants: GrantConnection
 }
 
 export type QueryLoopArgs = {
@@ -1597,6 +1706,16 @@ export type QueryReviewsArgs = {
   sorting?: Maybe<Array<ReviewSort>>
 }
 
+export type QueryGrantArgs = {
+  id: Scalars["ID"]
+}
+
+export type QueryGrantsArgs = {
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<GrantFilter>
+  sorting?: Maybe<Array<GrantSort>>
+}
+
 export type PaymentplanFilter = {
   and?: Maybe<Array<PaymentplanFilter>>
   or?: Maybe<Array<PaymentplanFilter>>
@@ -1651,6 +1770,47 @@ export enum UserSortFields {
   Name = "name",
   PostDate = "postDate",
   UpdatedAt = "updatedAt"
+}
+
+export type GrantFilter = {
+  and?: Maybe<Array<GrantFilter>>
+  or?: Maybe<Array<GrantFilter>>
+  id?: Maybe<IdFilterComparison>
+  role?: Maybe<StringFieldComparison>
+  resource?: Maybe<StringFieldComparison>
+  action?: Maybe<GrantActionsFilterComparison>
+  attributes?: Maybe<StringFieldComparison>
+}
+
+export type GrantActionsFilterComparison = {
+  is?: Maybe<Scalars["Boolean"]>
+  isNot?: Maybe<Scalars["Boolean"]>
+  eq?: Maybe<GrantActions>
+  neq?: Maybe<GrantActions>
+  gt?: Maybe<GrantActions>
+  gte?: Maybe<GrantActions>
+  lt?: Maybe<GrantActions>
+  lte?: Maybe<GrantActions>
+  like?: Maybe<GrantActions>
+  notLike?: Maybe<GrantActions>
+  iLike?: Maybe<GrantActions>
+  notILike?: Maybe<GrantActions>
+  in?: Maybe<Array<GrantActions>>
+  notIn?: Maybe<Array<GrantActions>>
+}
+
+export type GrantSort = {
+  field: GrantSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
+
+export enum GrantSortFields {
+  Id = "id",
+  Role = "role",
+  Resource = "resource",
+  Action = "action",
+  Attributes = "attributes"
 }
 
 export type Mutation = {
@@ -1718,6 +1878,10 @@ export type Mutation = {
   updateOneReview: Review
   deleteOneReview: ReviewDeleteResponse
   deleteManyReviews: DeleteManyResponse
+  createOneGrant: Grant
+  updateOneGrant: Grant
+  deleteOneGrant: GrantDeleteResponse
+  deleteManyGrants: DeleteManyResponse
 }
 
 export type MutationSetPackOnLoopArgs = {
@@ -1970,6 +2134,22 @@ export type MutationDeleteOneReviewArgs = {
 
 export type MutationDeleteManyReviewsArgs = {
   input: DeleteManyReviewsInput
+}
+
+export type MutationCreateOneGrantArgs = {
+  input: CreateOneGrantInput
+}
+
+export type MutationUpdateOneGrantArgs = {
+  input: UpdateOneGrantInput
+}
+
+export type MutationDeleteOneGrantArgs = {
+  input: DeleteOneGrantInput
+}
+
+export type MutationDeleteManyGrantsArgs = {
+  input: DeleteManyGrantsInput
 }
 
 export type SetPackOnLoopInput = {
@@ -2601,4 +2781,50 @@ export type ReviewDeleteFilter = {
   updatedAt?: Maybe<TimestampFieldComparison>
   userId?: Maybe<IdFilterComparison>
   packId?: Maybe<IdFilterComparison>
+}
+
+export type CreateOneGrantInput = {
+  /** The record to create */
+  grant: GrantDto
+}
+
+export type GrantDto = {
+  /** Example field (placeholder) */
+  role: Scalars["String"]
+  /** Example field (placeholder) */
+  resource: Scalars["String"]
+  action: GrantActions
+  /**
+   * all attributes => ['*'],
+   * all attributes except specific fields => ['*', '!id']
+   * only selected attributes => ['id', 'name']
+   */
+  attributes: Scalars["String"]
+}
+
+export type UpdateOneGrantInput = {
+  /** The id of the record to update */
+  id: Scalars["ID"]
+  /** The update to apply. */
+  update: GrantDto
+}
+
+export type DeleteOneGrantInput = {
+  /** The id of the record to delete. */
+  id: Scalars["ID"]
+}
+
+export type DeleteManyGrantsInput = {
+  /** Filter to find records to delete */
+  filter: GrantDeleteFilter
+}
+
+export type GrantDeleteFilter = {
+  and?: Maybe<Array<GrantDeleteFilter>>
+  or?: Maybe<Array<GrantDeleteFilter>>
+  id?: Maybe<IdFilterComparison>
+  role?: Maybe<StringFieldComparison>
+  resource?: Maybe<StringFieldComparison>
+  action?: Maybe<GrantActionsFilterComparison>
+  attributes?: Maybe<StringFieldComparison>
 }

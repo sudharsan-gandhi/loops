@@ -717,6 +717,45 @@ type loop {
   pack: pack!
 }
 
+type grant {
+  """Example field (placeholder)"""
+  id: ID!
+
+  """Example field (placeholder)"""
+  role: String!
+
+  """Example field (placeholder)"""
+  resource: String!
+  action: GrantActions!
+
+  """
+  
+      all attributes => ['*'],
+      all attributes except specific fields => ['*', '!id']
+      only selected attributes => ['id', 'name']
+      
+  """
+  attributes: String!
+
+  """Example field (placeholder)"""
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
+  postedById: ID!
+}
+
+enum GrantActions {
+  createAny
+  createOwn
+  readAny
+  readOwn
+  updateAny
+  updateOwn
+  deleteAny
+  deleteOwn
+}
+
 type DeleteManyResponse {
   """The number of records deleted."""
   deletedCount: Int!
@@ -1542,6 +1581,104 @@ type ReviewMaxAggregate {
   packId: ID
 }
 
+type GrantDeleteResponse {
+  """Example field (placeholder)"""
+  id: ID
+
+  """Example field (placeholder)"""
+  role: String
+
+  """Example field (placeholder)"""
+  resource: String
+  action: GrantActions
+
+  """
+  
+      all attributes => ['*'],
+      all attributes except specific fields => ['*', '!id']
+      only selected attributes => ['id', 'name']
+      
+  """
+  attributes: String
+
+  """Example field (placeholder)"""
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+type grantEdge {
+  """The node containing the grant"""
+  node: grant!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type GrantConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [grantEdge!]!
+}
+
+type grantAggregateGroupBy {
+  id: ID
+  role: String
+  resource: String
+  action: GrantActions
+  attributes: String
+  postDate: Timestamp
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+type grantCountAggregate {
+  id: Int
+  role: Int
+  resource: Int
+  action: Int
+  attributes: Int
+  postDate: Int
+  updatedAt: Int
+  postedById: Int
+}
+
+type grantSumAggregate {
+  id: Float
+  postedById: Float
+}
+
+type grantAvgAggregate {
+  id: Float
+  postedById: Float
+}
+
+type grantMinAggregate {
+  id: ID
+  role: String
+  resource: String
+  action: GrantActions
+  attributes: String
+  postDate: Timestamp
+  updatedAt: Timestamp
+  postedById: ID
+}
+
+type grantMaxAggregate {
+  id: ID
+  role: String
+  resource: String
+  action: GrantActions
+  attributes: String
+  postDate: Timestamp
+  updatedAt: Timestamp
+  postedById: ID
+}
+
 type Query {
   loop(
     """The id of the record to find."""
@@ -1655,6 +1792,20 @@ type Query {
     """Specify to sort results."""
     sorting: [ReviewSort!] = []
   ): ReviewConnection!
+  grant(
+    """The id of the record to find."""
+    id: ID!
+  ): grant
+  grants(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: grantFilter = {}
+
+    """Specify to sort results."""
+    sorting: [grantSort!] = []
+  ): GrantConnection!
 }
 
 input paymentplanFilter {
@@ -1711,6 +1862,53 @@ enum userSortFields {
   name
   postDate
   updatedAt
+}
+
+input grantFilter {
+  and: [grantFilter!]
+  or: [grantFilter!]
+  id: IDFilterComparison
+  role: StringFieldComparison
+  resource: StringFieldComparison
+  action: GrantActionsFilterComparison
+  attributes: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  postedById: IDFilterComparison
+}
+
+input GrantActionsFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: GrantActions
+  neq: GrantActions
+  gt: GrantActions
+  gte: GrantActions
+  lt: GrantActions
+  lte: GrantActions
+  like: GrantActions
+  notLike: GrantActions
+  iLike: GrantActions
+  notILike: GrantActions
+  in: [GrantActions!]
+  notIn: [GrantActions!]
+}
+
+input grantSort {
+  field: grantSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum grantSortFields {
+  id
+  role
+  resource
+  action
+  attributes
+  postDate
+  updatedAt
+  postedById
 }
 
 type Mutation {
@@ -1777,6 +1975,10 @@ type Mutation {
   updateOneReview(input: UpdateOneReviewInput!): Review!
   deleteOneReview(input: DeleteOneReviewInput!): ReviewDeleteResponse!
   deleteManyReviews(input: DeleteManyReviewsInput!): DeleteManyResponse!
+  createOneGrant(input: CreateOneGrantInput!): grant!
+  updateOneGrant(input: UpdateOneGrantInput!): grant!
+  deleteOneGrant(input: DeleteOneGrantInput!): GrantDeleteResponse!
+  deleteManyGrants(input: DeleteManyGrantsInput!): DeleteManyResponse!
 }
 
 input SetPackOnLoopInput {
@@ -2476,4 +2678,59 @@ input ReviewDeleteFilter {
   updatedAt: TimestampFieldComparison
   userId: IDFilterComparison
   packId: IDFilterComparison
+}
+
+input CreateOneGrantInput {
+  """The record to create"""
+  grant: GrantDTO!
+}
+
+input GrantDTO {
+  """Example field (placeholder)"""
+  role: String!
+
+  """Example field (placeholder)"""
+  resource: String!
+  action: GrantActions!
+
+  """
+  
+        all attributes => ['*'],
+        all attributes except specific fields => ['*', '!id']
+        only selected attributes => ['id', 'name']
+        
+  """
+  attributes: String!
+  postedById: ID!
+}
+
+input UpdateOneGrantInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: GrantDTO!
+}
+
+input DeleteOneGrantInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyGrantsInput {
+  """Filter to find records to delete"""
+  filter: grantDeleteFilter!
+}
+
+input grantDeleteFilter {
+  and: [grantDeleteFilter!]
+  or: [grantDeleteFilter!]
+  id: IDFilterComparison
+  role: StringFieldComparison
+  resource: StringFieldComparison
+  action: GrantActionsFilterComparison
+  attributes: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  postedById: IDFilterComparison
 }

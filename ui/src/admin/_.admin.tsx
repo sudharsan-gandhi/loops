@@ -398,13 +398,23 @@ const Resource: React.FC<{
                                 case "date":
                                   return (
                                     <Td>
-                                      {new Date(user[field]).toDateString()}
+                                      <Text maxW="30ch" isTruncated>
+                                        {new Date(user[field]).toDateString()}
+                                      </Text>
                                     </Td>
                                   );
                                 case "boolean":
-                                  return <Td>{user[field] ? "Yes" : "No"}</Td>;
+                                  return (
+                                    <Td>
+                                      <Text maxW="30ch" isTruncated>{user[field] ? "Yes" : "No"}</Text>
+                                    </Td>
+                                  );
                                 case "number":
-                                  return <Td isNumeric>{user[field]}</Td>;
+                                  return (
+                                    <Td isNumeric>
+                                      <Text maxW="30ch" isTruncated>{user[field]}</Text>
+                                    </Td>
+                                  );
                                 case "link":
                                   let imageLink = user[field];
                                   if (!imageLink.startsWith("http")) {
@@ -413,23 +423,25 @@ const Resource: React.FC<{
                                   if (isImage) {
                                     return (
                                       <Td>
-                                        <Link
-                                          href={imageLink}
-                                          target="_blank"
-                                          rel="noreferrer"
-                                        >
-                                          <Avatar
-                                            size={"sm"}
-                                            src={imageLink}
-                                            borderRadius="sm"
-                                          />
-                                        </Link>
+                                        <Text maxW="30ch" isTruncated>
+                                          <Link
+                                            href={imageLink}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                          >
+                                            <Avatar
+                                              size={"sm"}
+                                              src={imageLink}
+                                              borderRadius="sm"
+                                            />
+                                          </Link>
+                                        </Text>
                                       </Td>
                                     );
                                   } else {
                                     return (
                                       <Td>
-                                        <Text>
+                                        <Text maxW="30ch" isTruncated>
                                           <Link
                                             variant={"button"}
                                             href={imageLink}

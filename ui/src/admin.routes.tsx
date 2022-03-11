@@ -1,4 +1,5 @@
 import Dashboard from 'admin/dashboard.admin';
+import GrantResource from 'admin/grant.admin';
 import JobResource from 'admin/job.admin';
 import LoopResource from 'admin/loop.admin';
 import PackResource from 'admin/pack.admin';
@@ -67,6 +68,14 @@ export const AdminRoutes = () => {
         element={
           <RequireAuth>
             <PaymentResource />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="grants"
+        element={
+          <RequireAuth>
+            <GrantResource />
           </RequireAuth>
         }
       />
