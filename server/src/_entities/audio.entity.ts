@@ -36,7 +36,7 @@ registerEnumType(AudioType, { name: 'AudioType' });
 @Entity('audio')
 @FilterableRelation('pack', () => Pack, { disableRemove: true })
 @Authorize(AudioAuthorizer)
-export class Audio extends BaseEntity {
+export class Loop extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;

@@ -9,7 +9,7 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import create from 'zustand';
+import create, { GetState } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import {
@@ -192,5 +192,26 @@ export const useUser = create(
       setUser: (currentUser) => set({ currentUser }),
     }),
     { name: "user" }
+  )
+);
+
+export const useAccess = create(
+  persist(
+    (set, get: GetState<{ access: any }>) => ({
+      access: {},
+      setAccess: async () => {
+        debugger;
+        let access = get().access;
+        if (!access || JSON.stringify(access) === "{}") {
+          const resp = await axios.get("/auth/access");
+          access = resp.data;
+        }
+        set({ access });
+      },
+      clearAccess: () => {
+        set({}, true);
+      }
+    }),
+    { name: "access" }
   )
 );

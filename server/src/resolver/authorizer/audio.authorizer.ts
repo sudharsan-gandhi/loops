@@ -1,6 +1,6 @@
 import { AudioInputDTO } from 'src/_dto';
 import {
-  Audio,
+  Loop,
   Pack,
 } from 'src/_entities';
 import {
@@ -51,13 +51,13 @@ export class AudioAuthorizer implements CustomAuthorizer<AudioInputDTO> {
       // if not check if owned resource can be edited
       let resource;
       if (action === OperationGroup.CREATE) {
-        const audio: Audio = context.req.body.variables.input[this.NAME];
+        const audio: Loop = context.req.body.variables.input[this.NAME];
         resource = await Pack.findOne(audio.packId);
         if(!resource) {
           throw new BadRequestException('Cannot find parent pack to add audio');
         }
       } else {
-        const audio: Audio = await Audio.findOne(resourceId, {
+        const audio: Loop = await Loop.findOne(resourceId, {
           relations: ['pack'],
         });
         resource = audio.pack;

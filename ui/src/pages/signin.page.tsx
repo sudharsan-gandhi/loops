@@ -13,6 +13,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import {
+  useAccess,
   useAuth,
   useUser,
 } from 'state/user';
@@ -44,6 +45,7 @@ const SignIn: React.FC = () => {
   const auth = useAuth.getState().auth;
   const { login, logout } = useAuth();
   const setUser = useUser((state) => state.setUser);
+  const clearAccess = useAccess(state => state.clearAccess);
 
   async function isLoggedIn() {
     try {
@@ -51,9 +53,11 @@ const SignIn: React.FC = () => {
       console.log("isloggedin", resp);
       resp?.data?.id ? login() : logout();
       resp?.data?.id ? setUser(resp.data) : setUser({});
+      clearAccess();
     } catch (e) {
       logout();
       setUser({});
+      clearAccess();
     }
   }
 
@@ -66,6 +70,7 @@ const SignIn: React.FC = () => {
     } catch (e) {
       logout();
       setUser({});
+      clearAccess();
     }
   }, []);
 

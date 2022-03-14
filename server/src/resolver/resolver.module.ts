@@ -13,9 +13,9 @@ import {
 } from 'src/_dto';
 import { GrantDTO } from 'src/_dto/grant.dto';
 import {
-  Audio,
   Grant,
   Job,
+  Loop,
   Pack,
   Payment,
   Paymentplan,
@@ -46,8 +46,8 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   PagingStrategies
 >[] = [
   {
-    DTOClass: Audio,
-    EntityClass: Audio,
+    DTOClass: Loop,
+    EntityClass: Loop,
     CreateDTOClass: AudioInputDTO,
     UpdateDTOClass: AudioUpdateDTO,
     read: { guards: [JwtNoauthGuard] },

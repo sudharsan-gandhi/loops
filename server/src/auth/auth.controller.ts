@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { ENTITIES } from 'src/entities';
 
 import {
   Controller,
@@ -12,12 +13,20 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 
+import {
+  AccessControlService,
+  AuthPossesion,
+} from './service/access-control.service';
+
 @Controller('auth')
 export class AuthController {
   private clientUrl;
   private readonly console = new Logger(AuthController.name);
 
-  constructor(protected config: ConfigService) {
+  constructor(
+    protected config: ConfigService,
+    private acl: AccessControlService,
+  ) {
     this.console.debug('Current Enviroment:', config.get<string>('ENV'));
     if (config.get<string>('ENV') === 'DEVELOPMENT') {
       this.clientUrl = 'http://localhost:3001';
@@ -78,6 +87,40 @@ export class AuthController {
     res.clearCookie('userId');
     res.clearCookie('user');
     res.json({});
+  }
+
+  @Get('/access')
+  @UseGuards(AuthGuard('jwt'))
+  accessList(@Req() req, @Res() res: Response) {
+    this.getAccessList(req)
+      .then((accessList) => {
+        res.json(accessList);
+      })
+      .catch((err) => {
+        this.console.log(err);
+        res.status(400).send('something went wrong');
+      });
+  }
+
+  async getAccessList(req) {
+    const actions = ['read', 'update', 'delete', 'create'];
+    const accessList = {};
+
+    for (let entity of ENTITIES) {
+      let actionObj = {};
+      for (let action of actions) {
+        const bool = await this.acl.allowed(
+          req.user.role || 'guest',
+          entity.name.toLowerCase(),
+          action,
+          AuthPossesion.ANY,
+        );
+        actionObj = { ...actionObj, ...{ [action]: bool } };
+      }
+      accessList[entity.name.toLowerCase()] = actionObj;
+    }
+    this.console.log(accessList);
+    return accessList;
   }
 
   private attachUserCookie(req, res: Response) {

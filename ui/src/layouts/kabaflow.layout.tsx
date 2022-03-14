@@ -172,6 +172,7 @@ export const KabaflowLayout: React.FC = () => {
   const { setUser } = useUser();
   let location = useLocation();
   let history = useNavigate();
+  // const currentUser = useUser((state) => state.currentUser) as User;
   let [currentUser, setCurrentUser] = useState<MakeOptional<User, keyof User>>(
     {}
   );

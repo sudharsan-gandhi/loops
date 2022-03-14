@@ -1,5 +1,5 @@
 import { GraphQLBoolean } from 'graphql';
-import { Audio } from 'src/_entities/audio.entity';
+import { Loop } from 'src/_entities/audio.entity';
 import { Payment } from 'src/_entities/payment.entity';
 import { User } from 'src/_entities/user.entity';
 import { PackAuthorizer } from 'src/resolver/authorizer';
@@ -42,7 +42,7 @@ registerEnumType(PacketType, { name: 'PacketType' });
 @ObjectType('pack')
 @Entity('pack')
 @Relation('author', () => User, { disableRemove: true })
-@CursorConnection('audio', () => Audio, { disableRemove: true })
+@CursorConnection('audio', () => Loop, { disableRemove: true })
 @CursorConnection('payments', () => Payment, { disableRemove: true })
 @CursorConnection('reviews', () => Payment, { disableRemove: true })
 @Authorize(PackAuthorizer)
@@ -88,8 +88,8 @@ export class Pack extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Audio, (audio) => audio.pack)
-  audio: Audio[];
+  @OneToMany(() => Loop, (audio) => audio.pack)
+  audio: Loop[];
 
   @FilterableField(() => ID)
   @Column('int')

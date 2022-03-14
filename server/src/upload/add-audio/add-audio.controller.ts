@@ -2,7 +2,7 @@ import { UploadedFile as AdminUploadedFile } from 'adminjs';
 import { randomUUID } from 'crypto';
 import { extname } from 'path';
 import {
-  Audio,
+  Loop,
   Pack,
 } from 'src/_entities';
 
@@ -53,7 +53,7 @@ export class AddAudioController {
     @Req() req,
   ) {
     const pack = await Pack.findOne(packId);
-    const audio = await Audio.findOne<Audio>(audioId);
+    const audio = await Loop.findOne<Loop>(audioId);
     if (
       pack &&
       audio &&

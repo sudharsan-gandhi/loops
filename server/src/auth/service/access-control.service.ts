@@ -23,7 +23,7 @@ export class AccessControlService {
   async allowed(
     role: string,
     resource: string,
-    action: OperationGroup,
+    action: OperationGroup | string,
     possesion: AuthPossesion,
   ) {
     await this.init();

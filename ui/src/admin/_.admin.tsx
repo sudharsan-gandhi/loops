@@ -29,7 +29,10 @@ import {
   MdRemoveRedEye,
   MdVisibility,
 } from 'react-icons/md';
-import { useUser } from 'state/user';
+import {
+  useAccess,
+  useUser,
+} from 'state/user';
 import create from 'zustand';
 
 import {
@@ -114,6 +117,21 @@ const Resource: React.FC<{
   variables,
   mutationFields,
 }) => {
+  const [accessList, setAccessList] = useState<any>({
+    read: false,
+    update: false,
+    create: false,
+    delete: false,
+  });
+
+  const setAccess = useAccess((state) => state.setAccess);
+
+  setAccess().then(() => {
+    const access = useAccess.getState().access;
+    console.log(access);
+    setAccessList(access[resource.toLowerCase()]);
+  });
+
   const toast = useToast();
 
   const viewQuery = AdminQueries.getMany(resource, viewFields);
@@ -139,6 +157,9 @@ const Resource: React.FC<{
     useMutation<{ deleteManyUsers: DeleteManyResponse }>(deleteManyQuery);
 
   const deleteOneFn = async (id: string) => {
+    if (!accessList.delete) {
+      return;
+    }
     try {
       const { data } = await deleteOne(deleteOneVariable(id));
       resetChecked();
@@ -166,6 +187,9 @@ const Resource: React.FC<{
   };
 
   const deleteManyFn = async () => {
+    if (!accessList.delete) {
+      return;
+    }
     if (deleteItems.size > 0) {
       try {
         const deleteItemsArr = [];
@@ -199,6 +223,9 @@ const Resource: React.FC<{
   };
 
   useEffect(() => {
+    if (!accessList.read) {
+      return;
+    }
     try {
       getAll({ variables }).then(({ data }) => {
         setViewData(data[pluralize(resource.toLowerCase())]);
@@ -214,7 +241,7 @@ const Resource: React.FC<{
         status: "error",
       });
     }
-  }, []);
+  }, [accessList]);
   // whenever packVariables fetchMore data from backend
   useEffect(() => {
     try {
@@ -232,7 +259,7 @@ const Resource: React.FC<{
         status: "error",
       });
     }
-  }, [variables]);
+  }, [variables, accessList]);
 
   const [view, setView] = useState(undefined);
 
@@ -271,7 +298,7 @@ const Resource: React.FC<{
       <Container maxW="container.xl">
         <VStack pt="2">
           <HStack justify="end" w="100%">
-            {deleteItems.size > 0 && (
+            {accessList.delete && deleteItems.size > 0 && (
               <Button
                 leftIcon={<MdDeleteOutline />}
                 onClick={() => deleteManyFn()}
@@ -279,232 +306,254 @@ const Resource: React.FC<{
                 Delete Selected
               </Button>
             )}
-            <Button leftIcon={<MdAdd />} onClick={() => openMutationModal()}>
-              Create New
-            </Button>
+            {accessList.create && (
+              <Button leftIcon={<MdAdd />} onClick={() => openMutationModal()}>
+                Create New
+              </Button>
+            )}
           </HStack>
-          <HStack
-            w="100%"
-            justify="space-between"
-            alignItems="center"
-            // boxShadow="dark-lg"
-            color="white"
-            bg="gray.700"
-            p="2"
-          >
-            <Box
-              visibility={
-                !(viewData as any)?.pageInfo?.hasPreviousPage
-                  ? "hidden"
-                  : "visible"
-              }
-            >
-              <PaginationButton dispatch={formReducer} isPrev />
-            </Box>
-            <Spacer />
-            <VStack>
-              <HStack alignItems="baseline">
-                <Text fontSize={{ base: "lg", md: "2xl" }} m="0">
-                  {`${pluralize(resource)}`}
-                </Text>
+          {accessList.read ? (
+            <>
+              <HStack
+                w="100%"
+                justify="space-between"
+                alignItems="center"
+                // boxShadow="dark-lg"
+                color="white"
+                bg="gray.700"
+                p="2"
+              >
                 <Box
-                  display={
-                    (viewData as any)?.edges?.length > 0 ? "block" : "none"
+                  visibility={
+                    !(viewData as any)?.pageInfo?.hasPreviousPage
+                      ? "hidden"
+                      : "visible"
                   }
                 >
-                  <FilterUI
-                    formReducer={formReducer}
-                    pagination={AdminQueries.pagination}
-                    searchFields={searchFields}
-                    sortFields={sortFields}
-                  />
+                  <PaginationButton dispatch={formReducer} isPrev />
+                </Box>
+                <Spacer />
+                <VStack>
+                  <HStack alignItems="baseline">
+                    <Text fontSize={{ base: "lg", md: "2xl" }} m="0">
+                      {`${pluralize(resource)}`}
+                    </Text>
+                    <Box
+                      display={
+                        (viewData as any)?.edges?.length > 0 ? "block" : "none"
+                      }
+                    >
+                      <FilterUI
+                        formReducer={formReducer}
+                        pagination={AdminQueries.pagination}
+                        searchFields={searchFields}
+                        sortFields={sortFields}
+                      />
+                    </Box>
+                  </HStack>
+                </VStack>
+                <Spacer />
+                <Box
+                  visibility={
+                    !(viewData as any)?.pageInfo?.hasNextPage
+                      ? "hidden"
+                      : "visible"
+                  }
+                >
+                  <PaginationButton dispatch={formReducer} />
                 </Box>
               </HStack>
-            </VStack>
-            <Spacer />
-            <Box
-              visibility={
-                !(viewData as any)?.pageInfo?.hasNextPage ? "hidden" : "visible"
-              }
-            >
-              <PaginationButton dispatch={formReducer} />
-            </Box>
-          </HStack>
-          <Box pb="10" py="2" w="100%">
-            <TableContainer>
-              <Table variant="striped">
-                <Thead>
-                  <Tr>
-                    <Th>
-                      <Checkbox
-                        isChecked={allChecked}
-                        isIndeterminate={isIndeterminate}
-                        onChange={(e) => {
-                          const arr = Array(
-                            (viewData as any).edges.length
-                          ).fill(e.target.checked);
-                          if (e.target.checked) {
-                            const ids = (viewData as any).edges.reduce(
-                              (prev, curr) => {
-                                prev.push(curr.node.id);
-                                return prev;
-                              },
-                              []
-                            );
-                            setDeleteItems(new Set(ids));
-                          } else {
-                            setDeleteItems(new Set());
-                          }
-                          setCheckedItems(arr);
-                        }}
-                      />
-                    </Th>
-                    {viewFields.map(({ field }) => (
-                      <Th>{field}</Th>
-                    ))}
-                    <Th>ACTIONS</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {viewData && (viewData as any)?.edges?.length > 0 ? (
-                    (viewData as any)?.edges.map(({ node: user }, index) => (
+              <Box pb="10" py="2" w="100%">
+                <TableContainer>
+                  <Table variant="striped">
+                    <Thead>
                       <Tr>
-                        <Td>
+                        <Th>
                           <Checkbox
-                            isChecked={checkedItems[index]}
+                            isChecked={allChecked}
+                            isIndeterminate={isIndeterminate}
                             onChange={(e) => {
-                              const arr = [...checkedItems];
-                              arr[index] = e.target.checked;
+                              const arr = Array(
+                                (viewData as any).edges.length
+                              ).fill(e.target.checked);
                               if (e.target.checked) {
-                                const set = new Set(deleteItems.add(user.id));
-                                setDeleteItems(set);
+                                const ids = (viewData as any).edges.reduce(
+                                  (prev, curr) => {
+                                    prev.push(curr.node.id);
+                                    return prev;
+                                  },
+                                  []
+                                );
+                                setDeleteItems(new Set(ids));
                               } else {
-                                const set = new Set(deleteItems);
-                                set.delete(user.id);
-                                setDeleteItems(set);
+                                setDeleteItems(new Set());
                               }
                               setCheckedItems(arr);
                             }}
                           />
-                        </Td>
-                        {viewFields.map(
-                          ({ field, type, linkPrefix, isImage }) => {
-                            linkPrefix = linkPrefix || "";
-                            if (
-                              user[field] &&
-                              user[field]?.toString()?.trim() !== ""
-                            ) {
-                              switch (type) {
-                                case "date":
-                                  return (
-                                    <Td>
-                                      <Text maxW="30ch" isTruncated>
-                                        {new Date(user[field]).toDateString()}
-                                      </Text>
-                                    </Td>
-                                  );
-                                case "boolean":
-                                  return (
-                                    <Td>
-                                      <Text maxW="30ch" isTruncated>{user[field] ? "Yes" : "No"}</Text>
-                                    </Td>
-                                  );
-                                case "number":
-                                  return (
-                                    <Td isNumeric>
-                                      <Text maxW="30ch" isTruncated>{user[field]}</Text>
-                                    </Td>
-                                  );
-                                case "link":
-                                  let imageLink = user[field];
-                                  if (!imageLink.startsWith("http")) {
-                                    imageLink = `${linkPrefix}/${user[field]}`;
-                                  }
-                                  if (isImage) {
-                                    return (
-                                      <Td>
-                                        <Text maxW="30ch" isTruncated>
-                                          <Link
-                                            href={imageLink}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                          >
-                                            <Avatar
-                                              size={"sm"}
-                                              src={imageLink}
-                                              borderRadius="sm"
-                                            />
-                                          </Link>
-                                        </Text>
-                                      </Td>
-                                    );
-                                  } else {
-                                    return (
-                                      <Td>
-                                        <Text maxW="30ch" isTruncated>
-                                          <Link
-                                            variant={"button"}
-                                            href={imageLink}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                          >
-                                            Open File
-                                          </Link>
-                                        </Text>
-                                      </Td>
-                                    );
-                                  }
-                                default:
-                                  return (
-                                    <Td>
-                                      <Text maxW="30ch" isTruncated>
-                                        {user[field]}
-                                      </Text>
-                                    </Td>
-                                  );
-                              }
-                            } else return <Td></Td>;
-                          }
-                        )}
-                        <Td>
-                          <IconButton
-                            m="1"
-                            aria-label="view"
-                            icon={<MdVisibility />}
-                            onClick={() => {
-                              setView(user);
-                              openView();
-                            }}
-                          />
-                          <IconButton
-                            m="1"
-                            aria-label="edit"
-                            icon={<MdEdit />}
-                            onClick={() => {
-                              setFormData(user);
-                              openMutationModal();
-                            }}
-                          />
-                          <IconButton
-                            m="1"
-                            aria-label="delete"
-                            icon={<MdDelete />}
-                            onClick={() => deleteOneFn(user.id)}
-                          />
-                        </Td>
+                        </Th>
+                        {viewFields.map(({ field }) => (
+                          <Th>{field}</Th>
+                        ))}
+                        <Th>ACTIONS</Th>
                       </Tr>
-                    ))
-                  ) : (
-                    <Tr>
-                      <Td colSpan={viewFields.length + 2}>
-                        No data found. Please create new resource
-                      </Td>
-                    </Tr>
-                  )}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </Box>
+                    </Thead>
+                    <Tbody>
+                      {viewData && (viewData as any)?.edges?.length > 0 ? (
+                        (viewData as any)?.edges.map(
+                          ({ node: user }, index) => (
+                            <Tr>
+                              <Td>
+                                <Checkbox
+                                  isChecked={checkedItems[index]}
+                                  onChange={(e) => {
+                                    const arr = [...checkedItems];
+                                    arr[index] = e.target.checked;
+                                    if (e.target.checked) {
+                                      const set = new Set(
+                                        deleteItems.add(user.id)
+                                      );
+                                      setDeleteItems(set);
+                                    } else {
+                                      const set = new Set(deleteItems);
+                                      set.delete(user.id);
+                                      setDeleteItems(set);
+                                    }
+                                    setCheckedItems(arr);
+                                  }}
+                                />
+                              </Td>
+                              {viewFields.map(
+                                ({ field, type, linkPrefix, isImage }) => {
+                                  linkPrefix = linkPrefix || "";
+                                  if (
+                                    user[field] &&
+                                    user[field]?.toString()?.trim() !== ""
+                                  ) {
+                                    switch (type) {
+                                      case "date":
+                                        return (
+                                          <Td>
+                                            <Text maxW="30ch" isTruncated>
+                                              {new Date(
+                                                user[field]
+                                              ).toDateString()}
+                                            </Text>
+                                          </Td>
+                                        );
+                                      case "boolean":
+                                        return (
+                                          <Td>
+                                            <Text maxW="30ch" isTruncated>
+                                              {user[field] ? "Yes" : "No"}
+                                            </Text>
+                                          </Td>
+                                        );
+                                      case "number":
+                                        return (
+                                          <Td isNumeric>
+                                            <Text maxW="30ch" isTruncated>
+                                              {user[field]}
+                                            </Text>
+                                          </Td>
+                                        );
+                                      case "link":
+                                        let imageLink = user[field];
+                                        if (!imageLink.startsWith("http")) {
+                                          imageLink = `${linkPrefix}/${user[field]}`;
+                                        }
+                                        if (isImage) {
+                                          return (
+                                            <Td>
+                                              <Text maxW="30ch" isTruncated>
+                                                <Link
+                                                  href={imageLink}
+                                                  target="_blank"
+                                                  rel="noreferrer"
+                                                >
+                                                  <Avatar
+                                                    size={"sm"}
+                                                    src={imageLink}
+                                                    borderRadius="sm"
+                                                  />
+                                                </Link>
+                                              </Text>
+                                            </Td>
+                                          );
+                                        } else {
+                                          return (
+                                            <Td>
+                                              <Text maxW="30ch" isTruncated>
+                                                <Link
+                                                  variant={"button"}
+                                                  href={imageLink}
+                                                  target="_blank"
+                                                  rel="noreferrer"
+                                                >
+                                                  Open File
+                                                </Link>
+                                              </Text>
+                                            </Td>
+                                          );
+                                        }
+                                      default:
+                                        return (
+                                          <Td>
+                                            <Text maxW="30ch" isTruncated>
+                                              {user[field]}
+                                            </Text>
+                                          </Td>
+                                        );
+                                    }
+                                  } else return <Td></Td>;
+                                }
+                              )}
+                              <Td>
+                                <IconButton
+                                  m="1"
+                                  aria-label="view"
+                                  icon={<MdVisibility />}
+                                  onClick={() => {
+                                    setView(user);
+                                    openView();
+                                  }}
+                                />
+                                <IconButton
+                                  m="1"
+                                  aria-label="edit"
+                                  icon={<MdEdit />}
+                                  onClick={() => {
+                                    setFormData(user);
+                                    openMutationModal();
+                                  }}
+                                />
+                                <IconButton
+                                  m="1"
+                                  aria-label="delete"
+                                  icon={<MdDelete />}
+                                  onClick={() => deleteOneFn(user.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          )
+                        )
+                      ) : (
+                        <Tr>
+                          <Td colSpan={viewFields.length + 2}>
+                            No data found. Please create new resource
+                          </Td>
+                        </Tr>
+                      )}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box>You dont have access to view the data</Box>
+            </>
+          )}
         </VStack>
       </Container>
       {view && (
