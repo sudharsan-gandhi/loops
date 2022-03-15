@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -77,6 +78,10 @@ export class Grant extends BaseEntity {
   @Column('datetime', { name: 'updatedAt' })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 
   @FilterableField(() => ID)
   @Column('int')

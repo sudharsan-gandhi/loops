@@ -7,6 +7,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
@@ -106,4 +107,8 @@ export class Pack extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.pack)
   reviews: Review[];
+  
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 }

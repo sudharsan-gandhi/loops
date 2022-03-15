@@ -23,6 +23,7 @@ type job {
   """Example field (placeholder)"""
   updatedAt: Timestamp!
   postedById: ID!
+  deletedAt: Timestamp
   postedBy: user!
 }
 
@@ -39,6 +40,7 @@ type rave {
 
   """Example field (placeholder)"""
   followingId: Int!
+  deletedAt: Timestamp
   follower: user!
   following: user!
 }
@@ -54,6 +56,7 @@ type Review {
   updatedAt: Timestamp!
   userId: ID!
   packId: ID!
+  deletedAt: Timestamp
   user: user!
   pack: pack!
 }
@@ -74,6 +77,7 @@ type user {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp!
+  deletedAt: Timestamp
   jobs(
     """Limit or page results."""
     paging: CursorPaging = {first: 10}
@@ -169,6 +173,7 @@ input jobFilter {
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
   postedById: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input IDFilterComparison {
@@ -239,6 +244,7 @@ enum jobSortFields {
   postDate
   updatedAt
   postedById
+  deletedAt
 }
 
 """Sort Directions"""
@@ -264,6 +270,7 @@ input packFilter {
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
   authorId: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input FloatFieldComparison {
@@ -328,6 +335,7 @@ enum packSortFields {
   postDate
   updatedAt
   authorId
+  deletedAt
 }
 
 input raveFilter {
@@ -336,6 +344,7 @@ input raveFilter {
   id: IDFilterComparison
   followerId: IntFieldComparison
   followingId: IntFieldComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input IntFieldComparison {
@@ -368,6 +377,7 @@ enum raveSortFields {
   id
   followerId
   followingId
+  deletedAt
 }
 
 input paymentFilter {
@@ -385,6 +395,7 @@ input paymentFilter {
   packId: IDFilterComparison
   paymentPlanId: IDFilterComparison
   userId: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input PlanTypeFilterComparison {
@@ -455,6 +466,7 @@ enum paymentSortFields {
   packId
   paymentPlanId
   userId
+  deletedAt
 }
 
 input ReviewFilter {
@@ -465,6 +477,7 @@ input ReviewFilter {
   updatedAt: TimestampFieldComparison
   userId: IDFilterComparison
   packId: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input ReviewSort {
@@ -479,6 +492,7 @@ enum ReviewSortFields {
   updatedAt
   userId
   packId
+  deletedAt
 }
 
 type paymentplan {
@@ -506,6 +520,7 @@ type paymentplan {
 
   """Example filed (placeholder)"""
   isActive: Boolean!
+  deletedAt: Timestamp
   postedBy: user!
   payments(
     """Limit or page results."""
@@ -552,6 +567,7 @@ type payment {
   packId: ID!
   paymentPlanId: ID!
   userId: ID!
+  deletedAt: Timestamp
   pack: pack!
   paymentPlan: paymentplan!
   user: user!
@@ -580,6 +596,7 @@ type pack {
   """Example field (placeholder)"""
   updatedAt: Timestamp!
   authorId: ID!
+  deletedAt: Timestamp
   author: user!
   audio(
     """Limit or page results."""
@@ -626,6 +643,7 @@ input loopFilter {
   packId: IDFilterComparison
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
   pack: loopFilterpackFilter
 }
 
@@ -662,6 +680,7 @@ input loopFilterpackFilter {
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
   authorId: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input loopSort {
@@ -681,6 +700,7 @@ enum loopSortFields {
   packId
   postDate
   updatedAt
+  deletedAt
 }
 
 type loop {
@@ -714,6 +734,7 @@ type loop {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp!
+  deletedAt: Timestamp
   pack: pack!
 }
 
@@ -742,6 +763,7 @@ type grant {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp!
+  deletedAt: Timestamp
   postedById: ID!
 }
 
@@ -754,6 +776,156 @@ enum GrantActions {
   updateOwn
   deleteAny
   deleteOwn
+}
+
+type loopEdge {
+  """The node containing the loop"""
+  node: loop!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type PageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+
+  """The cursor of the first returned record."""
+  startCursor: ConnectionCursor
+
+  """The cursor of the last returned record."""
+  endCursor: ConnectionCursor
+}
+
+type loopConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [loopEdge!]!
+}
+
+type grantEdge {
+  """The node containing the grant"""
+  node: grant!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type grantConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [grantEdge!]!
+}
+
+type jobEdge {
+  """The node containing the job"""
+  node: job!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type jobConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [jobEdge!]!
+}
+
+type packEdge {
+  """The node containing the pack"""
+  node: pack!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type packConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [packEdge!]!
+}
+
+type paymentplanEdge {
+  """The node containing the paymentplan"""
+  node: paymentplan!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type paymentEdge {
+  """The node containing the payment"""
+  node: payment!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type paymentConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [paymentEdge!]!
+}
+
+type raveEdge {
+  """The node containing the rave"""
+  node: rave!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type raveConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [raveEdge!]!
+}
+
+type ReviewEdge {
+  """The node containing the Review"""
+  node: Review!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type ReviewConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [ReviewEdge!]!
+}
+
+type userEdge {
+  """The node containing the user"""
+  node: user!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type userConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [userEdge!]!
 }
 
 type DeleteManyResponse {
@@ -792,28 +964,7 @@ type LoopDeleteResponse {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp
-}
-
-type loopEdge {
-  """The node containing the loop"""
-  node: loop!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type PageInfo {
-  """true if paging forward and there are more records."""
-  hasNextPage: Boolean
-
-  """true if paging backwards and there are more records."""
-  hasPreviousPage: Boolean
-
-  """The cursor of the first returned record."""
-  startCursor: ConnectionCursor
-
-  """The cursor of the last returned record."""
-  endCursor: ConnectionCursor
+  deletedAt: Timestamp
 }
 
 type LoopConnection {
@@ -835,6 +986,7 @@ type loopAggregateGroupBy {
   packId: ID
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
 }
 
 type loopCountAggregate {
@@ -848,6 +1000,7 @@ type loopCountAggregate {
   packId: Int
   postDate: Int
   updatedAt: Int
+  deletedAt: Int
 }
 
 type loopSumAggregate {
@@ -875,6 +1028,7 @@ type loopMinAggregate {
   packId: ID
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
 }
 
 type loopMaxAggregate {
@@ -888,6 +1042,7 @@ type loopMaxAggregate {
   packId: ID
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
 }
 
 type JobDeleteResponse {
@@ -911,14 +1066,7 @@ type JobDeleteResponse {
   """Example field (placeholder)"""
   updatedAt: Timestamp
   postedById: ID
-}
-
-type jobEdge {
-  """The node containing the job"""
-  node: job!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  deletedAt: Timestamp
 }
 
 type JobConnection {
@@ -937,6 +1085,7 @@ type jobAggregateGroupBy {
   postDate: Timestamp
   updatedAt: Timestamp
   postedById: ID
+  deletedAt: Timestamp
 }
 
 type jobCountAggregate {
@@ -947,6 +1096,7 @@ type jobCountAggregate {
   postDate: Int
   updatedAt: Int
   postedById: Int
+  deletedAt: Int
 }
 
 type jobSumAggregate {
@@ -967,6 +1117,7 @@ type jobMinAggregate {
   postDate: Timestamp
   updatedAt: Timestamp
   postedById: ID
+  deletedAt: Timestamp
 }
 
 type jobMaxAggregate {
@@ -977,6 +1128,7 @@ type jobMaxAggregate {
   postDate: Timestamp
   updatedAt: Timestamp
   postedById: ID
+  deletedAt: Timestamp
 }
 
 type PackDeleteResponse {
@@ -1002,14 +1154,7 @@ type PackDeleteResponse {
   """Example field (placeholder)"""
   updatedAt: Timestamp
   authorId: ID
-}
-
-type packEdge {
-  """The node containing the pack"""
-  node: pack!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  deletedAt: Timestamp
 }
 
 type PackConnection {
@@ -1029,6 +1174,7 @@ type packAggregateGroupBy {
   postDate: Timestamp
   updatedAt: Timestamp
   authorId: ID
+  deletedAt: Timestamp
 }
 
 type packCountAggregate {
@@ -1040,6 +1186,7 @@ type packCountAggregate {
   postDate: Int
   updatedAt: Int
   authorId: Int
+  deletedAt: Int
 }
 
 type packSumAggregate {
@@ -1062,6 +1209,7 @@ type packMinAggregate {
   postDate: Timestamp
   updatedAt: Timestamp
   authorId: ID
+  deletedAt: Timestamp
 }
 
 type packMaxAggregate {
@@ -1072,14 +1220,7 @@ type packMaxAggregate {
   postDate: Timestamp
   updatedAt: Timestamp
   authorId: ID
-}
-
-type paymentEdge {
-  """The node containing the payment"""
-  node: payment!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  deletedAt: Timestamp
 }
 
 type PackReviewsConnection {
@@ -1131,14 +1272,7 @@ type PaymentplanDeleteResponse {
 
   """Example filed (placeholder)"""
   isActive: Boolean
-}
-
-type paymentplanEdge {
-  """The node containing the paymentplan"""
-  node: paymentplan!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  deletedAt: Timestamp
 }
 
 type PaymentplanConnection {
@@ -1157,6 +1291,7 @@ type paymentplanAggregateGroupBy {
   updatedAt: Timestamp
   postedById: ID
   isActive: Boolean
+  deletedAt: Timestamp
 }
 
 type paymentplanCountAggregate {
@@ -1167,6 +1302,7 @@ type paymentplanCountAggregate {
   updatedAt: Int
   postedById: Int
   isActive: Int
+  deletedAt: Int
 }
 
 type paymentplanSumAggregate {
@@ -1188,6 +1324,7 @@ type paymentplanMinAggregate {
   postDate: Timestamp
   updatedAt: Timestamp
   postedById: ID
+  deletedAt: Timestamp
 }
 
 type paymentplanMaxAggregate {
@@ -1197,6 +1334,7 @@ type paymentplanMaxAggregate {
   postDate: Timestamp
   updatedAt: Timestamp
   postedById: ID
+  deletedAt: Timestamp
 }
 
 type PaymentplanPaymentsConnection {
@@ -1240,6 +1378,7 @@ type PaymentDeleteResponse {
   packId: ID
   paymentPlanId: ID
   userId: ID
+  deletedAt: Timestamp
 }
 
 type PaymentConnection {
@@ -1263,6 +1402,7 @@ type paymentAggregateGroupBy {
   packId: ID
   paymentPlanId: ID
   userId: ID
+  deletedAt: Timestamp
 }
 
 type paymentCountAggregate {
@@ -1278,6 +1418,7 @@ type paymentCountAggregate {
   packId: Int
   paymentPlanId: Int
   userId: Int
+  deletedAt: Int
 }
 
 type paymentSumAggregate {
@@ -1308,6 +1449,7 @@ type paymentMinAggregate {
   packId: ID
   paymentPlanId: ID
   userId: ID
+  deletedAt: Timestamp
 }
 
 type paymentMaxAggregate {
@@ -1322,6 +1464,7 @@ type paymentMaxAggregate {
   packId: ID
   paymentPlanId: ID
   userId: ID
+  deletedAt: Timestamp
 }
 
 type RaveDeleteResponse {
@@ -1332,14 +1475,7 @@ type RaveDeleteResponse {
 
   """Example field (placeholder)"""
   followingId: Int
-}
-
-type raveEdge {
-  """The node containing the rave"""
-  node: rave!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  deletedAt: Timestamp
 }
 
 type RaveConnection {
@@ -1354,12 +1490,14 @@ type raveAggregateGroupBy {
   id: ID
   followerId: Int
   followingId: Int
+  deletedAt: Timestamp
 }
 
 type raveCountAggregate {
   id: Int
   followerId: Int
   followingId: Int
+  deletedAt: Int
 }
 
 type raveSumAggregate {
@@ -1378,12 +1516,14 @@ type raveMinAggregate {
   id: ID
   followerId: Int
   followingId: Int
+  deletedAt: Timestamp
 }
 
 type raveMaxAggregate {
   id: ID
   followerId: Int
   followingId: Int
+  deletedAt: Timestamp
 }
 
 type UserDeleteResponse {
@@ -1402,14 +1542,7 @@ type UserDeleteResponse {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp
-}
-
-type userEdge {
-  """The node containing the user"""
-  node: user!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  deletedAt: Timestamp
 }
 
 type UserConnection {
@@ -1426,6 +1559,7 @@ type userAggregateGroupBy {
   name: String
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
 }
 
 type userCountAggregate {
@@ -1434,6 +1568,7 @@ type userCountAggregate {
   name: Int
   postDate: Int
   updatedAt: Int
+  deletedAt: Int
 }
 
 type userSumAggregate {
@@ -1450,6 +1585,7 @@ type userMinAggregate {
   name: String
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
 }
 
 type userMaxAggregate {
@@ -1458,14 +1594,7 @@ type userMaxAggregate {
   name: String
   postDate: Timestamp
   updatedAt: Timestamp
-}
-
-type ReviewEdge {
-  """The node containing the Review"""
-  node: Review!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  deletedAt: Timestamp
 }
 
 type UserReviewsConnection {
@@ -1527,14 +1656,7 @@ type ReviewDeleteResponse {
   updatedAt: Timestamp
   userId: ID
   packId: ID
-}
-
-type ReviewConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [ReviewEdge!]!
+  deletedAt: Timestamp
 }
 
 type ReviewAggregateGroupBy {
@@ -1543,6 +1665,7 @@ type ReviewAggregateGroupBy {
   updatedAt: Timestamp
   userId: ID
   packId: ID
+  deletedAt: Timestamp
 }
 
 type ReviewCountAggregate {
@@ -1551,6 +1674,7 @@ type ReviewCountAggregate {
   updatedAt: Int
   userId: Int
   packId: Int
+  deletedAt: Int
 }
 
 type ReviewSumAggregate {
@@ -1571,6 +1695,7 @@ type ReviewMinAggregate {
   updatedAt: Timestamp
   userId: ID
   packId: ID
+  deletedAt: Timestamp
 }
 
 type ReviewMaxAggregate {
@@ -1579,6 +1704,7 @@ type ReviewMaxAggregate {
   updatedAt: Timestamp
   userId: ID
   packId: ID
+  deletedAt: Timestamp
 }
 
 type GrantDeleteResponse {
@@ -1606,15 +1732,8 @@ type GrantDeleteResponse {
 
   """Example field (placeholder)"""
   updatedAt: Timestamp
+  deletedAt: Timestamp
   postedById: ID
-}
-
-type grantEdge {
-  """The node containing the grant"""
-  node: grant!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
 }
 
 type GrantConnection {
@@ -1633,6 +1752,7 @@ type grantAggregateGroupBy {
   attributes: String
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
   postedById: ID
 }
 
@@ -1644,6 +1764,7 @@ type grantCountAggregate {
   attributes: Int
   postDate: Int
   updatedAt: Int
+  deletedAt: Int
   postedById: Int
 }
 
@@ -1665,6 +1786,7 @@ type grantMinAggregate {
   attributes: String
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
   postedById: ID
 }
 
@@ -1676,10 +1798,91 @@ type grantMaxAggregate {
   attributes: String
   postDate: Timestamp
   updatedAt: Timestamp
+  deletedAt: Timestamp
   postedById: ID
 }
 
 type Query {
+  GrantWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: grantFilter = {}
+
+    """Specify to sort results."""
+    sorting: [grantSort!] = []
+  ): grantConnection!
+  JobWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: jobFilter = {}
+
+    """Specify to sort results."""
+    sorting: [jobSort!] = []
+  ): jobConnection!
+  LoopWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: loopFilter = {}
+
+    """Specify to sort results."""
+    sorting: [loopSort!] = []
+  ): loopConnection!
+  PackWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: packFilter = {}
+
+    """Specify to sort results."""
+    sorting: [packSort!] = []
+  ): packConnection!
+  PaymentWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: paymentFilter = {}
+
+    """Specify to sort results."""
+    sorting: [paymentSort!] = []
+  ): paymentConnection!
+  RaveWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: raveFilter = {}
+
+    """Specify to sort results."""
+    sorting: [raveSort!] = []
+  ): raveConnection!
+  ReviewWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: ReviewFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ReviewSort!] = []
+  ): ReviewConnection!
+  UserWithDeleted(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: userFilter = {}
+
+    """Specify to sort results."""
+    sorting: [userSort!] = []
+  ): userConnection!
   loop(
     """The id of the record to find."""
     id: ID!
@@ -1808,62 +2011,6 @@ type Query {
   ): GrantConnection!
 }
 
-input paymentplanFilter {
-  and: [paymentplanFilter!]
-  or: [paymentplanFilter!]
-  id: IDFilterComparison
-  title: StringFieldComparison
-  amount: FloatFieldComparison
-  postDate: TimestampFieldComparison
-  updatedAt: TimestampFieldComparison
-  postedById: IDFilterComparison
-  isActive: PaymentplanIsActiveFilterComparison
-}
-
-input PaymentplanIsActiveFilterComparison {
-  eq: Boolean
-}
-
-input paymentplanSort {
-  field: paymentplanSortFields!
-  direction: SortDirection!
-  nulls: SortNulls
-}
-
-enum paymentplanSortFields {
-  id
-  title
-  amount
-  postDate
-  updatedAt
-  postedById
-  isActive
-}
-
-input userFilter {
-  and: [userFilter!]
-  or: [userFilter!]
-  id: IDFilterComparison
-  email: StringFieldComparison
-  name: StringFieldComparison
-  postDate: TimestampFieldComparison
-  updatedAt: TimestampFieldComparison
-}
-
-input userSort {
-  field: userSortFields!
-  direction: SortDirection!
-  nulls: SortNulls
-}
-
-enum userSortFields {
-  id
-  email
-  name
-  postDate
-  updatedAt
-}
-
 input grantFilter {
   and: [grantFilter!]
   or: [grantFilter!]
@@ -1874,6 +2021,7 @@ input grantFilter {
   attributes: StringFieldComparison
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
   postedById: IDFilterComparison
 }
 
@@ -1908,7 +2056,68 @@ enum grantSortFields {
   attributes
   postDate
   updatedAt
+  deletedAt
   postedById
+}
+
+input userFilter {
+  and: [userFilter!]
+  or: [userFilter!]
+  id: IDFilterComparison
+  email: StringFieldComparison
+  name: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
+}
+
+input userSort {
+  field: userSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum userSortFields {
+  id
+  email
+  name
+  postDate
+  updatedAt
+  deletedAt
+}
+
+input paymentplanFilter {
+  and: [paymentplanFilter!]
+  or: [paymentplanFilter!]
+  id: IDFilterComparison
+  title: StringFieldComparison
+  amount: FloatFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  postedById: IDFilterComparison
+  isActive: PaymentplanIsActiveFilterComparison
+  deletedAt: TimestampFieldComparison
+}
+
+input PaymentplanIsActiveFilterComparison {
+  eq: Boolean
+}
+
+input paymentplanSort {
+  field: paymentplanSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum paymentplanSortFields {
+  id
+  title
+  amount
+  postDate
+  updatedAt
+  postedById
+  isActive
+  deletedAt
 }
 
 type Mutation {
@@ -2073,6 +2282,7 @@ input loopDeleteFilter {
   packId: IDFilterComparison
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input SetPostedByOnJobInput {
@@ -2130,6 +2340,7 @@ input jobDeleteFilter {
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
   postedById: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input SetAuthorOnPackInput {
@@ -2252,6 +2463,7 @@ input packDeleteFilter {
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
   authorId: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input SetPostedByOnPaymentplanInput {
@@ -2329,6 +2541,7 @@ input paymentplanDeleteFilter {
   updatedAt: TimestampFieldComparison
   postedById: IDFilterComparison
   isActive: PaymentplanIsActiveFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input SetPackOnPaymentInput {
@@ -2419,6 +2632,7 @@ input paymentDeleteFilter {
   packId: IDFilterComparison
   paymentPlanId: IDFilterComparison
   userId: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input SetFollowerOnRaveInput {
@@ -2474,6 +2688,7 @@ input raveDeleteFilter {
   id: IDFilterComparison
   followerId: IntFieldComparison
   followingId: IntFieldComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input AddJobsToUserInput {
@@ -2623,6 +2838,7 @@ input userDeleteFilter {
   name: StringFieldComparison
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input SetUserOnReviewInput {
@@ -2678,6 +2894,7 @@ input ReviewDeleteFilter {
   updatedAt: TimestampFieldComparison
   userId: IDFilterComparison
   packId: IDFilterComparison
+  deletedAt: TimestampFieldComparison
 }
 
 input CreateOneGrantInput {
@@ -2732,5 +2949,6 @@ input grantDeleteFilter {
   attributes: StringFieldComparison
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
   postedById: IDFilterComparison
 }

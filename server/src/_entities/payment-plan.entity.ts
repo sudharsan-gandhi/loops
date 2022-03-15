@@ -6,6 +6,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
@@ -83,4 +84,8 @@ export class Paymentplan extends BaseEntity {
 
   @OneToMany(() => Payment, (payment) => payment.paymentPlan)
   payments: Payment[];
+
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 }

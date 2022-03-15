@@ -10,6 +10,7 @@ import {
   BeforeUpdate,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   OneToMany,
@@ -139,6 +140,10 @@ export class User extends BaseEntity {
   @Column('datetime', { name: 'updatedAt' })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

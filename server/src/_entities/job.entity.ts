@@ -4,6 +4,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -80,4 +81,8 @@ export class Job extends BaseEntity {
     onUpdate: 'CASCADE',
   })
   postedBy: User;
+
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 }

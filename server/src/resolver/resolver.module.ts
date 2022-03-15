@@ -37,6 +37,18 @@ import {
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { Module } from '@nestjs/common';
 
+import {
+  GrantDeleteService,
+  JobDeleteService,
+  LoopDeleteService,
+  PackDeleteService,
+  PaymentDeleteService,
+  PaymentplanDeleteService,
+  RaveDeleteService,
+  ReviewDeleteService,
+  UserDeleteService,
+} from './service';
+
 const DEFAULT_RESOLVERS: AutoResolverOpts<
   any,
   any,
@@ -47,6 +59,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
 >[] = [
   {
     DTOClass: Loop,
+    ServiceClass: LoopDeleteService,
     EntityClass: Loop,
     CreateDTOClass: AudioInputDTO,
     UpdateDTOClass: AudioUpdateDTO,
@@ -57,6 +70,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: Job,
+    ServiceClass: JobDeleteService,
     EntityClass: Job,
     CreateDTOClass: JobInputDTO,
     UpdateDTOClass: JobInputDTO,
@@ -67,6 +81,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: Pack,
+    ServiceClass: PackDeleteService,
     EntityClass: Pack,
     CreateDTOClass: PackInputDTO,
     UpdateDTOClass: PackUpdateDTO,
@@ -77,6 +92,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: Paymentplan,
+    ServiceClass: PaymentplanDeleteService,
     EntityClass: Paymentplan,
     CreateDTOClass: PaymentplanInputDTO,
     UpdateDTOClass: PaymentplanInputDTO,
@@ -87,6 +103,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: Payment,
+    ServiceClass: PaymentDeleteService,
     EntityClass: Payment,
     CreateDTOClass: PaymentInputDTO,
     UpdateDTOClass: PaymentInputDTO,
@@ -96,6 +113,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: Rave,
+    ServiceClass: RaveDeleteService,
     EntityClass: Rave,
     CreateDTOClass: RaveInputDTO,
     UpdateDTOClass: RaveInputDTO,
@@ -106,6 +124,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: User,
+    ServiceClass: UserDeleteService,
     EntityClass: User,
     CreateDTOClass: UserInputDTO,
     UpdateDTOClass: UserUpdateDTO,
@@ -117,6 +136,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: Review,
+    ServiceClass: ReviewDeleteService,
     EntityClass: Review,
     CreateDTOClass: ReviewInputDTO,
     UpdateDTOClass: ReviewInputDTO,
@@ -128,6 +148,7 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
   {
     DTOClass: Grant,
+    ServiceClass: GrantDeleteService,
     EntityClass: Grant,
     CreateDTOClass: GrantDTO,
     UpdateDTOClass: GrantDTO,
@@ -141,7 +162,17 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   imports: [
     NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature(ENTITIES), AuthModule],
-      services: [],
+      services: [
+        GrantDeleteService,
+        JobDeleteService,
+        LoopDeleteService,
+        PackDeleteService,
+        PaymentDeleteService,
+        PaymentplanDeleteService,
+        RaveDeleteService,
+        ReviewDeleteService,
+        UserDeleteService,
+      ],
       resolvers: [...DEFAULT_RESOLVERS],
     }),
   ],

@@ -6,6 +6,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -138,4 +139,8 @@ export class Payment extends BaseEntity {
     onUpdate: 'NO ACTION',
   })
   user: User;
+
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 }

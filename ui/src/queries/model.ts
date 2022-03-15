@@ -674,6 +674,11 @@ export type Grant = {
    * only selected attributes => ['id', 'name']
    */
   attributes: Scalars["String"]
+  /** Example field (placeholder) */
+  postDate: Scalars["Timestamp"]
+  /** Example field (placeholder) */
+  updatedAt: Scalars["Timestamp"]
+  postedById: Scalars["ID"]
 }
 
 export enum GrantActions {
@@ -1540,6 +1545,11 @@ export type GrantDeleteResponse = {
    * only selected attributes => ['id', 'name']
    */
   attributes?: Maybe<Scalars["String"]>
+  /** Example field (placeholder) */
+  postDate?: Maybe<Scalars["Timestamp"]>
+  /** Example field (placeholder) */
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
 }
 
 export type GrantEdge = {
@@ -1565,6 +1575,9 @@ export type GrantAggregateGroupBy = {
   resource?: Maybe<Scalars["String"]>
   action?: Maybe<GrantActions>
   attributes?: Maybe<Scalars["String"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
 }
 
 export type GrantCountAggregate = {
@@ -1574,16 +1587,21 @@ export type GrantCountAggregate = {
   resource?: Maybe<Scalars["Int"]>
   action?: Maybe<Scalars["Int"]>
   attributes?: Maybe<Scalars["Int"]>
+  postDate?: Maybe<Scalars["Int"]>
+  updatedAt?: Maybe<Scalars["Int"]>
+  postedById?: Maybe<Scalars["Int"]>
 }
 
 export type GrantSumAggregate = {
   __typename?: "grantSumAggregate"
   id?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["Float"]>
 }
 
 export type GrantAvgAggregate = {
   __typename?: "grantAvgAggregate"
   id?: Maybe<Scalars["Float"]>
+  postedById?: Maybe<Scalars["Float"]>
 }
 
 export type GrantMinAggregate = {
@@ -1593,6 +1611,9 @@ export type GrantMinAggregate = {
   resource?: Maybe<Scalars["String"]>
   action?: Maybe<GrantActions>
   attributes?: Maybe<Scalars["String"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
 }
 
 export type GrantMaxAggregate = {
@@ -1602,6 +1623,9 @@ export type GrantMaxAggregate = {
   resource?: Maybe<Scalars["String"]>
   action?: Maybe<GrantActions>
   attributes?: Maybe<Scalars["String"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  postedById?: Maybe<Scalars["ID"]>
 }
 
 export type Query = {
@@ -1780,6 +1804,9 @@ export type GrantFilter = {
   resource?: Maybe<StringFieldComparison>
   action?: Maybe<GrantActionsFilterComparison>
   attributes?: Maybe<StringFieldComparison>
+  postDate?: Maybe<TimestampFieldComparison>
+  updatedAt?: Maybe<TimestampFieldComparison>
+  postedById?: Maybe<IdFilterComparison>
 }
 
 export type GrantActionsFilterComparison = {
@@ -1810,7 +1837,10 @@ export enum GrantSortFields {
   Role = "role",
   Resource = "resource",
   Action = "action",
-  Attributes = "attributes"
+  Attributes = "attributes",
+  PostDate = "postDate",
+  UpdatedAt = "updatedAt",
+  PostedById = "postedById"
 }
 
 export type Mutation = {
@@ -2800,6 +2830,7 @@ export type GrantDto = {
    * only selected attributes => ['id', 'name']
    */
   attributes: Scalars["String"]
+  postedById: Scalars["ID"]
 }
 
 export type UpdateOneGrantInput = {
@@ -2827,4 +2858,7 @@ export type GrantDeleteFilter = {
   resource?: Maybe<StringFieldComparison>
   action?: Maybe<GrantActionsFilterComparison>
   attributes?: Maybe<StringFieldComparison>
+  postDate?: Maybe<TimestampFieldComparison>
+  updatedAt?: Maybe<TimestampFieldComparison>
+  postedById?: Maybe<IdFilterComparison>
 }

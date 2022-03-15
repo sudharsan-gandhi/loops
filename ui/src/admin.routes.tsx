@@ -16,7 +16,7 @@ export const AdminRoutes = () => {
   return (
     <Routes>
       <Route
-        path=""
+        path="/"
         element={
           <RequireAuth>
             <Dashboard />

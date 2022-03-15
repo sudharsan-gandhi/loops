@@ -3,6 +3,7 @@ import { RaveAuthorizer } from 'src/resolver/authorizer';
 import {
   BaseEntity,
   Column,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -17,6 +18,7 @@ import {
   Relation,
 } from '@nestjs-query/query-graphql';
 import {
+  GraphQLTimestamp,
   ID,
   Int,
   ObjectType,
@@ -57,4 +59,8 @@ export class Rave extends BaseEntity {
   })
   @JoinColumn([{ name: 'followingId', referencedColumnName: 'id' }])
   following: User;
+
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 }

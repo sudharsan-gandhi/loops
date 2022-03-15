@@ -4,6 +4,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -96,4 +97,8 @@ export class Loop extends BaseEntity {
   @Column('datetime', { name: 'updatedAt' })
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @DeleteDateColumn()
+  @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})
+  deletedAt?: Date;
 }
