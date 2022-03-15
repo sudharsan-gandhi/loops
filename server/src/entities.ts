@@ -1,7 +1,7 @@
 import {
-  Audio,
   Grant,
   Job,
+  Loop,
   Pack,
   Payment,
   Paymentplan,
@@ -11,7 +11,7 @@ import {
 } from './_entities';
 
 export const ENTITIES = [
-  Audio,
+  Loop,
   Job,
   Pack,
   Paymentplan,
