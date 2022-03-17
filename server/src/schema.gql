@@ -778,156 +778,6 @@ enum GrantActions {
   deleteOwn
 }
 
-type loopEdge {
-  """The node containing the loop"""
-  node: loop!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type PageInfo {
-  """true if paging forward and there are more records."""
-  hasNextPage: Boolean
-
-  """true if paging backwards and there are more records."""
-  hasPreviousPage: Boolean
-
-  """The cursor of the first returned record."""
-  startCursor: ConnectionCursor
-
-  """The cursor of the last returned record."""
-  endCursor: ConnectionCursor
-}
-
-type loopConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [loopEdge!]!
-}
-
-type grantEdge {
-  """The node containing the grant"""
-  node: grant!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type grantConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [grantEdge!]!
-}
-
-type jobEdge {
-  """The node containing the job"""
-  node: job!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type jobConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [jobEdge!]!
-}
-
-type packEdge {
-  """The node containing the pack"""
-  node: pack!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type packConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [packEdge!]!
-}
-
-type paymentplanEdge {
-  """The node containing the paymentplan"""
-  node: paymentplan!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type paymentEdge {
-  """The node containing the payment"""
-  node: payment!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type paymentConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [paymentEdge!]!
-}
-
-type raveEdge {
-  """The node containing the rave"""
-  node: rave!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type raveConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [raveEdge!]!
-}
-
-type ReviewEdge {
-  """The node containing the Review"""
-  node: Review!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type ReviewConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [ReviewEdge!]!
-}
-
-type userEdge {
-  """The node containing the user"""
-  node: user!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-type userConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [userEdge!]!
-}
-
 type DeleteManyResponse {
   """The number of records deleted."""
   deletedCount: Int!
@@ -965,6 +815,28 @@ type LoopDeleteResponse {
   """Example field (placeholder)"""
   updatedAt: Timestamp
   deletedAt: Timestamp
+}
+
+type loopEdge {
+  """The node containing the loop"""
+  node: loop!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type PageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+
+  """The cursor of the first returned record."""
+  startCursor: ConnectionCursor
+
+  """The cursor of the last returned record."""
+  endCursor: ConnectionCursor
 }
 
 type LoopConnection {
@@ -1069,6 +941,14 @@ type JobDeleteResponse {
   deletedAt: Timestamp
 }
 
+type jobEdge {
+  """The node containing the job"""
+  node: job!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
 type JobConnection {
   """Paging information"""
   pageInfo: PageInfo!
@@ -1157,6 +1037,14 @@ type PackDeleteResponse {
   deletedAt: Timestamp
 }
 
+type packEdge {
+  """The node containing the pack"""
+  node: pack!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
 type PackConnection {
   """Paging information"""
   pageInfo: PageInfo!
@@ -1223,6 +1111,14 @@ type packMaxAggregate {
   deletedAt: Timestamp
 }
 
+type paymentEdge {
+  """The node containing the payment"""
+  node: payment!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
 type PackReviewsConnection {
   """Paging information"""
   pageInfo: PageInfo!
@@ -1273,6 +1169,14 @@ type PaymentplanDeleteResponse {
   """Example filed (placeholder)"""
   isActive: Boolean
   deletedAt: Timestamp
+}
+
+type paymentplanEdge {
+  """The node containing the paymentplan"""
+  node: paymentplan!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
 }
 
 type PaymentplanConnection {
@@ -1478,6 +1382,14 @@ type RaveDeleteResponse {
   deletedAt: Timestamp
 }
 
+type raveEdge {
+  """The node containing the rave"""
+  node: rave!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
 type RaveConnection {
   """Paging information"""
   pageInfo: PageInfo!
@@ -1545,6 +1457,14 @@ type UserDeleteResponse {
   deletedAt: Timestamp
 }
 
+type userEdge {
+  """The node containing the user"""
+  node: user!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
 type UserConnection {
   """Paging information"""
   pageInfo: PageInfo!
@@ -1595,6 +1515,14 @@ type userMaxAggregate {
   postDate: Timestamp
   updatedAt: Timestamp
   deletedAt: Timestamp
+}
+
+type ReviewEdge {
+  """The node containing the Review"""
+  node: Review!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
 }
 
 type UserReviewsConnection {
@@ -1657,6 +1585,14 @@ type ReviewDeleteResponse {
   userId: ID
   packId: ID
   deletedAt: Timestamp
+}
+
+type ReviewConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [ReviewEdge!]!
 }
 
 type ReviewAggregateGroupBy {
@@ -1736,6 +1672,14 @@ type GrantDeleteResponse {
   postedById: ID
 }
 
+type grantEdge {
+  """The node containing the grant"""
+  node: grant!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
 type GrantConnection {
   """Paging information"""
   pageInfo: PageInfo!
@@ -1803,86 +1747,6 @@ type grantMaxAggregate {
 }
 
 type Query {
-  GrantWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: grantFilter = {}
-
-    """Specify to sort results."""
-    sorting: [grantSort!] = []
-  ): grantConnection!
-  JobWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: jobFilter = {}
-
-    """Specify to sort results."""
-    sorting: [jobSort!] = []
-  ): jobConnection!
-  LoopWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: loopFilter = {}
-
-    """Specify to sort results."""
-    sorting: [loopSort!] = []
-  ): loopConnection!
-  PackWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: packFilter = {}
-
-    """Specify to sort results."""
-    sorting: [packSort!] = []
-  ): packConnection!
-  PaymentWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: paymentFilter = {}
-
-    """Specify to sort results."""
-    sorting: [paymentSort!] = []
-  ): paymentConnection!
-  RaveWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: raveFilter = {}
-
-    """Specify to sort results."""
-    sorting: [raveSort!] = []
-  ): raveConnection!
-  ReviewWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: ReviewFilter = {}
-
-    """Specify to sort results."""
-    sorting: [ReviewSort!] = []
-  ): ReviewConnection!
-  UserWithDeleted(
-    """Limit or page results."""
-    paging: CursorPaging = {first: 10}
-
-    """Specify to filter the records returned."""
-    filter: userFilter = {}
-
-    """Specify to sort results."""
-    sorting: [userSort!] = []
-  ): userConnection!
   loop(
     """The id of the record to find."""
     id: ID!
@@ -2011,6 +1875,66 @@ type Query {
   ): GrantConnection!
 }
 
+input paymentplanFilter {
+  and: [paymentplanFilter!]
+  or: [paymentplanFilter!]
+  id: IDFilterComparison
+  title: StringFieldComparison
+  amount: FloatFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  postedById: IDFilterComparison
+  isActive: PaymentplanIsActiveFilterComparison
+  deletedAt: TimestampFieldComparison
+}
+
+input PaymentplanIsActiveFilterComparison {
+  eq: Boolean
+}
+
+input paymentplanSort {
+  field: paymentplanSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum paymentplanSortFields {
+  id
+  title
+  amount
+  postDate
+  updatedAt
+  postedById
+  isActive
+  deletedAt
+}
+
+input userFilter {
+  and: [userFilter!]
+  or: [userFilter!]
+  id: IDFilterComparison
+  email: StringFieldComparison
+  name: StringFieldComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
+}
+
+input userSort {
+  field: userSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum userSortFields {
+  id
+  email
+  name
+  postDate
+  updatedAt
+  deletedAt
+}
+
 input grantFilter {
   and: [grantFilter!]
   or: [grantFilter!]
@@ -2058,66 +1982,6 @@ enum grantSortFields {
   updatedAt
   deletedAt
   postedById
-}
-
-input userFilter {
-  and: [userFilter!]
-  or: [userFilter!]
-  id: IDFilterComparison
-  email: StringFieldComparison
-  name: StringFieldComparison
-  postDate: TimestampFieldComparison
-  updatedAt: TimestampFieldComparison
-  deletedAt: TimestampFieldComparison
-}
-
-input userSort {
-  field: userSortFields!
-  direction: SortDirection!
-  nulls: SortNulls
-}
-
-enum userSortFields {
-  id
-  email
-  name
-  postDate
-  updatedAt
-  deletedAt
-}
-
-input paymentplanFilter {
-  and: [paymentplanFilter!]
-  or: [paymentplanFilter!]
-  id: IDFilterComparison
-  title: StringFieldComparison
-  amount: FloatFieldComparison
-  postDate: TimestampFieldComparison
-  updatedAt: TimestampFieldComparison
-  postedById: IDFilterComparison
-  isActive: PaymentplanIsActiveFilterComparison
-  deletedAt: TimestampFieldComparison
-}
-
-input PaymentplanIsActiveFilterComparison {
-  eq: Boolean
-}
-
-input paymentplanSort {
-  field: paymentplanSortFields!
-  direction: SortDirection!
-  nulls: SortNulls
-}
-
-enum paymentplanSortFields {
-  id
-  title
-  amount
-  postDate
-  updatedAt
-  postedById
-  isActive
-  deletedAt
 }
 
 type Mutation {
