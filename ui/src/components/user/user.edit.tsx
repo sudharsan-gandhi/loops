@@ -40,7 +40,6 @@ const EditUser: React.FC = () => {
   );
   const submit = async (data) => {
     try {
-      debugger;
       if (files.length > 0) {
         const formData = new FormData();
         formData.append("file", files[0].file);

@@ -985,7 +985,6 @@ const BuildForm: React.FC<{
     const uploadFields = mutationFields.filter(
       (field) => field.type === "upload"
     );
-    debugger;
     try {
       for (const { field, fileOptions } of uploadFields) {
         const files = fileOptions.files;

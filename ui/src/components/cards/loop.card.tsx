@@ -377,7 +377,6 @@ export const LoopCard: React.FC<{
 
   const deleteAudioFn = async () => {
     try {
-      debugger;
       const {
         data: { deleteOneLoop: deleted },
       } = await deleteAudio(deleteOneVariable(audio.id));

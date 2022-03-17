@@ -93,7 +93,6 @@ export const IsOwn: React.FC<{
   const currentUser = useUser.getState().currentUser as User;
   const [show, setShow] = useState(true);
   useEffect(() => {
-    debugger;
     if (
       auth &&
       userId &&
@@ -187,7 +186,6 @@ export const useAccess = create(
     (set, get: GetState<{ access: any }>) => ({
       access: {},
       setAccess: async () => {
-        debugger;
         let access = get().access;
         if (!access || JSON.stringify(access) === "{}") {
           const resp = await axios.get("/auth/access");

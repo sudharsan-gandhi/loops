@@ -12,7 +12,6 @@ import {
 
 const PackPage: React.FC = () => {
   let { state: activeTab } = useLocation();
-  debugger;
   if(activeTab === undefined) activeTab = 0;
   return (
     <>

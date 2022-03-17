@@ -63,7 +63,6 @@ const SignIn: React.FC = () => {
 
   useEffect(() => {
     if (!auth) {
-      debugger;
       isLoggedIn();
     }
   }, []);

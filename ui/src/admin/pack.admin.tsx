@@ -93,7 +93,6 @@ const PackResource: React.FC = () => {
   });
 
   const formReducer = (form: any) => {
-    debugger;
     if (form?.paging?.first) {
       form.paging.first = parseInt(form.paging.first);
     }

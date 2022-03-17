@@ -98,7 +98,6 @@ const EditLoop: React.FC<{
 
   const submit = async (data) => {
     // todo: should implement logic here to upload audio and get the file path
-    debugger;
     data.tempo = tempoValue;
     data.bpm = data.bpm ? parseInt(data.bpm) : undefined;
     try {
