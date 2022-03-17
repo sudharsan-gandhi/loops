@@ -31,6 +31,7 @@ const PaymentplanResource: React.FC = () => {
     { field: "postDate", type: "date" },
     { field: "updatedAt", type: "date" },
     { field: "postedById", type: "string" },
+    {field: "deletedAt", type: "date"}
   ];
 
   const mutationFields: MutationField[] = [
