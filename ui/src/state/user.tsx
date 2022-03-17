@@ -21,27 +21,6 @@ import {
   SkeletonText,
 } from '@chakra-ui/react';
 
-// import {
-//   createContext,
-//   useState,
-// } from 'react';
-
-// export const AuthContext = createContext(false);
-
-// export function useAuth() {
-//   const [auth, setAuth] = useState(false);
-
-//   return {
-//     auth,
-//     login() {
-//       setAuth(true);
-//     },
-//     logout() {
-//       setAuth(false);
-//     },
-//   };
-// }
-
 export const LoadAuth: React.FC = ({ children }: { children: JSX.Element }) => {
   const { auth, login } = useAuth();
 

@@ -45,7 +45,7 @@ const SignIn: React.FC = () => {
   const auth = useAuth.getState().auth;
   const { login, logout } = useAuth();
   const setUser = useUser((state) => state.setUser);
-  const clearAccess = useAccess(state => state.clearAccess);
+  const { setAccess, clearAccess } = useAccess();
 
   async function isLoggedIn() {
     try {
@@ -53,7 +53,7 @@ const SignIn: React.FC = () => {
       console.log("isloggedin", resp);
       resp?.data?.id ? login() : logout();
       resp?.data?.id ? setUser(resp.data) : setUser({});
-      clearAccess();
+      await setAccess();
     } catch (e) {
       logout();
       setUser({});
@@ -62,15 +62,9 @@ const SignIn: React.FC = () => {
   }
 
   useEffect(() => {
-    try {
-      if (!auth) {
-        debugger;
-        isLoggedIn();
-      }
-    } catch (e) {
-      logout();
-      setUser({});
-      clearAccess();
+    if (!auth) {
+      debugger;
+      isLoggedIn();
     }
   }, []);
 

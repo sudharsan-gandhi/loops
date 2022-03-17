@@ -126,7 +126,7 @@ export const ShowPack: React.FC = () => {
                       >
                         {pack.name.toUpperCase()}
                       </Heading>
-                      <Text>{pack.author.id}</Text>
+
                       <IsOwn userId={pack.author.id || pack.authorId}>
                         <>
                           <HStack display={{ base: "none", md: "block" }}>
@@ -190,7 +190,16 @@ export const ShowPack: React.FC = () => {
                     <Text color={"gray.500"}>{pack?.description}</Text>
                   </Stack>
                   <Stack mt={6} direction={"row"} spacing={4} align={"center"}>
-                    <Avatar src={pack?.author?.image} alt={"Author"} />
+                    <Avatar
+                      src={
+                        pack?.author?.image
+                          ? pack.author.image.startsWith("http")
+                            ? pack.author.image
+                            : `/static/avatars/${pack.author?.image}`
+                          : ""
+                      }
+                      alt={"Author"}
+                    />
                     <Stack direction={"column"} spacing={0} fontSize={"sm"}>
                       <Text fontWeight={600}>
                         {pack?.author?.name.toUpperCase()}

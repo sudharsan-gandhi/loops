@@ -41,24 +41,7 @@ import {
 } from '@chakra-ui/react';
 
 const AdminLayout = () => {
-  // useEffect(() => {
-  //   axios({
-  //     method: "get",
-  //     url: "/auth/isLoggedIn",
-  //     withCredentials: true,
-  //   })
-  //     .then((response) => {
-  //       debugger;
-  //       console.log(response.data);
-  //       setCurrentAdmin(response.data);
-  //     })
-  //     .catch((err) => console.error(err));
-  // }, []);
-  const {
-    isOpen,
-    onOpen: openMenu,
-    onClose: closeMenu,
-  } = useDisclosure();
+  const { isOpen, onOpen: openMenu, onClose: closeMenu } = useDisclosure();
 
   const LinkItems: Array<LinkItemProps> = [
     { name: "User", icon: AiOutlineUser, link: "/admin/users" },
@@ -73,21 +56,36 @@ const AdminLayout = () => {
 
   const btnRef = useRef();
 
-  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // const { access, setAccess } = useAccess(state => state);
+
+  // console.log("access", access);
+  // console.count("access");
+
+  // useEffect(() => {
+  //   if (setAccess) {
+  //     loadAccess();
+  //   }
+  //   async function loadAccess() {
+  //     await setAccess();
+  //     setLoading(true);
+  //   }
+  // }, [setAccess]);
 
   const { setAccess } = useAccess();
 
   useEffect(() => {
-    async function loadAccess() {
+    accessData();
+    async function accessData() {
       await setAccess();
-      setLoading(true);
+      setLoaded(true);
     }
-    loadAccess();
-  }, [setAccess]);
+  }, []);
 
   return (
     <>
-      <Skeleton isLoaded={loading}>
+      <Skeleton isLoaded={loaded}>
         <Flex
           p={{ base: "5", md: "3" }}
           justifyContent={"space-between"}

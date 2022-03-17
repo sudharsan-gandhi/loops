@@ -56,7 +56,6 @@ import {
   HStack,
   Icon,
   IconButton,
-  Skeleton,
   Spacer,
   Stack,
   Stat,
@@ -165,7 +164,6 @@ const TopNavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
 };
 
 export const KabaflowLayout: React.FC = () => {
-  const [loaded, setLoaded] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -185,11 +183,9 @@ export const KabaflowLayout: React.FC = () => {
     );
     if (error) {
       console.error(error);
-      setLoaded(true);
     }
     if (data) {
       setUser(data);
-      setLoaded(true);
     }
   }
 
@@ -243,7 +239,7 @@ export const KabaflowLayout: React.FC = () => {
 
   return (
     <>
-      <Skeleton isLoaded={loaded}>
+      {/* <Skeleton isLoaded={loaded}> */}
         <Flex
           p={{ base: "5", md: "3" }}
           justifyContent={"space-between"}
@@ -498,7 +494,7 @@ export const KabaflowLayout: React.FC = () => {
           </DrawerContent>
         </Drawer>
         <UserRoutes />
-      </Skeleton>
+      {/* </Skeleton> */}
     </>
   );
 };
