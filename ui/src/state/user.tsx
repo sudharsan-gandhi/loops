@@ -4,7 +4,10 @@ import React, {
 } from 'react';
 
 import axios from 'axios';
-import { User } from 'queries';
+import {
+  MakeOptional,
+  User,
+} from 'queries';
 import {
   useLocation,
   useNavigate,
@@ -179,16 +182,21 @@ export function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
-export const useAuth = create((set: any, get) => ({
-  auth: false,
-  login: () => set(() => ({ auth: true })),
-  logout: () => set({ auth: false }),
-}));
+export const useAuth = create(
+  persist(
+    (set: any, get) => ({
+      auth: false,
+      login: () => set(() => ({ auth: true })),
+      logout: () => set({ auth: false }),
+    }),
+    { name: "auth" }
+  )
+);
 
 export const useUser = create(
   persist(
     (set: any) => ({
-      currentUser: {},
+      currentUser: {} as MakeOptional<User, keyof User>,
       setUser: (currentUser) => set({ currentUser }),
     }),
     { name: "user" }
@@ -210,7 +218,7 @@ export const useAccess = create(
       },
       clearAccess: () => {
         set({}, true);
-      }
+      },
     }),
     { name: "access" }
   )

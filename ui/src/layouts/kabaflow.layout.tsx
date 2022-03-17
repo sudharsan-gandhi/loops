@@ -1,6 +1,5 @@
 import {
   ReactText,
-  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -9,7 +8,6 @@ import axios from 'axios';
 import {
   getUserWithPayPlan,
   getUserWithPayPlanVariables,
-  MakeOptional,
   User,
 } from 'queries';
 import { IconType } from 'react-icons';
@@ -58,6 +56,7 @@ import {
   HStack,
   Icon,
   IconButton,
+  Skeleton,
   Spacer,
   Stack,
   Stat,
@@ -166,39 +165,39 @@ const TopNavItem = ({ icon, children, link, ...rest }: NavItemProps) => {
 };
 
 export const KabaflowLayout: React.FC = () => {
+  const [loaded, setLoaded] = useState(false);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const { auth, logout } = useAuth();
-  const { setUser } = useUser();
+  const { currentUser, setUser } = useUser();
   let location = useLocation();
   let history = useNavigate();
-  // const currentUser = useUser((state) => state.currentUser) as User;
-  let [currentUser, setCurrentUser] = useState<MakeOptional<User, keyof User>>(
-    {}
-  );
-  useUser.subscribe((state) => setCurrentUser(state.currentUser));
-  const [loadedUser, setLoadedUser] = useState<User>();
 
+  console.count("called");
+  console.log(currentUser, auth);
   const [loadUser] = useLazyQuery<User>(getUserWithPayPlan);
+  const [called, setCalled] = useState(false);
 
-  useEffect(() => {
-    async function load() {
-      if (auth && currentUser?.id) {
-        const { data, error } = await loadUser(
-          getUserWithPayPlanVariables(currentUser.id)
-        );
-        if (error) {
-          console.error(error);
-        }
-        if (data) {
-          setLoadedUser(data);
-        }
-      }
+  async function load() {
+    const { data, error } = await loadUser(
+      getUserWithPayPlanVariables(currentUser.id)
+    );
+    if (error) {
+      console.error(error);
+      setLoaded(true);
     }
+    if (data) {
+      setUser(data);
+      setLoaded(true);
+    }
+  }
+
+  if (auth && currentUser?.id && !called) {
     load();
-  }, [auth, currentUser]);
-  console.log("auth", auth);
-  console.log("currentuser", currentUser);
+    setCalled(true);
+  }
+
   const {
     isOpen: isOpenRight,
     onOpen: onOpenRight,
@@ -206,6 +205,7 @@ export const KabaflowLayout: React.FC = () => {
   } = useDisclosure();
   const btnRef = useRef();
   const btnRight = useRef();
+
   const signOut = async () => {
     try {
       const resp = await axios.get("/auth/logout");
@@ -240,65 +240,67 @@ export const KabaflowLayout: React.FC = () => {
     }
     onCloseRight();
   };
+
   return (
     <>
-      <Flex
-        p={{ base: "5", md: "3" }}
-        justifyContent={"space-between"}
-        // bg={useColorModeValue("white", "gray.800")}
-        boxShadow="xl"
-      >
-        <HStack>
-          <IconButton
-            ref={btnRef}
-            display={{ base: "flex" }}
-            onClick={onOpen}
-            aria-label="open menu"
-            colorScheme="black"
-            variant="ghost"
-            icon={<FiMenu />}
-          />
-          <Text
-            fontSize="2xl"
-            fontFamily="monospace"
-            fontWeight="bold"
-            color="gray.700"
-          >
-            <Link to="/" replace>
-              Kabaflow
-            </Link>
-          </Text>
-        </HStack>
-        <Spacer />
-        <HStack px="10" display={{ base: "none", md: "flex" }}>
-          <TopNavItem icon={AiOutlineDollarCircle} link="payplans">
-            Payplans
-          </TopNavItem>
-          <TopNavItem icon={MdOutlineWorkOutline} link="jobs">
-            Jobs
-          </TopNavItem>
-        </HStack>
-        {auth ? (
-          <Flex alignItems={"center"} p={1}>
-            {/* <Menu>
+      <Skeleton isLoaded={loaded}>
+        <Flex
+          p={{ base: "5", md: "3" }}
+          justifyContent={"space-between"}
+          // bg={useColorModeValue("white", "gray.800")}
+          boxShadow="xl"
+        >
+          <HStack>
+            <IconButton
+              ref={btnRef}
+              display={{ base: "flex" }}
+              onClick={onOpen}
+              aria-label="open menu"
+              colorScheme="black"
+              variant="ghost"
+              icon={<FiMenu />}
+            />
+            <Text
+              fontSize="2xl"
+              fontFamily="monospace"
+              fontWeight="bold"
+              color="gray.700"
+            >
+              <Link to="/" replace>
+                Kabaflow
+              </Link>
+            </Text>
+          </HStack>
+          <Spacer />
+          <HStack px="10" display={{ base: "none", md: "flex" }}>
+            <TopNavItem icon={AiOutlineDollarCircle} link="payplans">
+              Payplans
+            </TopNavItem>
+            <TopNavItem icon={MdOutlineWorkOutline} link="jobs">
+              Jobs
+            </TopNavItem>
+          </HStack>
+          {auth ? (
+            <Flex alignItems={"center"} p={1}>
+              {/* <Menu>
             <MenuButton
               py={2}
               transition="all 0.3s"
               _focus={{ boxShadow: "none" }}
             > */}
-            <HStack ref={btnRight} cursor="pointer" onClick={onOpenRight}>
-              <Avatar
-                size={"sm"}
-                src={
-                  currentUser?.image
-                    ? currentUser.image.startsWith("http")
-                      ? currentUser?.image
-                      : `/static/avatars/${currentUser?.image}`
-                    : ""
-                }
-              />
-            </HStack>
-            {/* </MenuButton>
+              <HStack ref={btnRight} cursor="pointer" onClick={onOpenRight}>
+                <Avatar
+                  size={"sm"}
+                  src={
+                    currentUser?.image
+                      ? currentUser.image.startsWith("http")
+                        ? currentUser?.image
+                        : `/static/avatars/${currentUser?.image}`
+                      : ""
+                  }
+                />
+              </HStack>
+              {/* </MenuButton>
             <MenuList
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
@@ -310,184 +312,193 @@ export const KabaflowLayout: React.FC = () => {
               <MenuItem>Sign out</MenuItem>
             </MenuList>
           </Menu> */}
-          </Flex>
-        ) : (
-          <HStack>
-            <Box display={{ base: "none", md: "block" }}>
-              <Link to="/signup">
-                <Button m={1}>new user?</Button>
-              </Link>
-            </Box>
-            <Box>
-              <Link to="/signin">
-                <Button variant="solid" m={1}>
-                  Sign in
-                </Button>
-              </Link>
-            </Box>
-          </HStack>
-        )}
-      </Flex>
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-        size={"sm"}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader color="gray.700">Kabaflow</DrawerHeader>
+            </Flex>
+          ) : (
+            <HStack>
+              <Box display={{ base: "none", md: "block" }}>
+                <Link to="/signup">
+                  <Button m={1}>new user?</Button>
+                </Link>
+              </Box>
+              <Box>
+                <Link to="/signin">
+                  <Button variant="solid" m={1}>
+                    Sign in
+                  </Button>
+                </Link>
+              </Box>
+            </HStack>
+          )}
+        </Flex>
+        <Drawer
+          isOpen={isOpen}
+          placement="left"
+          onClose={onClose}
+          finalFocusRef={btnRef}
+          size={"sm"}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader color="gray.700">Kabaflow</DrawerHeader>
 
-          <DrawerBody>
-            {LinkItems.map((link) => {
-              if (link.isAuth) {
-                return (
-                  <IsAuth userId={currentUser.id}>
+            <DrawerBody>
+              {LinkItems.map((link) => {
+                if (link.isAuth) {
+                  return (
+                    <IsAuth userId={currentUser.id}>
+                      <NavItem
+                        link={link.link}
+                        key={link.name}
+                        icon={link.icon}
+                      >
+                        {link.name}
+                      </NavItem>
+                    </IsAuth>
+                  );
+                } else {
+                  return (
                     <NavItem link={link.link} key={link.name} icon={link.icon}>
                       {link.name}
                     </NavItem>
-                  </IsAuth>
-                );
-              } else {
-                return (
-                  <NavItem link={link.link} key={link.name} icon={link.icon}>
-                    {link.name}
-                  </NavItem>
-                );
-              }
-            })}
-            <Box display={{ base: "block", md: "none" }}>
-              <NavItem icon={AiOutlineDollarCircle} link="payplans">
-                Payplans
-              </NavItem>
-              <NavItem icon={MdOutlineWorkOutline} link="jobs">
-                Jobs
-              </NavItem>
-            </Box>
-          </DrawerBody>
-
-          <DrawerFooter>
-            <>
-              {currentUser?.role !== "user" && (
-                <NavItem icon={MdAdminPanelSettings} link="admin">
-                  Admin Dashboard
+                  );
+                }
+              })}
+              <Box display={{ base: "block", md: "none" }}>
+                <NavItem icon={AiOutlineDollarCircle} link="payplans">
+                  Payplans
                 </NavItem>
-              )}
-            </>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-      <Drawer
-        isOpen={isOpenRight}
-        placement="right"
-        onClose={onCloseRight}
-        finalFocusRef={btnRight}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>User Details</DrawerHeader>
+                <NavItem icon={MdOutlineWorkOutline} link="jobs">
+                  Jobs
+                </NavItem>
+              </Box>
+            </DrawerBody>
 
-          <DrawerBody>
-            <Flex>
-              <VStack w="full" justifyContent="center">
-                <HStack>
-                  <Heading fontSize={{ base: "lg", md: "xl" }}>
-                    {currentUser?.name?.toUpperCase()}{" "}
-                  </Heading>
-                  <Box>
-                    <Link
-                      to={{ pathname: "/profile" }}
-                      state={{ from: location }}
-                      onClick={onCloseRight}
+            <DrawerFooter>
+              <>
+                {currentUser?.role !== "user" && (
+                  <NavItem icon={MdAdminPanelSettings} link="admin">
+                    Admin Dashboard
+                  </NavItem>
+                )}
+              </>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+        <Drawer
+          isOpen={isOpenRight}
+          placement="right"
+          onClose={onCloseRight}
+          finalFocusRef={btnRight}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>User Details</DrawerHeader>
+
+            <DrawerBody>
+              <Flex>
+                <VStack w="full" justifyContent="center">
+                  <HStack>
+                    <Heading fontSize={{ base: "lg", md: "xl" }}>
+                      {currentUser?.name?.toUpperCase()}{" "}
+                    </Heading>
+                    <Box>
+                      <Link
+                        to={{ pathname: "/profile" }}
+                        state={{ from: location }}
+                        onClick={onCloseRight}
+                      >
+                        <IconButton
+                          aria-label="edit user"
+                          size="sm"
+                          icon={<FiEdit />}
+                        />
+                      </Link>
+                    </Box>
+                  </HStack>
+                  <Box pt="5">
+                    <Avatar
+                      size={"xl"}
+                      src={
+                        currentUser?.image
+                          ? currentUser.image.startsWith("http")
+                            ? currentUser?.image
+                            : `/static/avatars/${currentUser?.image}`
+                          : ""
+                      }
+                    />
+                  </Box>
+                  <Heading fontSize={"sm"}>{currentUser?.email}</Heading>
+                  <Text>role: {currentUser?.role}</Text>
+                  <Stack w="100%" pt="10" spacing={"1"}>
+                    <Heading fontSize={"lg"} textAlign={"center"}>
+                      About
+                    </Heading>
+                    <Text mb={10}>{currentUser?.about}</Text>
+                    <Heading fontSize={"lg"} textAlign={"center"}>
+                      Payplan
+                    </Heading>
+                    <Box
+                      p={5}
+                      m={"0.5em !important"}
+                      boxShadow="2xl"
+                      bg="yellow.400"
                     >
-                      <IconButton
-                        aria-label="edit user"
-                        size="sm"
-                        icon={<FiEdit />}
-                      />
-                    </Link>
-                  </Box>
-                </HStack>
-                <Box pt="5">
-                  <Avatar
-                    size={"xl"}
-                    src={
-                      currentUser?.image
-                        ? currentUser.image.startsWith("http")
-                          ? currentUser?.image
-                          : `/static/avatars/${currentUser?.image}`
-                        : ""
-                    }
-                  />
-                </Box>
-                <Heading fontSize={"sm"}>{currentUser?.email}</Heading>
-                <Text>role: {currentUser?.role}</Text>
-                <Stack w="100%" pt="10" spacing={"1"}>
-                  <Heading fontSize={"lg"} textAlign={"center"}>
-                    About
-                  </Heading>
-                  <Text mb={10}>{currentUser?.about}</Text>
-                  <Heading fontSize={"lg"} textAlign={"center"}>
-                    Payplan
-                  </Heading>
-                  <Box
-                    p={5}
-                    m={"0.5em !important"}
-                    boxShadow="2xl"
-                    bg="yellow.400"
-                  >
-                    <Stat>
-                      <StatLabel>Current Plan</StatLabel>
-                      <StatNumber>£0.00</StatNumber>
-                      <StatHelpText>12-01 - 12-21</StatHelpText>
-                    </Stat>
-                  </Box>
-
-                  {loadedUser?.payments?.edges.length > 0 ? (
-                    <StatGroup>
                       <Stat>
                         <StatLabel>Current Plan</StatLabel>
                         <StatNumber>£0.00</StatNumber>
-                        <StatHelpText>
-                          {loadedUser?.payments?.edges[0]?.node?.planStartDate}{" "}
-                          - {loadedUser?.payments?.edges[0]?.node?.planEndDate}
-                        </StatHelpText>
+                        <StatHelpText>12-01 - 12-21</StatHelpText>
                       </Stat>
-                    </StatGroup>
-                  ) : (
-                    <StatGroup>
-                      <Stat>
-                        <StatLabel>No plans found</StatLabel>
-                        <StatHelpText mt="2" textAlign={"center"}>
-                          <Button
-                            w="100%"
-                            variant="ghost"
-                            color="black"
-                            bg="yellow.400"
-                          >
-                            buy subscription?
-                          </Button>
-                        </StatHelpText>
-                      </Stat>
-                    </StatGroup>
-                  )}
-                </Stack>
-              </VStack>
-            </Flex>
-          </DrawerBody>
-          <DrawerFooter>
-            {auth && (
-              <Button w="full" onClick={signOut}>
-                Signout
-              </Button>
-            )}
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-      <UserRoutes />
+                    </Box>
+
+                    {currentUser?.payments?.edges.length > 0 ? (
+                      <StatGroup>
+                        <Stat>
+                          <StatLabel>Current Plan</StatLabel>
+                          <StatNumber>£0.00</StatNumber>
+                          <StatHelpText>
+                            {
+                              currentUser?.payments?.edges[0]?.node
+                                ?.planStartDate
+                            }{" "}
+                            -{" "}
+                            {currentUser?.payments?.edges[0]?.node?.planEndDate}
+                          </StatHelpText>
+                        </Stat>
+                      </StatGroup>
+                    ) : (
+                      <StatGroup>
+                        <Stat>
+                          <StatLabel>No plans found</StatLabel>
+                          <StatHelpText mt="2" textAlign={"center"}>
+                            <Button
+                              w="100%"
+                              variant="ghost"
+                              color="black"
+                              bg="yellow.400"
+                            >
+                              buy subscription?
+                            </Button>
+                          </StatHelpText>
+                        </Stat>
+                      </StatGroup>
+                    )}
+                  </Stack>
+                </VStack>
+              </Flex>
+            </DrawerBody>
+            <DrawerFooter>
+              {auth && (
+                <Button w="full" onClick={signOut}>
+                  Signout
+                </Button>
+              )}
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+        <UserRoutes />
+      </Skeleton>
     </>
   );
 };

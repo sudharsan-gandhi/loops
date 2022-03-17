@@ -1,4 +1,4 @@
-import AdminLayout from 'admin/admin.layout';
+import AdminLayout from 'layouts/admin.layout';
 import { KabaflowLayout } from 'layouts/kabaflow.layout';
 import {
   Route,

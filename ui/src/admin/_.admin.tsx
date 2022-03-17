@@ -117,20 +117,30 @@ const Resource: React.FC<{
   variables,
   mutationFields,
 }) => {
-  const [accessList, setAccessList] = useState<any>({
-    read: false,
-    update: false,
-    create: false,
-    delete: false,
-  });
+  // const [accessList, setAccessList] = useState<any>({
+  //   read: false,
+  //   update: false,
+  //   create: false,
+  //   delete: false,
+  // });
 
-  const setAccess = useAccess((state) => state.setAccess);
+  // useEffect(() => {
+  //   setAccessList(access);
+  // }, [access])
 
-  setAccess().then(() => {
-    const access = useAccess.getState().access;
-    console.log(access);
-    setAccessList(access[resource.toLowerCase()]);
-  });
+  // const setAccess = useAccess.getState().setAccess;
+
+  // if (setAccess) {
+  //   setAccess().then(() => {
+  //     const access = useAccess.getState().access;
+  //     console.log(access);
+  //     setAccessList(access[resource.toLowerCase()]);
+  //   });
+  // }
+
+  const { access } = useAccess();
+
+  const accessList = access[resource.toLowerCase()];
 
   const toast = useToast();
 
@@ -157,7 +167,7 @@ const Resource: React.FC<{
     useMutation<{ deleteManyUsers: DeleteManyResponse }>(deleteManyQuery);
 
   const deleteOneFn = async (id: string) => {
-    if (!accessList.delete) {
+    if (!accessList || !accessList.delete) {
       return;
     }
     try {
@@ -187,7 +197,7 @@ const Resource: React.FC<{
   };
 
   const deleteManyFn = async () => {
-    if (!accessList.delete) {
+    if (!accessList || !accessList.delete) {
       return;
     }
     if (deleteItems.size > 0) {
@@ -223,7 +233,7 @@ const Resource: React.FC<{
   };
 
   useEffect(() => {
-    if (!accessList.read) {
+    if (!accessList || !accessList.read) {
       return;
     }
     try {
@@ -298,7 +308,7 @@ const Resource: React.FC<{
       <Container maxW="container.xl">
         <VStack pt="2">
           <HStack justify="end" w="100%">
-            {accessList.delete && deleteItems.size > 0 && (
+            {accessList && accessList?.delete && deleteItems.size > 0 && (
               <Button
                 leftIcon={<MdDeleteOutline />}
                 onClick={() => deleteManyFn()}
@@ -306,13 +316,13 @@ const Resource: React.FC<{
                 Delete Selected
               </Button>
             )}
-            {accessList.create && (
+            {accessList && accessList?.create && (
               <Button leftIcon={<MdAdd />} onClick={() => openMutationModal()}>
                 Create New
               </Button>
             )}
           </HStack>
-          {accessList.read ? (
+          {accessList?.read ? (
             <>
               <HStack
                 w="100%"
