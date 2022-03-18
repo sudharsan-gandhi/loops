@@ -5,13 +5,17 @@ import {
 } from 'react';
 
 import { AdminRoutes } from 'admin.routes';
+import axios from 'axios';
 import {
   LinkItemProps,
   NavItem,
 } from 'layouts/kabaflow.layout';
 import { AiOutlineUser } from 'react-icons/ai';
 import { BsFileMusic } from 'react-icons/bs';
-import { FiMenu } from 'react-icons/fi';
+import {
+  FiEdit,
+  FiMenu,
+} from 'react-icons/fi';
 import { GoPackage } from 'react-icons/go';
 import {
   MdAttachMoney,
@@ -19,11 +23,21 @@ import {
   MdPayment,
   MdSecurity,
 } from 'react-icons/md';
-import { Link } from 'react-router-dom';
-import { useAccess } from 'state/user';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import {
+  useAccess,
+  useAuth,
+  useUser,
+} from 'state/user';
 
 import {
+  Avatar,
   Box,
+  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -32,16 +46,30 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  Heading,
   HStack,
   IconButton,
   Skeleton,
   Spacer,
+  Stack,
+  Stat,
+  StatGroup,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
   Text,
   useDisclosure,
+  useToast,
+  VStack,
 } from '@chakra-ui/react';
 
 const AdminLayout = () => {
+  const toast = useToast();
+  const { auth, logout } = useAuth();
+  const { currentUser, setUser } = useUser();
   const { isOpen, onOpen: openMenu, onClose: closeMenu } = useDisclosure();
+  let history = useNavigate();
+  let location = useLocation();
 
   const LinkItems: Array<LinkItemProps> = [
     { name: "User", icon: AiOutlineUser, link: "/admin/users" },
@@ -83,6 +111,50 @@ const AdminLayout = () => {
     }
   }, []);
 
+  const btnRight = useRef();
+
+  const {
+    isOpen: isOpenRight,
+    onOpen: onOpenRight,
+    onClose: onCloseRight,
+  } = useDisclosure();
+
+  const signOut = async () => {
+    try {
+      const resp = await axios.get("/auth/logout");
+      if (resp.status === 200) {
+        toast({
+          title: "Logged out user",
+          description: "redirecting to home page",
+          duration: 4000,
+          id: "signout",
+          status: "success",
+        });
+        logout();
+        setUser({});
+        history("/");
+      } else {
+        toast({
+          title: "Error terminating session",
+          description: `${resp.statusText}`,
+          duration: 4000,
+          status: "error",
+          position: "top",
+        });
+      }
+    } catch (e) {
+      toast({
+        title: "Error terminating session",
+        description: e.message,
+        duration: 4000,
+        status: "error",
+        position: "top",
+      });
+    }
+    onCloseRight();
+  };
+
+
   return (
     <>
       <Skeleton isLoaded={loaded}>
@@ -114,6 +186,18 @@ const AdminLayout = () => {
             </Text>
           </HStack>
           <Spacer />
+          <HStack ref={btnRight} cursor="pointer" onClick={onOpenRight}>
+                <Avatar
+                  size={"sm"}
+                  src={
+                    currentUser?.image
+                      ? currentUser.image.startsWith("http")
+                        ? currentUser?.image
+                        : `/static/avatars/${currentUser?.image}`
+                      : ""
+                  }
+                />
+              </HStack>
         </Flex>
         <Box width="100%">
           <AdminRoutes />
@@ -145,6 +229,118 @@ const AdminLayout = () => {
               <NavItem icon={MdOutlineContactPage} link="/">
                 User Dashboard
               </NavItem>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+        <Drawer
+          isOpen={isOpenRight}
+          placement="right"
+          onClose={onCloseRight}
+          finalFocusRef={btnRight}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>User Details</DrawerHeader>
+
+            <DrawerBody>
+              <Flex>
+                <VStack w="full" justifyContent="center">
+                  <HStack>
+                    <Heading fontSize={{ base: "lg", md: "xl" }}>
+                      {currentUser?.name?.toUpperCase()}{" "}
+                    </Heading>
+                    <Box>
+                      <Link
+                        to={{ pathname: "/profile" }}
+                        state={{ from: location }}
+                        onClick={onCloseRight}
+                      >
+                        <IconButton
+                          aria-label="edit user"
+                          size="sm"
+                          icon={<FiEdit />}
+                        />
+                      </Link>
+                    </Box>
+                  </HStack>
+                  <Box pt="5">
+                    <Avatar
+                      size={"xl"}
+                      src={
+                        currentUser?.image
+                          ? currentUser.image.startsWith("http")
+                            ? currentUser?.image
+                            : `/static/avatars/${currentUser?.image}`
+                          : ""
+                      }
+                    />
+                  </Box>
+                  <Heading fontSize={"sm"}>{currentUser?.email}</Heading>
+                  <Text>role: {currentUser?.role}</Text>
+                  <Stack w="100%" pt="10" spacing={"1"}>
+                    <Heading fontSize={"lg"} textAlign={"center"}>
+                      About
+                    </Heading>
+                    <Text mb={10}>{currentUser?.about}</Text>
+                    <Heading fontSize={"lg"} textAlign={"center"}>
+                      Payplan
+                    </Heading>
+                    <Box
+                      p={5}
+                      m={"0.5em !important"}
+                      boxShadow="2xl"
+                      bg="yellow.400"
+                    >
+                      <Stat>
+                        <StatLabel>Current Plan</StatLabel>
+                        <StatNumber>£0.00</StatNumber>
+                        <StatHelpText>12-01 - 12-21</StatHelpText>
+                      </Stat>
+                    </Box>
+
+                    {currentUser?.payments?.edges.length > 0 ? (
+                      <StatGroup>
+                        <Stat>
+                          <StatLabel>Current Plan</StatLabel>
+                          <StatNumber>£0.00</StatNumber>
+                          <StatHelpText>
+                            {
+                              currentUser?.payments?.edges[0]?.node
+                                ?.planStartDate
+                            }{" "}
+                            -{" "}
+                            {currentUser?.payments?.edges[0]?.node?.planEndDate}
+                          </StatHelpText>
+                        </Stat>
+                      </StatGroup>
+                    ) : (
+                      <StatGroup>
+                        <Stat>
+                          <StatLabel>No plans found</StatLabel>
+                          <StatHelpText mt="2" textAlign={"center"}>
+                            <Button
+                              w="100%"
+                              variant="ghost"
+                              color="black"
+                              bg="yellow.400"
+                            >
+                              buy subscription?
+                            </Button>
+                          </StatHelpText>
+                        </Stat>
+                      </StatGroup>
+                    )}
+                  </Stack>
+                </VStack>
+              </Flex>
+            </DrawerBody>
+            <DrawerFooter>
+              {auth && (
+                <Button w="full" onClick={signOut}>
+                  Signout
+                </Button>
+              )}
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
