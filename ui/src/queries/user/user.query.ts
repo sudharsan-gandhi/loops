@@ -62,7 +62,7 @@ export const getUserWithPayPlanVariables = (
     ],
     filter: {
       isActive: {
-        eq: 1,
+        eq: true,
       },
     },
   };

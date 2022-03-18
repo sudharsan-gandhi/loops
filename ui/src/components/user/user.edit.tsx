@@ -38,6 +38,15 @@ const EditUser: React.FC = () => {
   const currentUser: MakeOptional<User, keyof User> = useUser(
     (state) => state.currentUser
   );
+  const mutationFields = [
+    "id",
+    "name",
+    "email",
+    "password",
+    "image",
+    "about",
+    "role",
+  ];
   const submit = async (data) => {
     try {
       if (files.length > 0) {
@@ -53,9 +62,8 @@ const EditUser: React.FC = () => {
         data.image = response.data.path;
       }
       console.log(data);
-      delete data.iat;
-      delete data.exp;
-      const newData = Object.entries(data)
+
+      let newData = Object.entries(data)
         .filter(([_, v]) => {
           console.log(v);
           return true;
@@ -63,12 +71,20 @@ const EditUser: React.FC = () => {
         .filter(([_, v]) => v && (v as string) !== "")
         .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {});
 
+      debugger;
+      newData = mutationFields.reduce((acc, field) => {
+        if (!!newData[field] && newData[field].trim() !== "") {
+          acc[field] = newData[field];
+        }
+        return acc;
+      }, {});
+
       const {
         data: { updateOneUser: u },
       }: any = await updateUser(updateOneUserVariables(newData));
       toast({
         title: `User ${u.name} updated Successfully`,
-        description: "redirecting to Signin page",
+        description: "redirecting to dashboard",
         status: "success",
         duration: 4000,
         isClosable: true,
@@ -94,8 +110,10 @@ const EditUser: React.FC = () => {
             Edit Profile{" "}
           </Heading>
           {currentUser?.authorizer?.toUpperCase() !== "LOCAL" && (
-              <Badge colorScheme="red" p="1">{currentUser.authorizer} User</Badge>
-            )}
+            <Badge colorScheme="red" p="1">
+              {currentUser.authorizer} User
+            </Badge>
+          )}
         </Stack>
         <Box
           rounded={"lg"}

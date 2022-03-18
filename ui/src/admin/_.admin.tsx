@@ -756,7 +756,7 @@ const MutationModal: React.FC<{
   );
 };
 
-const BuildForm: React.FC<{
+export const BuildForm: React.FC<{
   resource: string;
   mutationFields: MutationField[];
   defaultValue?: any;
@@ -969,8 +969,12 @@ const BuildForm: React.FC<{
     let id = data.id;
     if (update) {
       // strip fields which are not allowed in mutation. because data contains all the fields.
+      // also if current field is undefined then set default value
       data = mutationFields.reduce((acc, curr) => {
         acc[curr.field] = data[curr.field];
+        if (acc[curr.field] === undefined || acc[curr.field].trim() === "") {
+          acc[curr.field] = defaultValue[curr.field];
+        }
         return acc;
       }, {});
     }
@@ -989,7 +993,7 @@ const BuildForm: React.FC<{
       for (const { field, fileOptions } of uploadFields) {
         const files = fileOptions.files;
         const url = fileOptions.uploadLink;
-        if (files.length > 0) {
+        if (files && files.length > 0) {
           const formData = new FormData();
           formData.append("file", files[0].file);
           const response = await axios({
@@ -1000,6 +1004,8 @@ const BuildForm: React.FC<{
           });
           console.log(response.data.path);
           data[field] = response.data.path;
+        } else {
+          delete data[field];
         }
         toast({
           title: "file upload",
@@ -1041,9 +1047,14 @@ const BuildForm: React.FC<{
         isClosable: true,
         position: "top",
       });
-      refetch().then(({ data }) => {
-        setViewData(data[pluralize(resource.toLowerCase())]);
-      });
+      if (refetch) {
+        refetch().then(({ data }) => {
+          setViewData(data[pluralize(resource.toLowerCase())]);
+        });
+      }
+      if(submit2) {
+        submit2(response.data[key]);
+      }
       close();
     } catch (error) {
       toast({

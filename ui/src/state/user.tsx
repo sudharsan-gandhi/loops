@@ -25,7 +25,7 @@ export const LoadAuth: React.FC = ({ children }: { children: JSX.Element }) => {
   const { auth, login } = useAuth();
 
   const [loading, setLoading] = useState(true);
-  const setUser = useUser((state) => state.setUser);
+  const { currentUser, setUser } = useUser();
 
   useEffect(() => {
     if (auth) {
@@ -34,7 +34,8 @@ export const LoadAuth: React.FC = ({ children }: { children: JSX.Element }) => {
   }, [auth]);
 
   useEffect(() => {
-    if (!auth) {
+    debugger;
+    if (!auth || !currentUser || JSON.stringify(currentUser) === "{}") {
       isLoggedIn();
     }
     async function isLoggedIn() {
@@ -42,6 +43,7 @@ export const LoadAuth: React.FC = ({ children }: { children: JSX.Element }) => {
         const resp = await axios.get("/auth/isLoggedIn");
         console.log("isloggedin", resp);
         login();
+        console.log("loadauth", resp.data);
         setUser(resp.data);
         setLoading(false);
       } catch (err) {

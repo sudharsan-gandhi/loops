@@ -11,7 +11,7 @@ export const Entities = [
 ];
 
 export const Actions = [
-  "createAny",
+  "create:any",
   "update:any",
   "delete:any",
   "read:any",

@@ -22,7 +22,7 @@ export const getActivePayplansVariables = () => {
       paymentplanId: null,
       filter: {
         isActive: {
-          eq: 1,
+          eq: true,
         },
       },
     },

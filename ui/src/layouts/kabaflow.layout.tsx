@@ -174,7 +174,7 @@ export const KabaflowLayout: React.FC = () => {
 
   console.count("called");
   console.log(currentUser, auth);
-  const [loadUser] = useLazyQuery<User>(getUserWithPayPlan);
+  const [loadUser] = useLazyQuery<{user: User}>(getUserWithPayPlan);
   const [called, setCalled] = useState(false);
 
   async function load() {
@@ -185,7 +185,7 @@ export const KabaflowLayout: React.FC = () => {
       console.error(error);
     }
     if (data) {
-      setUser(data);
+      setUser(data.user);
     }
   }
 
