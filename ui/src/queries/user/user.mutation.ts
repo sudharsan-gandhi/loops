@@ -32,7 +32,7 @@ export const signupVariables = (user: MakeOptional<User, keyof User>) => {
 export const updateOneUserVariables = (
   user: MakeOptional<User, keyof User>
 ) => {
-  const { role, authorizer, id, __typename, ...update } = user;
+  const { authorizer, id, __typename, ...update } = user;
   return {
     variables: {
       input: {

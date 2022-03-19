@@ -1,4 +1,4 @@
-import { Job } from 'src/_entities';
+import { Carousel } from 'src/_entities';
 import { JwtNoauthGuard } from 'src/auth/guards/jwt-noauth.guard';
 import { Repository } from 'typeorm';
 
@@ -27,38 +27,37 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { KBTypeOrmQueryService } from './kbtypeorm.service';
 
-@QueryService(Job)
-export class JobDeleteService extends KBTypeOrmQueryService<Job> {
-  constructor(@InjectRepository(Job) repo: Repository<Job>) {
+@QueryService(Carousel)
+export class CarouselDeleteService extends KBTypeOrmQueryService<Carousel> {
+  constructor(@InjectRepository(Carousel) repo: Repository<Carousel>) {
     // pass the use soft delete option to the service.
     super(repo, { useSoftDelete: true });
   }
 }
 
-@Resolver(() => Job)
+@Resolver(() => Carousel)
 @UseGuards(JwtNoauthGuard)
-@UseInterceptors(AuthorizerInterceptor(Job))
-export class JobResolver {
+@UseInterceptors(AuthorizerInterceptor(Carousel))
+export class CarouselResolver {
+  private readonly console = new Logger(CarouselResolver.name);
 
-  private readonly console = new Logger(JobResolver.name);
-
-  constructor(readonly service: JobDeleteService) {
-    this.console.debug("JobResolver");
+  constructor(readonly service: CarouselDeleteService) {
+    this.console.debug('CarouselResolver');
   }
 
-  @Mutation(() => Job)
-  restoreOneJob(
-    @Args('input', { type: () => ID }) id: number
-  ): Promise<Job> {
+  @Mutation(() => Carousel)
+  restoreOneCarousel(
+    @Args('input', { type: () => ID }) id: number,
+  ): Promise<Carousel> {
     this.console.debug('called');
-    return Promise.resolve(new Job());
+    return Promise.resolve(new Carousel());
   }
 
   @Mutation(() => UpdateManyResponseType())
-  restoreManyJobs(
-    @Args('input', { type: () => FilterType(Job) }) filter: Filter<Job>,
+  restoreManyCarousels(
+    @Args('input', { type: () => FilterType(Carousel) })
+    filter: Filter<Carousel>,
   ): Promise<UpdateManyResponse> {
     return this.service.restoreMany(filter);
   }
 }
-

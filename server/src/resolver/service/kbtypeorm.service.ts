@@ -5,4 +5,5 @@ export class KBTypeOrmQueryService<Entity> extends TypeOrmQueryService<Entity> {
   async query(query: Query<Entity>): Promise<Entity[]> {
     return this.filterQueryBuilder.select(query).withDeleted().getMany();
   }
+
 }

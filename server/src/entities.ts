@@ -1,4 +1,5 @@
 import {
+  Carousel,
   Grant,
   Job,
   Loop,
@@ -11,6 +12,7 @@ import {
 } from './_entities';
 
 export const ENTITIES = [
+  Carousel,
   Loop,
   Job,
   Pack,

@@ -1,4 +1,5 @@
 export * from './audio.delete';
+export * from './carousel.delete';
 export * from './grant.delete';
 export * from './job.delete';
 export * from './pack.delete';

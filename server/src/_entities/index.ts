@@ -1,4 +1,5 @@
 export * from './audio.entity';
+export * from './carousel.entity';
 export * from './job.entity';
 export * from './pack.entity';
 export * from './payment-plan.entity';

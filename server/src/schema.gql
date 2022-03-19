@@ -45,6 +45,20 @@ type rave {
   following: user!
 }
 
+type carousel {
+  id: ID!
+  image: String!
+  packId: ID!
+  authorId: ID!
+  postDate: Timestamp!
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp!
+  deletedAt: Timestamp
+  pack: pack!
+  author: user!
+}
+
 type Review {
   id: ID!
   review: String!
@@ -138,6 +152,16 @@ type user {
     """Specify to sort results."""
     sorting: [ReviewSort!] = []
   ): UserReviewsConnection!
+  carousels(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: carouselFilter = {}
+
+    """Specify to sort results."""
+    sorting: [carouselSort!] = []
+  ): UserCarouselsConnection!
 }
 
 enum Authorizer {
@@ -495,6 +519,32 @@ enum ReviewSortFields {
   deletedAt
 }
 
+input carouselFilter {
+  and: [carouselFilter!]
+  or: [carouselFilter!]
+  id: IDFilterComparison
+  packId: IDFilterComparison
+  authorId: IDFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
+}
+
+input carouselSort {
+  field: carouselSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum carouselSortFields {
+  id
+  packId
+  authorId
+  postDate
+  updatedAt
+  deletedAt
+}
+
 type paymentplan {
   """Example field (placeholder)"""
   id: ID!
@@ -623,11 +673,21 @@ type pack {
     paging: CursorPaging = {first: 10}
 
     """Specify to filter the records returned."""
-    filter: paymentFilter = {}
+    filter: ReviewFilter = {}
 
     """Specify to sort results."""
-    sorting: [paymentSort!] = []
+    sorting: [ReviewSort!] = []
   ): PackReviewsConnection!
+  carousels(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: carouselFilter = {}
+
+    """Specify to sort results."""
+    sorting: [carouselSort!] = []
+  ): PackCarouselsConnection!
 }
 
 input loopFilter {
@@ -751,9 +811,9 @@ type grant {
 
   """
   
-      all attributes => ['*'],
-      all attributes except specific fields => ['*', '!id']
-      only selected attributes => ['id', 'name']
+      all attributes => *,
+      all attributes except specific fields => *, !id
+      only selected attributes => id, name
       
   """
   attributes: String!
@@ -815,6 +875,11 @@ type LoopDeleteResponse {
   """Example field (placeholder)"""
   updatedAt: Timestamp
   deletedAt: Timestamp
+}
+
+type UpdateManyResponse {
+  """The number of records updated."""
+  updatedCount: Int!
 }
 
 type loopEdge {
@@ -912,6 +977,82 @@ type loopMaxAggregate {
   key: String
   tempo: Int
   packId: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+type CarouselDeleteResponse {
+  id: ID
+  image: String
+  packId: ID
+  authorId: ID
+  postDate: Timestamp
+
+  """Example field (placeholder)"""
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+type carouselEdge {
+  """The node containing the carousel"""
+  node: carousel!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type CarouselConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [carouselEdge!]!
+}
+
+type carouselAggregateGroupBy {
+  id: ID
+  packId: ID
+  authorId: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+type carouselCountAggregate {
+  id: Int
+  packId: Int
+  authorId: Int
+  postDate: Int
+  updatedAt: Int
+  deletedAt: Int
+}
+
+type carouselSumAggregate {
+  id: Float
+  packId: Float
+  authorId: Float
+}
+
+type carouselAvgAggregate {
+  id: Float
+  packId: Float
+  authorId: Float
+}
+
+type carouselMinAggregate {
+  id: ID
+  packId: ID
+  authorId: ID
+  postDate: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+type carouselMaxAggregate {
+  id: ID
+  packId: ID
+  authorId: ID
   postDate: Timestamp
   updatedAt: Timestamp
   deletedAt: Timestamp
@@ -1111,9 +1252,17 @@ type packMaxAggregate {
   deletedAt: Timestamp
 }
 
-type paymentEdge {
-  """The node containing the payment"""
-  node: payment!
+type PackCarouselsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [carouselEdge!]!
+}
+
+type ReviewEdge {
+  """The node containing the Review"""
+  node: Review!
 
   """Cursor for this node."""
   cursor: ConnectionCursor!
@@ -1124,7 +1273,15 @@ type PackReviewsConnection {
   pageInfo: PageInfo!
 
   """Array of edges."""
-  edges: [paymentEdge!]!
+  edges: [ReviewEdge!]!
+}
+
+type paymentEdge {
+  """The node containing the payment"""
+  node: payment!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
 }
 
 type PackPaymentsConnection {
@@ -1517,12 +1674,12 @@ type userMaxAggregate {
   deletedAt: Timestamp
 }
 
-type ReviewEdge {
-  """The node containing the Review"""
-  node: Review!
+type UserCarouselsConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
 
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
+  """Array of edges."""
+  edges: [carouselEdge!]!
 }
 
 type UserReviewsConnection {
@@ -1656,9 +1813,9 @@ type GrantDeleteResponse {
 
   """
   
-      all attributes => ['*'],
-      all attributes except specific fields => ['*', '!id']
-      only selected attributes => ['id', 'name']
+      all attributes => *,
+      all attributes except specific fields => *, !id
+      only selected attributes => id, name
       
   """
   attributes: String
@@ -1761,6 +1918,20 @@ type Query {
     """Specify to sort results."""
     sorting: [loopSort!] = []
   ): LoopConnection!
+  carousel(
+    """The id of the record to find."""
+    id: ID!
+  ): carousel
+  carousels(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: carouselFilter = {}
+
+    """Specify to sort results."""
+    sorting: [carouselSort!] = []
+  ): CarouselConnection!
   job(
     """The id of the record to find."""
     id: ID!
@@ -1985,11 +2156,37 @@ enum grantSortFields {
 }
 
 type Mutation {
+  restoreOneGrant(input: ID!): grant!
+  restoreManyGrants(input: grantFilter!): UpdateManyResponse!
+  restoreOnePaymentplan(input: ID!): paymentplan!
+  restoreManyPaymentplans(input: paymentplanFilter!): UpdateManyResponse!
+  restoreOneJob(input: ID!): job!
+  restoreManyJobs(input: jobFilter!): UpdateManyResponse!
+  restoreOneLoop(input: ID!): loop!
+  restoreManyLoops(input: loopFilter!): UpdateManyResponse!
+  restoreOneCarousel(input: ID!): carousel!
+  restoreManyCarousels(input: carouselFilter!): UpdateManyResponse!
+  restoreOnePack(input: ID!): pack!
+  restoreManyPacks(input: packFilter!): UpdateManyResponse!
+  restoreOnePayment(input: ID!): payment!
+  restoreManyPayments(input: paymentFilter!): UpdateManyResponse!
+  restoreOneRave(input: ID!): rave!
+  restoreManyRaves(input: raveFilter!): UpdateManyResponse!
+  restoreOneReview(input: ID!): Review!
+  restoreManyReviews(input: ReviewFilter!): UpdateManyResponse!
+  restoreOneUser(input: ID!): user!
+  restoreManyUsers(input: userFilter!): UpdateManyResponse!
   setPackOnLoop(input: SetPackOnLoopInput!): loop!
   createOneLoop(input: CreateOneLoopInput!): loop!
   updateOneLoop(input: UpdateOneLoopInput!): loop!
   deleteOneLoop(input: DeleteOneLoopInput!): LoopDeleteResponse!
   deleteManyLoops(input: DeleteManyLoopsInput!): DeleteManyResponse!
+  setPackOnCarousel(input: SetPackOnCarouselInput!): carousel!
+  setAuthorOnCarousel(input: SetAuthorOnCarouselInput!): carousel!
+  createOneCarousel(input: CreateOneCarouselInput!): carousel!
+  updateOneCarousel(input: UpdateOneCarouselInput!): carousel!
+  deleteOneCarousel(input: DeleteOneCarouselInput!): CarouselDeleteResponse!
+  deleteManyCarousels(input: DeleteManyCarouselsInput!): DeleteManyResponse!
   setPostedByOnJob(input: SetPostedByOnJobInput!): job!
   createOneJob(input: CreateOneJobInput!): job!
   updateOneJob(input: UpdateOneJobInput!): job!
@@ -2002,6 +2199,8 @@ type Mutation {
   setPaymentsOnPack(input: SetPaymentsOnPackInput!): pack!
   addReviewsToPack(input: AddReviewsToPackInput!): pack!
   setReviewsOnPack(input: SetReviewsOnPackInput!): pack!
+  addCarouselsToPack(input: AddCarouselsToPackInput!): pack!
+  setCarouselsOnPack(input: SetCarouselsOnPackInput!): pack!
   createOnePack(input: CreateOnePackInput!): pack!
   updateOnePack(input: UpdateOnePackInput!): pack!
   deleteOnePack(input: DeleteOnePackInput!): PackDeleteResponse!
@@ -2038,6 +2237,8 @@ type Mutation {
   setPaymentsOnUser(input: SetPaymentsOnUserInput!): user!
   addReviewsToUser(input: AddReviewsToUserInput!): user!
   setReviewsOnUser(input: SetReviewsOnUserInput!): user!
+  addCarouselsToUser(input: AddCarouselsToUserInput!): user!
+  setCarouselsOnUser(input: SetCarouselsOnUserInput!): user!
   createOneUser(input: CreateOneUserInput!): user!
   updateOneUser(input: UpdateOneUserInput!): user!
   deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
@@ -2144,6 +2345,62 @@ input loopDeleteFilter {
   key: StringFieldComparison
   tempo: IntFieldComparison
   packId: IDFilterComparison
+  postDate: TimestampFieldComparison
+  updatedAt: TimestampFieldComparison
+  deletedAt: TimestampFieldComparison
+}
+
+input SetPackOnCarouselInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input SetAuthorOnCarouselInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input CreateOneCarouselInput {
+  """The record to create"""
+  carousel: CarouselInputDTO!
+}
+
+input CarouselInputDTO {
+  image: String!
+  packId: ID!
+  authorId: ID!
+}
+
+input UpdateOneCarouselInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: CarouselInputDTO!
+}
+
+input DeleteOneCarouselInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyCarouselsInput {
+  """Filter to find records to delete"""
+  filter: carouselDeleteFilter!
+}
+
+input carouselDeleteFilter {
+  and: [carouselDeleteFilter!]
+  or: [carouselDeleteFilter!]
+  id: IDFilterComparison
+  packId: IDFilterComparison
+  authorId: IDFilterComparison
   postDate: TimestampFieldComparison
   updatedAt: TimestampFieldComparison
   deletedAt: TimestampFieldComparison
@@ -2256,6 +2513,22 @@ input AddReviewsToPackInput {
 }
 
 input SetReviewsOnPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input AddCarouselsToPackInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetCarouselsOnPackInput {
   """The id of the record."""
   id: ID!
 
@@ -2644,6 +2917,22 @@ input AddReviewsToUserInput {
 }
 
 input SetReviewsOnUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input AddCarouselsToUserInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetCarouselsOnUserInput {
   """The id of the record."""
   id: ID!
 

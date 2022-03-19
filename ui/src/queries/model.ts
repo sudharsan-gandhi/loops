@@ -36,6 +36,7 @@ export type Job = {
   /** Example field (placeholder) */
   updatedAt: Scalars["Timestamp"]
   postedById: Scalars["ID"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   postedBy: User
 }
 
@@ -46,8 +47,23 @@ export type Rave = {
   followerId: Scalars["Int"]
   /** Example field (placeholder) */
   followingId: Scalars["Int"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   follower: User
   following: User
+}
+
+export type Carousel = {
+  __typename?: "carousel"
+  id: Scalars["ID"]
+  image: Scalars["String"]
+  packId: Scalars["ID"]
+  authorId: Scalars["ID"]
+  postDate: Scalars["Timestamp"]
+  /** Example field (placeholder) */
+  updatedAt: Scalars["Timestamp"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
+  pack: Pack
+  author: User
 }
 
 export type Review = {
@@ -60,6 +76,7 @@ export type Review = {
   updatedAt: Scalars["Timestamp"]
   userId: Scalars["ID"]
   packId: Scalars["ID"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   user: User
   pack: Pack
 }
@@ -79,12 +96,14 @@ export type User = {
   postDate: Scalars["Timestamp"]
   /** Example field (placeholder) */
   updatedAt: Scalars["Timestamp"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   jobs: UserJobsConnection
   packs: UserPacksConnection
   followers: UserFollowersConnection
   followings: UserFollowingsConnection
   payments: UserPaymentsConnection
   reviews: UserReviewsConnection
+  carousels: UserCarouselsConnection
 }
 
 export type UserJobsArgs = {
@@ -123,6 +142,12 @@ export type UserReviewsArgs = {
   sorting?: Maybe<Array<ReviewSort>>
 }
 
+export type UserCarouselsArgs = {
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<CarouselFilter>
+  sorting?: Maybe<Array<CarouselSort>>
+}
+
 export enum Authorizer {
   Google = "GOOGLE",
   Facebook = "FACEBOOK",
@@ -150,6 +175,7 @@ export type JobFilter = {
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
   postedById?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type IdFilterComparison = {
@@ -219,7 +245,8 @@ export enum JobSortFields {
   Location = "location",
   PostDate = "postDate",
   UpdatedAt = "updatedAt",
-  PostedById = "postedById"
+  PostedById = "postedById",
+  DeletedAt = "deletedAt"
 }
 
 /** Sort Directions */
@@ -245,6 +272,7 @@ export type PackFilter = {
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
   authorId?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type FloatFieldComparison = {
@@ -308,7 +336,8 @@ export enum PackSortFields {
   IsLoop = "isLoop",
   PostDate = "postDate",
   UpdatedAt = "updatedAt",
-  AuthorId = "authorId"
+  AuthorId = "authorId",
+  DeletedAt = "deletedAt"
 }
 
 export type RaveFilter = {
@@ -317,6 +346,7 @@ export type RaveFilter = {
   id?: Maybe<IdFilterComparison>
   followerId?: Maybe<IntFieldComparison>
   followingId?: Maybe<IntFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type IntFieldComparison = {
@@ -348,7 +378,8 @@ export type RaveSort = {
 export enum RaveSortFields {
   Id = "id",
   FollowerId = "followerId",
-  FollowingId = "followingId"
+  FollowingId = "followingId",
+  DeletedAt = "deletedAt"
 }
 
 export type PaymentFilter = {
@@ -366,6 +397,7 @@ export type PaymentFilter = {
   packId?: Maybe<IdFilterComparison>
   paymentPlanId?: Maybe<IdFilterComparison>
   userId?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type PlanTypeFilterComparison = {
@@ -435,7 +467,8 @@ export enum PaymentSortFields {
   UpdatedAt = "updatedAt",
   PackId = "packId",
   PaymentPlanId = "paymentPlanId",
-  UserId = "userId"
+  UserId = "userId",
+  DeletedAt = "deletedAt"
 }
 
 export type ReviewFilter = {
@@ -446,6 +479,7 @@ export type ReviewFilter = {
   updatedAt?: Maybe<TimestampFieldComparison>
   userId?: Maybe<IdFilterComparison>
   packId?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type ReviewSort = {
@@ -459,7 +493,34 @@ export enum ReviewSortFields {
   PostDate = "postDate",
   UpdatedAt = "updatedAt",
   UserId = "userId",
-  PackId = "packId"
+  PackId = "packId",
+  DeletedAt = "deletedAt"
+}
+
+export type CarouselFilter = {
+  and?: Maybe<Array<CarouselFilter>>
+  or?: Maybe<Array<CarouselFilter>>
+  id?: Maybe<IdFilterComparison>
+  packId?: Maybe<IdFilterComparison>
+  authorId?: Maybe<IdFilterComparison>
+  postDate?: Maybe<TimestampFieldComparison>
+  updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
+}
+
+export type CarouselSort = {
+  field: CarouselSortFields
+  direction: SortDirection
+  nulls?: Maybe<SortNulls>
+}
+
+export enum CarouselSortFields {
+  Id = "id",
+  PackId = "packId",
+  AuthorId = "authorId",
+  PostDate = "postDate",
+  UpdatedAt = "updatedAt",
+  DeletedAt = "deletedAt"
 }
 
 export type Paymentplan = {
@@ -481,6 +542,7 @@ export type Paymentplan = {
   postedById: Scalars["ID"]
   /** Example filed (placeholder) */
   isActive: Scalars["Boolean"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   postedBy: User
   payments: PaymentplanPaymentsConnection
 }
@@ -516,6 +578,7 @@ export type Payment = {
   packId: Scalars["ID"]
   paymentPlanId: Scalars["ID"]
   userId: Scalars["ID"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   pack: Pack
   paymentPlan: Paymentplan
   user: User
@@ -539,10 +602,12 @@ export type Pack = {
   /** Example field (placeholder) */
   updatedAt: Scalars["Timestamp"]
   authorId: Scalars["ID"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   author: User
   audio: PackAudioConnection
   payments: PackPaymentsConnection
   reviews: PackReviewsConnection
+  carousels: PackCarouselsConnection
 }
 
 export type PackAudioArgs = {
@@ -559,8 +624,14 @@ export type PackPaymentsArgs = {
 
 export type PackReviewsArgs = {
   paging?: Maybe<CursorPaging>
-  filter?: Maybe<PaymentFilter>
-  sorting?: Maybe<Array<PaymentSort>>
+  filter?: Maybe<ReviewFilter>
+  sorting?: Maybe<Array<ReviewSort>>
+}
+
+export type PackCarouselsArgs = {
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<CarouselFilter>
+  sorting?: Maybe<Array<CarouselSort>>
 }
 
 export type LoopFilter = {
@@ -576,6 +647,7 @@ export type LoopFilter = {
   packId?: Maybe<IdFilterComparison>
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
   pack?: Maybe<LoopFilterpackFilter>
 }
 
@@ -612,6 +684,7 @@ export type LoopFilterpackFilter = {
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
   authorId?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type LoopSort = {
@@ -630,7 +703,8 @@ export enum LoopSortFields {
   Tempo = "tempo",
   PackId = "packId",
   PostDate = "postDate",
-  UpdatedAt = "updatedAt"
+  UpdatedAt = "updatedAt",
+  DeletedAt = "deletedAt"
 }
 
 export type Loop = {
@@ -656,6 +730,7 @@ export type Loop = {
   postDate: Scalars["Timestamp"]
   /** Example field (placeholder) */
   updatedAt: Scalars["Timestamp"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   pack: Pack
 }
 
@@ -669,15 +744,16 @@ export type Grant = {
   resource: Scalars["String"]
   action: GrantActions
   /**
-   * all attributes => ['*'],
-   * all attributes except specific fields => ['*', '!id']
-   * only selected attributes => ['id', 'name']
+   * all attributes => *,
+   * all attributes except specific fields => *, !id
+   * only selected attributes => id, name
    */
   attributes: Scalars["String"]
   /** Example field (placeholder) */
   postDate: Scalars["Timestamp"]
   /** Example field (placeholder) */
   updatedAt: Scalars["Timestamp"]
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   postedById: Scalars["ID"]
 }
 
@@ -721,6 +797,13 @@ export type LoopDeleteResponse = {
   postDate?: Maybe<Scalars["Timestamp"]>
   /** Example field (placeholder) */
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
+}
+
+export type UpdateManyResponse = {
+  __typename?: "UpdateManyResponse"
+  /** The number of records updated. */
+  updatedCount: Scalars["Int"]
 }
 
 export type LoopEdge = {
@@ -763,6 +846,7 @@ export type LoopAggregateGroupBy = {
   packId?: Maybe<Scalars["ID"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type LoopCountAggregate = {
@@ -777,6 +861,7 @@ export type LoopCountAggregate = {
   packId?: Maybe<Scalars["Int"]>
   postDate?: Maybe<Scalars["Int"]>
   updatedAt?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type LoopSumAggregate = {
@@ -807,6 +892,7 @@ export type LoopMinAggregate = {
   packId?: Maybe<Scalars["ID"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type LoopMaxAggregate = {
@@ -821,6 +907,89 @@ export type LoopMaxAggregate = {
   packId?: Maybe<Scalars["ID"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
+}
+
+export type CarouselDeleteResponse = {
+  __typename?: "CarouselDeleteResponse"
+  id?: Maybe<Scalars["ID"]>
+  image?: Maybe<Scalars["String"]>
+  packId?: Maybe<Scalars["ID"]>
+  authorId?: Maybe<Scalars["ID"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  /** Example field (placeholder) */
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
+}
+
+export type CarouselEdge = {
+  __typename?: "carouselEdge"
+  /** The node containing the carousel */
+  node: Carousel
+  /** Cursor for this node. */
+  cursor: Scalars["ConnectionCursor"]
+}
+
+export type CarouselConnection = {
+  __typename?: "CarouselConnection"
+  /** Paging information */
+  pageInfo: PageInfo
+  /** Array of edges. */
+  edges: Array<CarouselEdge>
+}
+
+export type CarouselAggregateGroupBy = {
+  __typename?: "carouselAggregateGroupBy"
+  id?: Maybe<Scalars["ID"]>
+  packId?: Maybe<Scalars["ID"]>
+  authorId?: Maybe<Scalars["ID"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
+}
+
+export type CarouselCountAggregate = {
+  __typename?: "carouselCountAggregate"
+  id?: Maybe<Scalars["Int"]>
+  packId?: Maybe<Scalars["Int"]>
+  authorId?: Maybe<Scalars["Int"]>
+  postDate?: Maybe<Scalars["Int"]>
+  updatedAt?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
+}
+
+export type CarouselSumAggregate = {
+  __typename?: "carouselSumAggregate"
+  id?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+  authorId?: Maybe<Scalars["Float"]>
+}
+
+export type CarouselAvgAggregate = {
+  __typename?: "carouselAvgAggregate"
+  id?: Maybe<Scalars["Float"]>
+  packId?: Maybe<Scalars["Float"]>
+  authorId?: Maybe<Scalars["Float"]>
+}
+
+export type CarouselMinAggregate = {
+  __typename?: "carouselMinAggregate"
+  id?: Maybe<Scalars["ID"]>
+  packId?: Maybe<Scalars["ID"]>
+  authorId?: Maybe<Scalars["ID"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
+}
+
+export type CarouselMaxAggregate = {
+  __typename?: "carouselMaxAggregate"
+  id?: Maybe<Scalars["ID"]>
+  packId?: Maybe<Scalars["ID"]>
+  authorId?: Maybe<Scalars["ID"]>
+  postDate?: Maybe<Scalars["Timestamp"]>
+  updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type JobDeleteResponse = {
@@ -840,6 +1009,7 @@ export type JobDeleteResponse = {
   /** Example field (placeholder) */
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type JobEdge = {
@@ -867,6 +1037,7 @@ export type JobAggregateGroupBy = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type JobCountAggregate = {
@@ -878,6 +1049,7 @@ export type JobCountAggregate = {
   postDate?: Maybe<Scalars["Int"]>
   updatedAt?: Maybe<Scalars["Int"]>
   postedById?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type JobSumAggregate = {
@@ -901,6 +1073,7 @@ export type JobMinAggregate = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type JobMaxAggregate = {
@@ -912,6 +1085,7 @@ export type JobMaxAggregate = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PackDeleteResponse = {
@@ -932,6 +1106,7 @@ export type PackDeleteResponse = {
   /** Example field (placeholder) */
   updatedAt?: Maybe<Scalars["Timestamp"]>
   authorId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PackEdge = {
@@ -960,6 +1135,7 @@ export type PackAggregateGroupBy = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   authorId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PackCountAggregate = {
@@ -972,6 +1148,7 @@ export type PackCountAggregate = {
   postDate?: Maybe<Scalars["Int"]>
   updatedAt?: Maybe<Scalars["Int"]>
   authorId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type PackSumAggregate = {
@@ -997,6 +1174,7 @@ export type PackMinAggregate = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   authorId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PackMaxAggregate = {
@@ -1008,12 +1186,21 @@ export type PackMaxAggregate = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   authorId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
-export type PaymentEdge = {
-  __typename?: "paymentEdge"
-  /** The node containing the payment */
-  node: Payment
+export type PackCarouselsConnection = {
+  __typename?: "PackCarouselsConnection"
+  /** Paging information */
+  pageInfo: PageInfo
+  /** Array of edges. */
+  edges: Array<CarouselEdge>
+}
+
+export type ReviewEdge = {
+  __typename?: "ReviewEdge"
+  /** The node containing the Review */
+  node: Review
   /** Cursor for this node. */
   cursor: Scalars["ConnectionCursor"]
 }
@@ -1023,7 +1210,15 @@ export type PackReviewsConnection = {
   /** Paging information */
   pageInfo: PageInfo
   /** Array of edges. */
-  edges: Array<PaymentEdge>
+  edges: Array<ReviewEdge>
+}
+
+export type PaymentEdge = {
+  __typename?: "paymentEdge"
+  /** The node containing the payment */
+  node: Payment
+  /** Cursor for this node. */
+  cursor: Scalars["ConnectionCursor"]
 }
 
 export type PackPaymentsConnection = {
@@ -1061,6 +1256,7 @@ export type PaymentplanDeleteResponse = {
   postedById?: Maybe<Scalars["ID"]>
   /** Example filed (placeholder) */
   isActive?: Maybe<Scalars["Boolean"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PaymentplanEdge = {
@@ -1088,6 +1284,7 @@ export type PaymentplanAggregateGroupBy = {
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
   isActive?: Maybe<Scalars["Boolean"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PaymentplanCountAggregate = {
@@ -1099,6 +1296,7 @@ export type PaymentplanCountAggregate = {
   updatedAt?: Maybe<Scalars["Int"]>
   postedById?: Maybe<Scalars["Int"]>
   isActive?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type PaymentplanSumAggregate = {
@@ -1123,6 +1321,7 @@ export type PaymentplanMinAggregate = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PaymentplanMaxAggregate = {
@@ -1133,6 +1332,7 @@ export type PaymentplanMaxAggregate = {
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PaymentplanPaymentsConnection = {
@@ -1168,6 +1368,7 @@ export type PaymentDeleteResponse = {
   packId?: Maybe<Scalars["ID"]>
   paymentPlanId?: Maybe<Scalars["ID"]>
   userId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PaymentConnection = {
@@ -1192,6 +1393,7 @@ export type PaymentAggregateGroupBy = {
   packId?: Maybe<Scalars["ID"]>
   paymentPlanId?: Maybe<Scalars["ID"]>
   userId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PaymentCountAggregate = {
@@ -1208,6 +1410,7 @@ export type PaymentCountAggregate = {
   packId?: Maybe<Scalars["Int"]>
   paymentPlanId?: Maybe<Scalars["Int"]>
   userId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type PaymentSumAggregate = {
@@ -1241,6 +1444,7 @@ export type PaymentMinAggregate = {
   packId?: Maybe<Scalars["ID"]>
   paymentPlanId?: Maybe<Scalars["ID"]>
   userId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type PaymentMaxAggregate = {
@@ -1256,6 +1460,7 @@ export type PaymentMaxAggregate = {
   packId?: Maybe<Scalars["ID"]>
   paymentPlanId?: Maybe<Scalars["ID"]>
   userId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type RaveDeleteResponse = {
@@ -1265,6 +1470,7 @@ export type RaveDeleteResponse = {
   followerId?: Maybe<Scalars["Int"]>
   /** Example field (placeholder) */
   followingId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type RaveEdge = {
@@ -1288,6 +1494,7 @@ export type RaveAggregateGroupBy = {
   id?: Maybe<Scalars["ID"]>
   followerId?: Maybe<Scalars["Int"]>
   followingId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type RaveCountAggregate = {
@@ -1295,6 +1502,7 @@ export type RaveCountAggregate = {
   id?: Maybe<Scalars["Int"]>
   followerId?: Maybe<Scalars["Int"]>
   followingId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type RaveSumAggregate = {
@@ -1316,6 +1524,7 @@ export type RaveMinAggregate = {
   id?: Maybe<Scalars["ID"]>
   followerId?: Maybe<Scalars["Int"]>
   followingId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type RaveMaxAggregate = {
@@ -1323,6 +1532,7 @@ export type RaveMaxAggregate = {
   id?: Maybe<Scalars["ID"]>
   followerId?: Maybe<Scalars["Int"]>
   followingId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type UserDeleteResponse = {
@@ -1340,6 +1550,7 @@ export type UserDeleteResponse = {
   postDate?: Maybe<Scalars["Timestamp"]>
   /** Example field (placeholder) */
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type UserEdge = {
@@ -1365,6 +1576,7 @@ export type UserAggregateGroupBy = {
   name?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type UserCountAggregate = {
@@ -1374,6 +1586,7 @@ export type UserCountAggregate = {
   name?: Maybe<Scalars["Int"]>
   postDate?: Maybe<Scalars["Int"]>
   updatedAt?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type UserSumAggregate = {
@@ -1393,6 +1606,7 @@ export type UserMinAggregate = {
   name?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type UserMaxAggregate = {
@@ -1402,14 +1616,15 @@ export type UserMaxAggregate = {
   name?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
-export type ReviewEdge = {
-  __typename?: "ReviewEdge"
-  /** The node containing the Review */
-  node: Review
-  /** Cursor for this node. */
-  cursor: Scalars["ConnectionCursor"]
+export type UserCarouselsConnection = {
+  __typename?: "UserCarouselsConnection"
+  /** Paging information */
+  pageInfo: PageInfo
+  /** Array of edges. */
+  edges: Array<CarouselEdge>
 }
 
 export type UserReviewsConnection = {
@@ -1470,6 +1685,7 @@ export type ReviewDeleteResponse = {
   updatedAt?: Maybe<Scalars["Timestamp"]>
   userId?: Maybe<Scalars["ID"]>
   packId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type ReviewConnection = {
@@ -1487,6 +1703,7 @@ export type ReviewAggregateGroupBy = {
   updatedAt?: Maybe<Scalars["Timestamp"]>
   userId?: Maybe<Scalars["ID"]>
   packId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type ReviewCountAggregate = {
@@ -1496,6 +1713,7 @@ export type ReviewCountAggregate = {
   updatedAt?: Maybe<Scalars["Int"]>
   userId?: Maybe<Scalars["Int"]>
   packId?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
 }
 
 export type ReviewSumAggregate = {
@@ -1519,6 +1737,7 @@ export type ReviewMinAggregate = {
   updatedAt?: Maybe<Scalars["Timestamp"]>
   userId?: Maybe<Scalars["ID"]>
   packId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type ReviewMaxAggregate = {
@@ -1528,6 +1747,7 @@ export type ReviewMaxAggregate = {
   updatedAt?: Maybe<Scalars["Timestamp"]>
   userId?: Maybe<Scalars["ID"]>
   packId?: Maybe<Scalars["ID"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
 }
 
 export type GrantDeleteResponse = {
@@ -1540,15 +1760,16 @@ export type GrantDeleteResponse = {
   resource?: Maybe<Scalars["String"]>
   action?: Maybe<GrantActions>
   /**
-   * all attributes => ['*'],
-   * all attributes except specific fields => ['*', '!id']
-   * only selected attributes => ['id', 'name']
+   * all attributes => *,
+   * all attributes except specific fields => *, !id
+   * only selected attributes => id, name
    */
   attributes?: Maybe<Scalars["String"]>
   /** Example field (placeholder) */
   postDate?: Maybe<Scalars["Timestamp"]>
   /** Example field (placeholder) */
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
 }
 
@@ -1577,6 +1798,7 @@ export type GrantAggregateGroupBy = {
   attributes?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
 }
 
@@ -1589,6 +1811,7 @@ export type GrantCountAggregate = {
   attributes?: Maybe<Scalars["Int"]>
   postDate?: Maybe<Scalars["Int"]>
   updatedAt?: Maybe<Scalars["Int"]>
+  deletedAt?: Maybe<Scalars["Int"]>
   postedById?: Maybe<Scalars["Int"]>
 }
 
@@ -1613,6 +1836,7 @@ export type GrantMinAggregate = {
   attributes?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
 }
 
@@ -1625,6 +1849,7 @@ export type GrantMaxAggregate = {
   attributes?: Maybe<Scalars["String"]>
   postDate?: Maybe<Scalars["Timestamp"]>
   updatedAt?: Maybe<Scalars["Timestamp"]>
+  deletedAt?: Maybe<Scalars["Timestamp"]>
   postedById?: Maybe<Scalars["ID"]>
 }
 
@@ -1632,6 +1857,8 @@ export type Query = {
   __typename?: "Query"
   loop?: Maybe<Loop>
   loops: LoopConnection
+  carousel?: Maybe<Carousel>
+  carousels: CarouselConnection
   job?: Maybe<Job>
   jobs: JobConnection
   pack?: Maybe<Pack>
@@ -1658,6 +1885,16 @@ export type QueryLoopsArgs = {
   paging?: Maybe<CursorPaging>
   filter?: Maybe<LoopFilter>
   sorting?: Maybe<Array<LoopSort>>
+}
+
+export type QueryCarouselArgs = {
+  id: Scalars["ID"]
+}
+
+export type QueryCarouselsArgs = {
+  paging?: Maybe<CursorPaging>
+  filter?: Maybe<CarouselFilter>
+  sorting?: Maybe<Array<CarouselSort>>
 }
 
 export type QueryJobArgs = {
@@ -1750,6 +1987,7 @@ export type PaymentplanFilter = {
   updatedAt?: Maybe<TimestampFieldComparison>
   postedById?: Maybe<IdFilterComparison>
   isActive?: Maybe<PaymentplanIsActiveFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type PaymentplanIsActiveFilterComparison = {
@@ -1769,7 +2007,8 @@ export enum PaymentplanSortFields {
   PostDate = "postDate",
   UpdatedAt = "updatedAt",
   PostedById = "postedById",
-  IsActive = "isActive"
+  IsActive = "isActive",
+  DeletedAt = "deletedAt"
 }
 
 export type UserFilter = {
@@ -1780,6 +2019,7 @@ export type UserFilter = {
   name?: Maybe<StringFieldComparison>
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type UserSort = {
@@ -1793,7 +2033,8 @@ export enum UserSortFields {
   Email = "email",
   Name = "name",
   PostDate = "postDate",
-  UpdatedAt = "updatedAt"
+  UpdatedAt = "updatedAt",
+  DeletedAt = "deletedAt"
 }
 
 export type GrantFilter = {
@@ -1806,6 +2047,7 @@ export type GrantFilter = {
   attributes?: Maybe<StringFieldComparison>
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
   postedById?: Maybe<IdFilterComparison>
 }
 
@@ -1840,16 +2082,43 @@ export enum GrantSortFields {
   Attributes = "attributes",
   PostDate = "postDate",
   UpdatedAt = "updatedAt",
+  DeletedAt = "deletedAt",
   PostedById = "postedById"
 }
 
 export type Mutation = {
   __typename?: "Mutation"
+  restoreOneGrant: Grant
+  restoreManyGrants: UpdateManyResponse
+  restoreOnePaymentplan: Paymentplan
+  restoreManyPaymentplans: UpdateManyResponse
+  restoreOneJob: Job
+  restoreManyJobs: UpdateManyResponse
+  restoreOneLoop: Loop
+  restoreManyLoops: UpdateManyResponse
+  restoreOneCarousel: Carousel
+  restoreManyCarousels: UpdateManyResponse
+  restoreOnePack: Pack
+  restoreManyPacks: UpdateManyResponse
+  restoreOnePayment: Payment
+  restoreManyPayments: UpdateManyResponse
+  restoreOneRave: Rave
+  restoreManyRaves: UpdateManyResponse
+  restoreOneReview: Review
+  restoreManyReviews: UpdateManyResponse
+  restoreOneUser: User
+  restoreManyUsers: UpdateManyResponse
   setPackOnLoop: Loop
   createOneLoop: Loop
   updateOneLoop: Loop
   deleteOneLoop: LoopDeleteResponse
   deleteManyLoops: DeleteManyResponse
+  setPackOnCarousel: Carousel
+  setAuthorOnCarousel: Carousel
+  createOneCarousel: Carousel
+  updateOneCarousel: Carousel
+  deleteOneCarousel: CarouselDeleteResponse
+  deleteManyCarousels: DeleteManyResponse
   setPostedByOnJob: Job
   createOneJob: Job
   updateOneJob: Job
@@ -1862,6 +2131,8 @@ export type Mutation = {
   setPaymentsOnPack: Pack
   addReviewsToPack: Pack
   setReviewsOnPack: Pack
+  addCarouselsToPack: Pack
+  setCarouselsOnPack: Pack
   createOnePack: Pack
   updateOnePack: Pack
   deleteOnePack: PackDeleteResponse
@@ -1898,6 +2169,8 @@ export type Mutation = {
   setPaymentsOnUser: User
   addReviewsToUser: User
   setReviewsOnUser: User
+  addCarouselsToUser: User
+  setCarouselsOnUser: User
   createOneUser: User
   updateOneUser: User
   deleteOneUser: UserDeleteResponse
@@ -1912,6 +2185,86 @@ export type Mutation = {
   updateOneGrant: Grant
   deleteOneGrant: GrantDeleteResponse
   deleteManyGrants: DeleteManyResponse
+}
+
+export type MutationRestoreOneGrantArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyGrantsArgs = {
+  input: GrantFilter
+}
+
+export type MutationRestoreOnePaymentplanArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyPaymentplansArgs = {
+  input: PaymentplanFilter
+}
+
+export type MutationRestoreOneJobArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyJobsArgs = {
+  input: JobFilter
+}
+
+export type MutationRestoreOneLoopArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyLoopsArgs = {
+  input: LoopFilter
+}
+
+export type MutationRestoreOneCarouselArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyCarouselsArgs = {
+  input: CarouselFilter
+}
+
+export type MutationRestoreOnePackArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyPacksArgs = {
+  input: PackFilter
+}
+
+export type MutationRestoreOnePaymentArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyPaymentsArgs = {
+  input: PaymentFilter
+}
+
+export type MutationRestoreOneRaveArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyRavesArgs = {
+  input: RaveFilter
+}
+
+export type MutationRestoreOneReviewArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyReviewsArgs = {
+  input: ReviewFilter
+}
+
+export type MutationRestoreOneUserArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyUsersArgs = {
+  input: UserFilter
 }
 
 export type MutationSetPackOnLoopArgs = {
@@ -1932,6 +2285,30 @@ export type MutationDeleteOneLoopArgs = {
 
 export type MutationDeleteManyLoopsArgs = {
   input: DeleteManyLoopsInput
+}
+
+export type MutationSetPackOnCarouselArgs = {
+  input: SetPackOnCarouselInput
+}
+
+export type MutationSetAuthorOnCarouselArgs = {
+  input: SetAuthorOnCarouselInput
+}
+
+export type MutationCreateOneCarouselArgs = {
+  input: CreateOneCarouselInput
+}
+
+export type MutationUpdateOneCarouselArgs = {
+  input: UpdateOneCarouselInput
+}
+
+export type MutationDeleteOneCarouselArgs = {
+  input: DeleteOneCarouselInput
+}
+
+export type MutationDeleteManyCarouselsArgs = {
+  input: DeleteManyCarouselsInput
 }
 
 export type MutationSetPostedByOnJobArgs = {
@@ -1980,6 +2357,14 @@ export type MutationAddReviewsToPackArgs = {
 
 export type MutationSetReviewsOnPackArgs = {
   input: SetReviewsOnPackInput
+}
+
+export type MutationAddCarouselsToPackArgs = {
+  input: AddCarouselsToPackInput
+}
+
+export type MutationSetCarouselsOnPackArgs = {
+  input: SetCarouselsOnPackInput
 }
 
 export type MutationCreateOnePackArgs = {
@@ -2126,6 +2511,14 @@ export type MutationSetReviewsOnUserArgs = {
   input: SetReviewsOnUserInput
 }
 
+export type MutationAddCarouselsToUserArgs = {
+  input: AddCarouselsToUserInput
+}
+
+export type MutationSetCarouselsOnUserArgs = {
+  input: SetCarouselsOnUserInput
+}
+
 export type MutationCreateOneUserArgs = {
   input: CreateOneUserInput
 }
@@ -2260,6 +2653,60 @@ export type LoopDeleteFilter = {
   packId?: Maybe<IdFilterComparison>
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
+}
+
+export type SetPackOnCarouselInput = {
+  /** The id of the record. */
+  id: Scalars["ID"]
+  /** The id of relation. */
+  relationId: Scalars["ID"]
+}
+
+export type SetAuthorOnCarouselInput = {
+  /** The id of the record. */
+  id: Scalars["ID"]
+  /** The id of relation. */
+  relationId: Scalars["ID"]
+}
+
+export type CreateOneCarouselInput = {
+  /** The record to create */
+  carousel: CarouselInputDto
+}
+
+export type CarouselInputDto = {
+  image: Scalars["String"]
+  packId: Scalars["ID"]
+  authorId: Scalars["ID"]
+}
+
+export type UpdateOneCarouselInput = {
+  /** The id of the record to update */
+  id: Scalars["ID"]
+  /** The update to apply. */
+  update: CarouselInputDto
+}
+
+export type DeleteOneCarouselInput = {
+  /** The id of the record to delete. */
+  id: Scalars["ID"]
+}
+
+export type DeleteManyCarouselsInput = {
+  /** Filter to find records to delete */
+  filter: CarouselDeleteFilter
+}
+
+export type CarouselDeleteFilter = {
+  and?: Maybe<Array<CarouselDeleteFilter>>
+  or?: Maybe<Array<CarouselDeleteFilter>>
+  id?: Maybe<IdFilterComparison>
+  packId?: Maybe<IdFilterComparison>
+  authorId?: Maybe<IdFilterComparison>
+  postDate?: Maybe<TimestampFieldComparison>
+  updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type SetPostedByOnJobInput = {
@@ -2313,6 +2760,7 @@ export type JobDeleteFilter = {
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
   postedById?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type SetAuthorOnPackInput = {
@@ -2358,6 +2806,20 @@ export type AddReviewsToPackInput = {
 }
 
 export type SetReviewsOnPackInput = {
+  /** The id of the record. */
+  id: Scalars["ID"]
+  /** The ids of the relations. */
+  relationIds: Array<Scalars["ID"]>
+}
+
+export type AddCarouselsToPackInput = {
+  /** The id of the record. */
+  id: Scalars["ID"]
+  /** The ids of the relations. */
+  relationIds: Array<Scalars["ID"]>
+}
+
+export type SetCarouselsOnPackInput = {
   /** The id of the record. */
   id: Scalars["ID"]
   /** The ids of the relations. */
@@ -2423,6 +2885,7 @@ export type PackDeleteFilter = {
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
   authorId?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type SetPostedByOnPaymentplanInput = {
@@ -2492,6 +2955,7 @@ export type PaymentplanDeleteFilter = {
   updatedAt?: Maybe<TimestampFieldComparison>
   postedById?: Maybe<IdFilterComparison>
   isActive?: Maybe<PaymentplanIsActiveFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type SetPackOnPaymentInput = {
@@ -2572,6 +3036,7 @@ export type PaymentDeleteFilter = {
   packId?: Maybe<IdFilterComparison>
   paymentPlanId?: Maybe<IdFilterComparison>
   userId?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type SetFollowerOnRaveInput = {
@@ -2623,6 +3088,7 @@ export type RaveDeleteFilter = {
   id?: Maybe<IdFilterComparison>
   followerId?: Maybe<IntFieldComparison>
   followingId?: Maybe<IntFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type AddJobsToUserInput = {
@@ -2709,6 +3175,20 @@ export type SetReviewsOnUserInput = {
   relationIds: Array<Scalars["ID"]>
 }
 
+export type AddCarouselsToUserInput = {
+  /** The id of the record. */
+  id: Scalars["ID"]
+  /** The ids of the relations. */
+  relationIds: Array<Scalars["ID"]>
+}
+
+export type SetCarouselsOnUserInput = {
+  /** The id of the record. */
+  id: Scalars["ID"]
+  /** The ids of the relations. */
+  relationIds: Array<Scalars["ID"]>
+}
+
 export type CreateOneUserInput = {
   /** The record to create */
   user: UserInputDto
@@ -2759,6 +3239,7 @@ export type UserDeleteFilter = {
   name?: Maybe<StringFieldComparison>
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type SetUserOnReviewInput = {
@@ -2811,6 +3292,7 @@ export type ReviewDeleteFilter = {
   updatedAt?: Maybe<TimestampFieldComparison>
   userId?: Maybe<IdFilterComparison>
   packId?: Maybe<IdFilterComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
 }
 
 export type CreateOneGrantInput = {
@@ -2860,5 +3342,6 @@ export type GrantDeleteFilter = {
   attributes?: Maybe<StringFieldComparison>
   postDate?: Maybe<TimestampFieldComparison>
   updatedAt?: Maybe<TimestampFieldComparison>
+  deletedAt?: Maybe<TimestampFieldComparison>
   postedById?: Maybe<IdFilterComparison>
 }

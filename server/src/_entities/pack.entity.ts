@@ -31,6 +31,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 
+import { Carousel } from './carousel.entity';
 import { Review } from './review.entity';
 
 export enum PacketType {
@@ -45,7 +46,8 @@ registerEnumType(PacketType, { name: 'PacketType' });
 @Relation('author', () => User, { disableRemove: true })
 @CursorConnection('audio', () => Loop, { disableRemove: true })
 @CursorConnection('payments', () => Payment, { disableRemove: true })
-@CursorConnection('reviews', () => Payment, { disableRemove: true })
+@CursorConnection('reviews', () => Review, { disableRemove: true })
+@CursorConnection('carousels', () => Carousel, { disableRemove: true })
 @Authorize(PackAuthorizer)
 export class Pack extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
@@ -107,6 +109,9 @@ export class Pack extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.pack)
   reviews: Review[];
+
+  @OneToMany(() => Carousel, (carousel) => carousel.pack)
+  carousels: Carousel[];
   
   @DeleteDateColumn()
   @FilterableField(() => GraphQLTimestamp, {defaultValue: null, nullable: true})

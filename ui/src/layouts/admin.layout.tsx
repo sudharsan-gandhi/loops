@@ -11,7 +11,10 @@ import {
   NavItem,
 } from 'layouts/kabaflow.layout';
 import { AiOutlineUser } from 'react-icons/ai';
-import { BsFileMusic } from 'react-icons/bs';
+import {
+  BsCardImage,
+  BsFileMusic,
+} from 'react-icons/bs';
 import {
   FiEdit,
   FiMenu,
@@ -20,6 +23,7 @@ import { GoPackage } from 'react-icons/go';
 import {
   MdAttachMoney,
   MdOutlineContactPage,
+  MdOutlineWorkOutline,
   MdPayment,
   MdSecurity,
 } from 'react-icons/md';
@@ -77,7 +81,8 @@ const AdminLayout = () => {
     { name: "Loops", icon: BsFileMusic, link: "/admin/loops" },
     { name: "Payments", icon: MdAttachMoney, link: "/admin/payments" },
     { name: "PayPlans", icon: MdPayment, link: "/admin/payplans" },
-    { name: "Jobs", icon: MdPayment, link: "/admin/jobs" },
+    { name: "Jobs", icon: MdOutlineWorkOutline, link: "/admin/jobs" },
+    { name: "Carousels", icon: BsCardImage, link: "/admin/carousels" },
     { name: "User Permissions", icon: MdSecurity, link: "/admin/grants" },
     // { name: "Settings", icon: FiSettings, link: "/" },
   ];
@@ -154,7 +159,6 @@ const AdminLayout = () => {
     onCloseRight();
   };
 
-
   return (
     <>
       <Skeleton isLoaded={loaded}>
@@ -187,17 +191,17 @@ const AdminLayout = () => {
           </HStack>
           <Spacer />
           <HStack ref={btnRight} cursor="pointer" onClick={onOpenRight}>
-                <Avatar
-                  size={"sm"}
-                  src={
-                    currentUser?.image
-                      ? currentUser.image.startsWith("http")
-                        ? currentUser?.image
-                        : `/static/avatars/${currentUser?.image}`
-                      : ""
-                  }
-                />
-              </HStack>
+            <Avatar
+              size={"sm"}
+              src={
+                currentUser?.image
+                  ? currentUser.image.startsWith("http")
+                    ? currentUser?.image
+                    : `/static/avatars/${currentUser?.image}`
+                  : ""
+              }
+            />
+          </HStack>
         </Flex>
         <Box width="100%">
           <AdminRoutes />

@@ -1,6 +1,7 @@
 import {
   AudioInputDTO,
   AudioUpdateDTO,
+  CarouselInputDTO,
   JobInputDTO,
   PackInputDTO,
   PackUpdateDTO,
@@ -13,6 +14,7 @@ import {
 } from 'src/_dto';
 import { GrantDTO } from 'src/_dto/grant.dto';
 import {
+  Carousel,
   Grant,
   Job,
   Loop,
@@ -26,6 +28,7 @@ import { Review } from 'src/_entities/review.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { GqlJwtGuard } from 'src/auth/guards/gql-jwt.guard';
 import { JwtNoauthGuard } from 'src/auth/guards/jwt-noauth.guard';
+import { AccessControlService } from 'src/auth/service/access-control.service';
 import { ENTITIES } from 'src/entities';
 
 import {
@@ -37,16 +40,28 @@ import {
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { Module } from '@nestjs/common';
 
+import { GrantDTOAuthorizer } from './authorizer/grant.authorizer';
 import {
+  CarouselDeleteService,
+  CarouselResolver,
   GrantDeleteService,
+  GrantResolver,
   JobDeleteService,
+  JobResolver,
   LoopDeleteService,
+  LoopResolver,
   PackDeleteService,
+  PackResolver,
   PaymentDeleteService,
   PaymentplanDeleteService,
+  PaymentplanResolver,
+  PaymentResolver,
   RaveDeleteService,
+  RaveResolver,
   ReviewDeleteService,
+  ReviewResolver,
   UserDeleteService,
+  UserResolver,
 } from './service';
 
 const DEFAULT_RESOLVERS: AutoResolverOpts<
@@ -63,6 +78,17 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
     EntityClass: Loop,
     CreateDTOClass: AudioInputDTO,
     UpdateDTOClass: AudioUpdateDTO,
+    read: { guards: [JwtNoauthGuard] },
+    create: { guards: [GqlJwtGuard], many: { disabled: true } },
+    update: { guards: [GqlJwtGuard], many: { disabled: true } },
+    delete: { guards: [GqlJwtGuard], many: { guards: [GqlJwtGuard] } },
+  },
+  {
+    DTOClass: Carousel,
+    ServiceClass: CarouselDeleteService,
+    EntityClass: Carousel,
+    CreateDTOClass: CarouselInputDTO,
+    UpdateDTOClass: CarouselInputDTO,
     read: { guards: [JwtNoauthGuard] },
     create: { guards: [GqlJwtGuard], many: { disabled: true } },
     update: { guards: [GqlJwtGuard], many: { disabled: true } },
@@ -159,19 +185,35 @@ const DEFAULT_RESOLVERS: AutoResolverOpts<
   },
 ];
 @Module({
+  providers: [
+    GrantResolver,
+    JobResolver,
+    LoopResolver,
+    CarouselResolver,
+    PackResolver,
+    PaymentResolver,
+    PaymentplanResolver,
+    RaveResolver,
+    ReviewResolver,
+    UserResolver,
+    GrantDTOAuthorizer,
+  ],
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature(ENTITIES), AuthModule],
+      imports: [AuthModule, NestjsQueryTypeOrmModule.forFeature(ENTITIES)],
       services: [
         GrantDeleteService,
         JobDeleteService,
         LoopDeleteService,
+        CarouselDeleteService,
         PackDeleteService,
         PaymentDeleteService,
         PaymentplanDeleteService,
         RaveDeleteService,
         ReviewDeleteService,
         UserDeleteService,
+        AccessControlService,
+        GrantDTOAuthorizer,
       ],
       resolvers: [...DEFAULT_RESOLVERS],
     }),

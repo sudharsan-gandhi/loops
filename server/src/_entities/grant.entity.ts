@@ -1,3 +1,4 @@
+import { GrantDTOAuthorizer } from 'src/resolver/authorizer/grant.authorizer';
 import {
   BaseEntity,
   Column,
@@ -11,6 +12,7 @@ import {
 } from 'typeorm';
 
 import {
+  Authorize,
   FilterableField,
   IDField,
 } from '@nestjs-query/query-graphql';
@@ -39,6 +41,7 @@ registerEnumType(GrantActions, { name: 'GrantActions' });
 @ObjectType('grant')
 @Entity('grant')
 @Unique('role_resource_id', ['role', 'resource', 'action'])
+@Authorize(GrantDTOAuthorizer)
 export class Grant extends BaseEntity {
   @IDField(() => ID, { description: 'Example field (placeholder)' })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
@@ -58,9 +61,9 @@ export class Grant extends BaseEntity {
 
   @FilterableField({
     description: `
-    all attributes => ['*'],
-    all attributes except specific fields => ['*', '!id']
-    only selected attributes => ['id', 'name']
+    all attributes => *,
+    all attributes except specific fields => *, !id
+    only selected attributes => id, name
     `,
   })
   @Column('varchar', { name: 'attributes', length: 30, nullable: false })

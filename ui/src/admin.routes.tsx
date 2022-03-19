@@ -1,3 +1,4 @@
+import CarouselResource from 'admin/carousel.admin';
 import Dashboard from 'admin/dashboard.admin';
 import GrantResource from 'admin/grant.admin';
 import JobResource from 'admin/job.admin';
@@ -76,6 +77,14 @@ export const AdminRoutes = () => {
         element={
           <RequireAuth>
             <GrantResource />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="carousels"
+        element={
+          <RequireAuth>
+            <CarouselResource />
           </RequireAuth>
         }
       />

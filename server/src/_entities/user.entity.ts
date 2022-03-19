@@ -33,6 +33,7 @@ import {
 } from '@nestjs/graphql';
 
 import { Payment } from './';
+import { Carousel } from './carousel.entity';
 import { Review } from './review.entity';
 
 export enum Authorizer {
@@ -52,6 +53,7 @@ registerEnumType(Authorizer, { name: 'Authorizer' });
 @CursorConnection('followings', () => Rave, { disableRemove: true })
 @CursorConnection('payments', () => Payment, { disableRemove: true })
 @CursorConnection('reviews', () => Review, { disableRemove: true })
+@CursorConnection('carousels', () => Carousel, { disableRemove: true })
 @Authorize(UserAuthorizer)
 export class User extends BaseEntity {
   @IDField(() => ID)
@@ -124,6 +126,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.user)
   reviews?: Review[];
+
+  @OneToMany(() => Carousel, (carousel) => carousel.author)
+  carousels?: Review[];
 
   @FilterableField(() => GraphQLTimestamp, {
     description: 'Example field (placeholder)',

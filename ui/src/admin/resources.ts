@@ -8,15 +8,16 @@ export const Entities = [
   { label: "User", value: "user" },
   { label: "Review", value: "review" },
   { label: "Grant", value: "grant" },
+  { label: "Carousel", value: "carousel" },
 ];
 
 export const Actions = [
-  "create:any",
-  "update:any",
-  "delete:any",
-  "read:any",
-  "create:own",
-  "update:own",
-  "delete:own",
-  "read:own",
+  "createAny",
+  "updateAny",
+  "deleteAny",
+  "readAny",
+  "createOwn",
+  "updateOwn",
+  "deleteOwn",
+  "readOwn",
 ];
