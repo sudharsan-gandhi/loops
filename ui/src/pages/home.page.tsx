@@ -8,8 +8,10 @@ import { LoopCardWithPack } from 'components/cards/loop.card';
 import * as _ from 'lodash';
 import Carousel from 'nuka-carousel';
 import {
-  getAllPacksForHome,
-  getAllPacksForHomeVariables,
+  CarouselConnection,
+  CarouselEdge,
+  getHomeData,
+  getHomeDataVariables,
   PackConnection,
   PackEdge,
 } from 'queries';
@@ -17,7 +19,10 @@ import {
   MdArrowRight,
   MdArrowRightAlt,
 } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 
 import { useQuery } from '@apollo/client';
 import {
@@ -26,6 +31,7 @@ import {
   Container,
   HStack,
   IconButton,
+  Image,
   Skeleton,
   Spacer,
   Text,
@@ -49,22 +55,27 @@ import {
 // }
 
 const Home: React.FC = () => {
+  const [carousels, setCarousels] = useState<CarouselEdge[]>([]);
   const [group, setGroup] = useState<{ [any: string]: PackEdge[] }>();
   const [currentSlide, setCurrentSlide] = useState({});
   const [audioList, setAudioList] = useState<{ [any: string]: PackEdge[] }>();
+  const [heroIndex, setHeroIndex] = useState<number>(1);
+  const history = useNavigate();
+
   const slideSetting: { show: number; slide: number } = useBreakpointValue({
     base: { show: 2.5, slide: 2 },
     md: { show: 3.5, slide: 2 },
     lg: { show: 4.5, slide: 2.5 },
     xl: { show: 5.5, slide: 3 },
   });
-  const { loading, data } = useQuery<{ packs: PackConnection }>(
-    getAllPacksForHome,
-    getAllPacksForHomeVariables()
-  );
+  const { loading, data } = useQuery<{
+    packs: PackConnection;
+    carousels: CarouselConnection;
+  }>(getHomeData, getHomeDataVariables());
 
   useEffect(() => {
     if (data) {
+      setCarousels(data.carousels.edges);
       const packs = _.filter(
         data.packs.edges,
         (data) => data?.node?.audio?.edges[0]?.node && !data.node.isLoop
@@ -93,6 +104,33 @@ const Home: React.FC = () => {
         </HStack>
       ) : (
         <>
+          {carousels && carousels.length > 0 && (
+            <Box w="100%" padding={1}>
+              {/* <ChakraCarousel gap={10}> */}
+              <Carousel
+                framePadding="0px"
+                slidesToShow={1}
+                slidesToScroll={1}
+                cellSpacing={10}
+                slideIndex={heroIndex}
+              >
+                {carousels?.map(({ node }, index) => (
+                  <Image
+                    key={index}
+                    objectFit="cover"
+                    objectPosition="center"
+                    src={"/static/avatars/" + node.image}
+                    alt={`pack ${node.packId}`}
+                    boxSize="2xl"
+                    onClick={() => {
+                      history(`/pack/${node.packId}`);
+                    }}
+                  />
+                ))}
+              </Carousel>
+              {/* </ChakraCarousel> */}
+            </Box>
+          )}
           <HStack
             bg="gray.700"
             w="100%"
@@ -126,6 +164,7 @@ const Home: React.FC = () => {
               </Link>
             </Box>
           </HStack>
+
           {group &&
             Object.entries(group).map(([groupName, packs]) => (
               <>

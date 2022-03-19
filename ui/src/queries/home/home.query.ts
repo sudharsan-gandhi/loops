@@ -1,12 +1,14 @@
 import { gql } from '@apollo/client';
 
-export const getAllPacksForHome = gql`
+export const getHomeData = gql`
   query Packs(
     $paging: CursorPaging
     $audioPaging2: CursorPaging
     $sorting: [loopSort!]
     $filter: loopFilter
     $packsFilter2: packFilter
+    $carouselsPaging2: CursorPaging
+    $carouselsFilter2: carouselFilter
   ) {
     packs(paging: $paging, filter: $packsFilter2) {
       edges {
@@ -41,10 +43,18 @@ export const getAllPacksForHome = gql`
         }
       }
     }
+    carousels(paging: $carouselsPaging2, filter: $carouselsFilter2) {
+      edges {
+        node {
+          image
+          packId
+        }
+      }
+    }
   }
 `;
 
-export const getAllPacksForHomeVariables = () => {
+export const getHomeDataVariables = () => {
   return {
     variables: {
       paging: {
@@ -53,11 +63,14 @@ export const getAllPacksForHomeVariables = () => {
       audioPaging2: {
         first: 1,
       },
-      // packsFilter2: {
-      //   isLoop: {
-      //     isNot: true,
-      //   },
-      // },
+      carouselsPaging2: {
+        first: 5,
+      },
+      carouselsFilter2: {
+        deletedAt: {
+          is: null,
+        },
+      },
     },
   };
 };

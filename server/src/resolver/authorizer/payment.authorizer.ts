@@ -33,7 +33,7 @@ export class PaymentAuthorizer implements CustomAuthorizer<PaymentInputDTO> {
     // check first global access
     const action = authorizationContext.operationGroup;
     let allowed = await this.acl.allowed(
-      user.role,
+      user?.role || 'guest',
       this.NAME,
       action,
       AuthPossesion.ANY,
@@ -42,7 +42,12 @@ export class PaymentAuthorizer implements CustomAuthorizer<PaymentInputDTO> {
       return {};
     }
 
-    allowed = await this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
+    allowed = await this.acl.allowed(
+      user?.role || 'guest',
+      this.NAME,
+      action,
+      AuthPossesion.OWN,
+    );
     if (allowed) {
       // if not check if owned resource can be edited
       const resource = await Payment.findOne(resourceId);

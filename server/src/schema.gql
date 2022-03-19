@@ -2158,8 +2158,6 @@ enum grantSortFields {
 type Mutation {
   restoreOneGrant(input: ID!): grant!
   restoreManyGrants(input: grantFilter!): UpdateManyResponse!
-  restoreOnePaymentplan(input: ID!): paymentplan!
-  restoreManyPaymentplans(input: paymentplanFilter!): UpdateManyResponse!
   restoreOneJob(input: ID!): job!
   restoreManyJobs(input: jobFilter!): UpdateManyResponse!
   restoreOneLoop(input: ID!): loop!
@@ -2170,6 +2168,8 @@ type Mutation {
   restoreManyPacks(input: packFilter!): UpdateManyResponse!
   restoreOnePayment(input: ID!): payment!
   restoreManyPayments(input: paymentFilter!): UpdateManyResponse!
+  restoreOnePaymentplan(input: ID!): paymentplan!
+  restoreManyPaymentplans(input: paymentplanFilter!): UpdateManyResponse!
   restoreOneRave(input: ID!): rave!
   restoreManyRaves(input: raveFilter!): UpdateManyResponse!
   restoreOneReview(input: ID!): Review!

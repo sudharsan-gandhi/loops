@@ -40,7 +40,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
     ) {
       const input = context.req?.body?.variables?.input?.update;
       context.req.body.variables.input.update = this.acl.filter(
-        user?.role || 'user',
+        user?.role || 'guest',
         this.NAME,
         action,
         AuthPossesion.ANY,
@@ -55,7 +55,7 @@ export class UserAuthorizer implements CustomAuthorizer<UserInputDTO> {
         context.req?.body?.variables?.input[this.NAME.toLowerCase()];
       context.req.body.variables.input[this.NAME.toLowerCase()] =
         await this.acl.filter(
-          user?.role || 'user',
+          user?.role || 'guest',
           this.NAME,
           action,
           AuthPossesion.ANY,

@@ -32,8 +32,8 @@ export class ReviewAuthorizer implements CustomAuthorizer<ReviewInputDTO> {
     const resourceId = context.req?.body?.variables.id;
     // check first global access
     const action = authorizationContext.operationGroup;
-    let allowed =await this.acl.allowed(
-      user.role,
+    let allowed = await this.acl.allowed(
+      user?.role || 'guest',
       this.NAME,
       action,
       AuthPossesion.ANY,
@@ -42,7 +42,12 @@ export class ReviewAuthorizer implements CustomAuthorizer<ReviewInputDTO> {
       return {};
     }
 
-    allowed = await this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
+    allowed = await this.acl.allowed(
+      user?.role || 'guest',
+      this.NAME,
+      action,
+      AuthPossesion.OWN,
+    );
     if (allowed) {
       // if not check if owned resource can be edited
       const resource = await Review.findOne(resourceId);

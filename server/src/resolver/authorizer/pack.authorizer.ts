@@ -43,7 +43,12 @@ export class PackAuthorizer implements CustomAuthorizer<PackInputDTO> {
       return {};
     }
 
-    allowed = await this.acl.allowed(user.role, this.NAME, action, AuthPossesion.OWN);
+    allowed = await this.acl.allowed(
+      user?.role || 'guest',
+      this.NAME,
+      action,
+      AuthPossesion.OWN,
+    );
     if (allowed) {
       // if not check if owned resource can be edited
       let resource;

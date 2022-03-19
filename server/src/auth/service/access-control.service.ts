@@ -51,7 +51,11 @@ export class AccessControlService {
 
   async reload() {
     this.grants = await Grant.find({});
-    this.authorizer = new AccessControl(this.grants);
+    if (this.authorizer) {
+      this.authorizer.setGrants(this.grants);
+    } else {
+      this.authorizer = new AccessControl(this.grants);
+    }
   }
 }
 

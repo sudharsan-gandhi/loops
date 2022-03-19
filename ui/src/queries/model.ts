@@ -2090,8 +2090,6 @@ export type Mutation = {
   __typename?: "Mutation"
   restoreOneGrant: Grant
   restoreManyGrants: UpdateManyResponse
-  restoreOnePaymentplan: Paymentplan
-  restoreManyPaymentplans: UpdateManyResponse
   restoreOneJob: Job
   restoreManyJobs: UpdateManyResponse
   restoreOneLoop: Loop
@@ -2102,6 +2100,8 @@ export type Mutation = {
   restoreManyPacks: UpdateManyResponse
   restoreOnePayment: Payment
   restoreManyPayments: UpdateManyResponse
+  restoreOnePaymentplan: Paymentplan
+  restoreManyPaymentplans: UpdateManyResponse
   restoreOneRave: Rave
   restoreManyRaves: UpdateManyResponse
   restoreOneReview: Review
@@ -2195,14 +2195,6 @@ export type MutationRestoreManyGrantsArgs = {
   input: GrantFilter
 }
 
-export type MutationRestoreOnePaymentplanArgs = {
-  input: Scalars["ID"]
-}
-
-export type MutationRestoreManyPaymentplansArgs = {
-  input: PaymentplanFilter
-}
-
 export type MutationRestoreOneJobArgs = {
   input: Scalars["ID"]
 }
@@ -2241,6 +2233,14 @@ export type MutationRestoreOnePaymentArgs = {
 
 export type MutationRestoreManyPaymentsArgs = {
   input: PaymentFilter
+}
+
+export type MutationRestoreOnePaymentplanArgs = {
+  input: Scalars["ID"]
+}
+
+export type MutationRestoreManyPaymentplansArgs = {
+  input: PaymentplanFilter
 }
 
 export type MutationRestoreOneRaveArgs = {

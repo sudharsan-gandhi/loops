@@ -33,7 +33,7 @@ export class GrantDTOAuthorizer implements CustomAuthorizer<GrantDTO> {
     // check first global access
     const action = authorizationContext.operationGroup;
     let allowed = await this.acl.allowed(
-      user?.role || 'user',
+      user?.role || 'guest',
       this.NAME,
       action,
       AuthPossesion.ANY,
@@ -43,7 +43,7 @@ export class GrantDTOAuthorizer implements CustomAuthorizer<GrantDTO> {
     }
 
     allowed = await this.acl.allowed(
-      user.role,
+      user?.role || 'guest',
       this.NAME,
       action,
       AuthPossesion.OWN,
