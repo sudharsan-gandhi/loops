@@ -93,12 +93,22 @@ const CarouselResource: React.FC = () => {
   });
 
   const formReducer = (form: any) => {
-    if (form?.paging?.first) {
-      form.paging.first = parseInt(form.paging.first);
-    }
-    let newState: QueryUsersArgs = {
-      paging: { ...variables.paging, ...(form.paging || {}) },
+    let newState = {
+      paging: {},
     };
+    if (form.type === "clear") {
+      dispatch({...initialVariables})
+      return;
+    }
+    if (form?.paging?.first || variables?.paging?.first) {
+      newState = {
+        paging: {
+          first: form?.paging?.first
+            ? parseInt(form.paging.first)
+            : variables.paging.first,
+        },
+      };
+    }
     Object.entries(form).forEach(([key, value]) => {
       Object.entries(value).forEach(([k, v]) => {
         if (v) {
@@ -115,16 +125,13 @@ const CarouselResource: React.FC = () => {
         }
       });
     });
+    delete variables.paging;
+    newState = {
+      ...variables,
+      ...newState,
+    };
     // add default filters here
-    dispatch({
-      filter: {
-        ...(newState.filter || {}),
-      },
-      paging: {
-        ...(newState.paging || {}),
-      },
-      sorting: [...(newState.sorting || [])],
-    });
+    dispatch({ ...newState });
   };
 
   return (

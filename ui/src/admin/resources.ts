@@ -1,5 +1,5 @@
 export const Entities = [
-  { label: "Audio", value: "audio" },
+  { label: "Loop", value: "audio" },
   { label: "Job", value: "job" },
   { label: "Pack", value: "pack" },
   { label: "Paymentplan", value: "paymentplan" },

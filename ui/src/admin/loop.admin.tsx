@@ -16,6 +16,7 @@ import {
   QueryUsersArgs,
   UserConnection,
 } from 'queries';
+import { loopValidations } from 'validations/loop.validation';
 
 import AdminQueries, {
   MutationField,
@@ -51,7 +52,10 @@ const LoopResource: React.FC = () => {
       label: "Loop Name",
       type: "string",
       isRequired: true,
-      validations: {},
+      validations: {
+        ...loopValidations.name.maxLength,
+        ...loopValidations.name.minLength,
+      },
     },
     {
       field: "genre",
@@ -66,7 +70,10 @@ const LoopResource: React.FC = () => {
       label: "BPM",
       type: "number",
       isRequired: true,
-      validations: {},
+      validations: {
+        ...loopValidations.bpm.min,
+        ...loopValidations.bpm.max
+      },
     },
     {
       field: "path",
@@ -109,7 +116,7 @@ const LoopResource: React.FC = () => {
       type: "string",
       isRequired: true,
       validations: {},
-    },
+    }
   ];
 
   const searchFields: KBFilterInterface<Omit<LoopFilter, "or" | "and">>[] = [
@@ -155,12 +162,22 @@ const LoopResource: React.FC = () => {
   });
 
   const formReducer = (form: any) => {
-    if (form?.paging?.first) {
-      form.paging.first = parseInt(form.paging.first);
-    }
-    let newState: QueryUsersArgs = {
-      paging: { ...variables.paging, ...(form.paging || {}) },
+    let newState = {
+      paging: {},
     };
+    if (form.type === "clear") {
+      dispatch({ ...initialVariables });
+      return;
+    }
+    if (form?.paging?.first || variables?.paging?.first) {
+      newState = {
+        paging: {
+          first: form?.paging?.first
+            ? parseInt(form.paging.first)
+            : variables.paging.first,
+        },
+      };
+    }
     Object.entries(form).forEach(([key, value]) => {
       Object.entries(value).forEach(([k, v]) => {
         if (v) {
@@ -177,16 +194,13 @@ const LoopResource: React.FC = () => {
         }
       });
     });
+    delete variables.paging;
+    newState = {
+      ...variables,
+      ...newState,
+    };
     // add default filters here
-    dispatch({
-      filter: {
-        ...(newState.filter || {}),
-      },
-      paging: {
-        ...(newState.paging || {}),
-      },
-      sorting: [...(newState.sorting || [])],
-    });
+    dispatch({ ...newState });
   };
 
   return (

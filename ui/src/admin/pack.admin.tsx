@@ -11,6 +11,7 @@ import {
   QueryUsersArgs,
   UserConnection,
 } from 'queries';
+import { packValidations } from 'validations/pack.validation';
 
 import AdminQueries, {
   MutationField,
@@ -33,8 +34,21 @@ const PackResource: React.FC = () => {
   ];
 
   const mutationFields: MutationField[] = [
-    { field: "name", type: "string", isRequired: true, validations: {} },
-    { field: "description", type: "string", isRequired: true, validations: {} },
+    {
+      field: "name",
+      type: "string",
+      isRequired: true,
+      validations: {
+        ...packValidations.name.minlength,
+        ...packValidations.name.maxLength,
+      },
+    },
+    {
+      field: "description",
+      type: "string",
+      isRequired: true,
+      validations: { ...packValidations.description.maxLength },
+    },
     {
       field: "type",
       type: "select",
@@ -49,7 +63,10 @@ const PackResource: React.FC = () => {
       field: "price",
       type: "number",
       isRequired: false,
-      validations: {},
+      validations: {
+        ...packValidations.price.min,
+        ...packValidations.price.max,
+      },
     },
     { field: "isLoop", type: "checkbox", isRequired: true, validations: {} },
     {
@@ -93,19 +110,21 @@ const PackResource: React.FC = () => {
   });
 
   const formReducer = (form: any) => {
-    if (form?.paging?.first) {
-      form.paging.first = parseInt(form.paging.first);
-    }
-    let newState: QueryUsersArgs = {
-      paging: { ...variables.paging, ...(form.paging || {}) },
-      filter: { ...variables.filter },
-      sorting: [...variables.sorting],
+    let newState = {
+      paging: {},
     };
-
     if (form.type === "clear") {
-      newState = initialVariables;
-      // newState.paging.first =
-      //   variables.paging.first || initialVariables.paging.first;
+      dispatch({ ...initialVariables });
+      return;
+    }
+    if (form?.paging?.first || variables?.paging?.first) {
+      newState = {
+        paging: {
+          first: form?.paging?.first
+            ? parseInt(form.paging.first)
+            : variables.paging.first,
+        },
+      };
     }
     Object.entries(form).forEach(([key, value]) => {
       Object.entries(value).forEach(([k, v]) => {
@@ -123,16 +142,13 @@ const PackResource: React.FC = () => {
         }
       });
     });
+    delete variables.paging;
+    newState = {
+      ...variables,
+      ...newState,
+    };
     // add default filters here
-    dispatch({
-      filter: {
-        ...(newState.filter || {}),
-      },
-      paging: {
-        ...(newState.paging || {}),
-      },
-      sorting: [...(newState.sorting || [])],
-    });
+    dispatch({ ...newState });
   };
 
   return (
