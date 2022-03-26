@@ -13,7 +13,6 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import create, { GetState } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 import {
   Box,
@@ -34,7 +33,6 @@ export const LoadAuth: React.FC = ({ children }: { children: JSX.Element }) => {
   }, [auth]);
 
   useEffect(() => {
-    debugger;
     if (!auth || !currentUser || JSON.stringify(currentUser) === "{}") {
       isLoggedIn();
     }
@@ -163,29 +161,29 @@ export function RequireAuth({ children }: { children: JSX.Element }) {
 }
 
 export const useAuth = create(
-  persist(
+  // persist(
     (set: any, get) => ({
       auth: false,
       login: () => set(() => ({ auth: true })),
       logout: () => set({ auth: false }),
     }),
-    { name: "auth" }
-  )
+    // { name: "auth" }
+  // )
 );
 
 export const useUser = create(
-  persist(
+  // persist(
     (set: any) => ({
       currentUser: {} as MakeOptional<User, keyof User>,
       setUser: (currentUser) => set({ currentUser }),
     }),
-    { name: "user" }
-  )
+  //   { name: "user" }
+  // )
 );
 
 export const useAccess = create(
-  persist(
-    (set, get: GetState<{ access: any }>) => ({
+  // persist(
+    (set: any, get: GetState<{ access: any }>) => ({
       access: {},
       setAccess: async () => {
         let access = get().access;
@@ -199,6 +197,6 @@ export const useAccess = create(
         set({}, true);
       },
     }),
-    { name: "access" }
-  )
+  //   { name: "access" }
+  // )
 );

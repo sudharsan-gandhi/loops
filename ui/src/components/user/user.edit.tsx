@@ -71,7 +71,6 @@ const EditUser: React.FC = () => {
         .filter(([_, v]) => v && (v as string) !== "")
         .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {});
 
-      debugger;
       newData = mutationFields.reduce((acc, field) => {
         if (!!newData[field] && newData[field].trim() !== "") {
           acc[field] = newData[field];

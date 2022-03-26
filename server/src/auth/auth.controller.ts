@@ -92,12 +92,14 @@ export class AuthController {
   @Get('/access')
   @UseGuards(AuthGuard('jwt'))
   accessList(@Req() req, @Res() res: Response) {
+    this.console.log('fetching accesslist', req.user.role);
     this.getAccessList(req)
       .then((accessList) => {
+        this.console.log('accesslist', JSON.stringify(accessList, null, 2));
         res.json(accessList);
       })
       .catch((err) => {
-        this.console.log(err);
+        this.console.error(err);
         res.status(400).send('something went wrong');
       });
   }
@@ -110,7 +112,7 @@ export class AuthController {
       let actionObj = {};
       for (let action of actions) {
         const bool = await this.acl.allowed(
-          req.user.role || 'guest',
+          req?.user?.role || 'guest',
           entity.name.toLowerCase(),
           action,
           AuthPossesion.ANY,
@@ -119,7 +121,6 @@ export class AuthController {
       }
       accessList[entity.name.toLowerCase()] = actionObj;
     }
-    this.console.log(accessList);
     return accessList;
   }
 

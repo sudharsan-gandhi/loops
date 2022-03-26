@@ -9,6 +9,7 @@ import {
   MdOutlinePassword,
   MdRemoveRedEye,
 } from 'react-icons/md';
+import { userValidations } from 'validations/user.validation';
 
 import {
   Box,
@@ -85,14 +86,8 @@ export const UserForm: React.FC<{
           name="name"
           {...register("name", {
             ...requiredValidation,
-            maxLength: {
-              value: 75,
-              message: "maximum characters allowed is 75",
-            },
-            minLength: {
-              value: 5,
-              message: "minimum length must be 5",
-            },
+            ...userValidations.name.minLength,
+            ...userValidations.name.maxLength,
           })}
         />
         <FormErrorMessage>
@@ -114,18 +109,9 @@ export const UserForm: React.FC<{
             <Input
               {...register("email", {
                 ...requiredValidation,
-                maxLength: {
-                  value: 75,
-                  message: "Maximum characters allowed is 75",
-                },
-                minLength: {
-                  value: 8,
-                  message: "Minimum length must be 8",
-                },
-                pattern: {
-                  value: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                  message: "Not a valid email address",
-                },
+                ...userValidations.email.minLength,
+                ...userValidations.email.maxLength,
+                ...userValidations.email.pattern,
               })}
               type="email"
             />
@@ -143,12 +129,7 @@ export const UserForm: React.FC<{
               <Input
                 {...register("password", {
                   ...requiredValidation,
-                  pattern: {
-                    value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
-                    message:
-                      "Password must contain one upper case letter and lower case letter with atleast one special character and a number",
-                  },
+                  ...userValidations.password.pattern,
                 })}
                 type={showPassword ? "text" : "password"}
               />
@@ -173,14 +154,7 @@ export const UserForm: React.FC<{
         <FormLabel>About</FormLabel>
         <Textarea
           {...register("about", {
-            maxLength: {
-              value: 75,
-              message: "Maximum characters allowed is 75",
-            },
-            minLength: {
-              value: 8,
-              message: "Minimum length must be 8",
-            },
+            ...userValidations.about.maxLength,
           })}
         ></Textarea>
         <FormErrorMessage>

@@ -19,6 +19,8 @@ import {
 } from 'queries/model';
 import { useForm } from 'react-hook-form';
 import { MdGraphicEq } from 'react-icons/md';
+import { loopValidations } from 'validations/loop.validation';
+import { packValidations } from 'validations/pack.validation';
 
 import { useMutation } from '@apollo/client';
 import {
@@ -97,7 +99,6 @@ const EditLoop: React.FC<{
   };
 
   const submit = async (data) => {
-    // todo: should implement logic here to upload audio and get the file path
     data.tempo = tempoValue;
     data.bpm = data.bpm ? parseInt(data.bpm) : undefined;
     try {
@@ -233,14 +234,8 @@ const EditLoop: React.FC<{
                     id="name"
                     name="name"
                     {...register("name", {
-                      maxLength: {
-                        value: 75,
-                        message: "maximum characters allowed is 75",
-                      },
-                      minLength: {
-                        value: 5,
-                        message: "minimum length must be 5",
-                      },
+                      ...loopValidations.name.maxLength,
+                      ...loopValidations.name.minLength,
                     })}
                   />
                   <FormErrorMessage>
@@ -281,14 +276,7 @@ const EditLoop: React.FC<{
                         id="description"
                         name="description"
                         {...register("description", {
-                          maxLength: {
-                            value: 200,
-                            message: "maximum characters allowed is 200",
-                          },
-                          minLength: {
-                            value: 5,
-                            message: "minimum length must be 5",
-                          },
+                          ...packValidations.description.maxLength,
                         })}
                       />
                       <FormErrorMessage>
@@ -305,10 +293,8 @@ const EditLoop: React.FC<{
                       name="price"
                       type="number"
                       {...register("price", {
-                        max: {
-                          value: 200,
-                          message: "Price cannot be greater than 200",
-                        },
+                        ...packValidations.price.min,
+                        ...packValidations.price.max,
                         valueAsNumber: true,
                       })}
                     />
@@ -413,7 +399,7 @@ const EditLoop: React.FC<{
                   <FormHelperText>{tempoValue}</FormHelperText>
                   <Slider
                     min={0}
-                    max={300}
+                    max={loopValidations.tempo.maxConstant}
                     defaultValue={defaultValue?.tempo}
                     onChange={(val) => setTempo(val)}
                   >

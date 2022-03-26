@@ -5,10 +5,14 @@ import {
 import { Grant } from 'src/_entities';
 
 import { OperationGroup } from '@nestjs-query/query-graphql';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 
 @Injectable()
 export class AccessControlService {
+  private logger = new Logger();
   private authorizer: AccessControl;
   grants: Grant[];
 
@@ -50,13 +54,17 @@ export class AccessControlService {
   }
 
   async reload() {
-    this.grants = await Grant.find({});
+    this.grants = await Grant.find();
+    this.logger.log('sql grants', this.grants);
     if (this.authorizer) {
       this.authorizer.setGrants(this.grants);
+      this.logger.log('updated grants', this.grants);
     } else {
       this.authorizer = new AccessControl(this.grants);
+      this.logger.log('grants initial load complete', this.grants);
     }
   }
+
 }
 
 export enum AuthAction {

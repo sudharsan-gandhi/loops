@@ -91,7 +91,6 @@ export const grants = {
       'delete:own': '*',
     },
     user: {
-      'create:any': '*, !role',
       'read:own': '*',
       'update:own': '*',
       'delete:own': '*',
@@ -124,7 +123,11 @@ export const grants = {
     },
     user: {
       'read:any': '*',
+      'create:any': '*, !role',
     },
+    carousel: {
+      'read:any': '*'
+    }
   },
 };
 

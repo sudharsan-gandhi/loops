@@ -17,7 +17,7 @@ export const reducer = <T extends { [any: string]: any }>(
   switch (payload.type) {
     case "paging": {
       const key = payload.key;
-      let paging: CursorPaging = { first: state.paging.first };
+      let paging: CursorPaging = { first: state?.paging?.first };
       if (key === "before" || key === "after") {
         const cursor =
           key === "before" ? pageInfo?.startCursor : pageInfo?.endCursor;
