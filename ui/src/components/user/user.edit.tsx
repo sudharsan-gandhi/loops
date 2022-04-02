@@ -72,8 +72,13 @@ const EditUser: React.FC = () => {
         .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {});
 
       newData = mutationFields.reduce((acc, field) => {
-        if (!!newData[field] && newData[field].trim() !== "") {
-          acc[field] = newData[field];
+        if (!!newData[field]) {
+          if (
+            typeof newData[field] === "number" ||
+            (newData[field]?.trim && newData[field].trim() !== "")
+          ) {
+            acc[field] = newData[field];
+          }
         }
         return acc;
       }, {});

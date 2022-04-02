@@ -5,6 +5,7 @@ import { UserForm } from 'components/user/_user.form';
 import {
   signupUser,
   signupVariables,
+  User,
 } from 'queries';
 import {
   Link as Router,
@@ -27,7 +28,9 @@ import {
 export const State = (state) => <pre>{JSON.stringify(state, null, 2)}</pre>;
 
 const SignUp: React.FC = () => {
-  const [createOneUser, { loading }] = useMutation(signupUser);
+  const [createOneUser, { loading }] = useMutation<{ createOneUser: User }>(
+    signupUser
+  );
   const history = useNavigate();
   const toast = useToast();
 
@@ -45,7 +48,9 @@ const SignUp: React.FC = () => {
         console.log(response.data.path);
         data.image = response.data.path;
       }
-      const u: any = await createOneUser(signupVariables(data));
+      const {
+        data: { createOneUser: u },
+      } = await createOneUser(signupVariables(data));
       toast({
         title: `User ${u.name} created Successfully`,
         description: "redirecting to Signin page",
