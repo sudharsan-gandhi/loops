@@ -45,8 +45,9 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   async login(@Req() req, @Res() res) {
     this.console.debug(req.user);
+    const referer = this.getReferer(req);
     this.attachUserCookie(req, res);
-    res.redirect(this.clientUrl);
+    res.redirect(referer);
   }
 
   @Post('/login/admin')
@@ -65,8 +66,9 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   googleRedirect(@Req() req, @Res() res) {
     this.console.debug(req.user);
+    const referer = this.getReferer(req);
     this.attachUserCookie(req, res);
-    res.redirect(this.clientUrl + '/signin');
+    res.redirect(referer);
   }
 
   @Get('/facebook')
@@ -77,8 +79,9 @@ export class AuthController {
   @UseGuards(AuthGuard('facebook'))
   facebookRedirect(@Req() req, @Res() res) {
     this.console.debug(req.user);
+    const referer = this.getReferer(req);
     this.attachUserCookie(req, res);
-    res.redirect('/signin');
+    res.redirect(referer);
   }
 
   @Get('/logout')
@@ -128,5 +131,16 @@ export class AuthController {
     res.cookie('accessToken', req.user.accessToken);
     res.cookie('user', req.user.data);
     res.cookie('userId', req.user.data.id);
+  }
+
+  private getReferer(req: any) {
+    const referer =
+      req?.headers?.referer ||
+      (req?.headers?.host ? req?.headers?.host + '/signin' : undefined);
+    if (referer?.length > 0) {
+      return referer;
+    } else {
+      this.clientUrl + '/signin';
+    }
   }
 }

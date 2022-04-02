@@ -591,7 +591,7 @@ export type Pack = {
   /** Example field (placeholder) */
   name: Scalars["String"]
   /** Example field (placeholder) */
-  price: Scalars["Float"]
+  price?: Maybe<Scalars["Float"]>
   /** Example field (placeholder) */
   description: Scalars["String"]
   /** Example field (placeholder) */

@@ -631,7 +631,7 @@ type pack {
   name: String!
 
   """Example field (placeholder)"""
-  price: Float!
+  price: Float
 
   """Example field (placeholder)"""
   description: String!
