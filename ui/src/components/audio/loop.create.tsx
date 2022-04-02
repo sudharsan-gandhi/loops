@@ -54,13 +54,19 @@ import {
 } from './audio.model';
 import { packetType } from './pack.create';
 
-const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
+const CreateLoop: React.FC<{
+  packId?: string;
+  refetch?: any;
+  closeModal?: any;
+}> = ({ packId, refetch, closeModal }) => {
   let history = useNavigate();
-  const packId = props?.packId || "";
-  const [createOnePack] =
-    useMutation<{ createOnePack: MakeOptional<Pack, keyof Pack> }>(createPack);
-  const [createOneLoop] =
-    useMutation<{ createOneLoop: MakeOptional<Loop, keyof Loop> }>(createAudio);
+  packId = packId || "";
+  const [createOnePack] = useMutation<{
+    createOnePack: MakeOptional<Pack, keyof Pack>;
+  }>(createPack);
+  const [createOneLoop] = useMutation<{
+    createOneLoop: MakeOptional<Loop, keyof Loop>;
+  }>(createAudio);
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -109,6 +115,13 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
         console.log(response.data.path);
         data.path = response.data.path;
       } else {
+        toast({
+          title: `Please attach an audio file`,
+          status: "warning",
+          duration: 4000,
+          isClosable: true,
+          position: "top",
+        });
         return false;
       }
     } catch (e) {
@@ -141,7 +154,8 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
           isClosable: true,
           position: "top",
         });
-        history(`/pack/${packId}`);
+        refetch && refetch();
+        closeModal && closeModal();
       } else {
         const packInput: MakeOptional<Pack, keyof Pack> = {
           name: data.name,
@@ -171,7 +185,8 @@ const CreateLoop: React.FC<{ packId?: string }> = ({ ...props }) => {
           position: "top",
         });
         setLoading(false);
-        history(`/pack`, { state: { activeTab: 1 } });
+        refetch && refetch();
+        closeModal && closeModal();
       }
     } catch (e) {
       toast({

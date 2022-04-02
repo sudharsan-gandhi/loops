@@ -252,7 +252,7 @@ export const ShowPack: React.FC = () => {
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody pb={6}>
-                <CreateLoop packId={pack.id} />
+                <CreateLoop packId={pack.id} refetch={refetch} closeModal={onModelClose} />
               </ModalBody>
             </ModalContent>
           </Modal>

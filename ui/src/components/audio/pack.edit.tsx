@@ -38,7 +38,7 @@ export const EditPack: React.FC<{
   editClose: any;
 }> = ({ pack, refetch, editClose }) => {
   const [updatePack, { loading }] =
-    useMutation<{ UpdateOnePack: Pack }>(updateOnePack);
+    useMutation<{ updateOnePack: Pack }>(updateOnePack);
   const [isFree, setFree] = useState(false);
   const {
     handleSubmit,
@@ -65,7 +65,7 @@ export const EditPack: React.FC<{
     try {
       data.authorId = cookies.get("userId") as number;
       const {
-        data: { UpdateOnePack: pack },
+        data: { updateOnePack: pack },
       } = await updatePack(updateOnePackVariables(data));
       toast({
         title: `Successfully updated pack details`,

@@ -1,15 +1,16 @@
-import { AllLoops } from 'components/audio/loop.all';
-import { AllPacks } from 'components/audio/pack.all';
-import { useLocation } from 'react-router-dom';
+import { AllLoops } from "components/audio/loop.all";
+import { AllPacks } from "components/audio/pack.all";
+import { Link, useLocation } from "react-router-dom";
 
 import {
+  Button,
   Container,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
 const PackPage: React.FC = () => {
   let { state: activeTab } = useLocation();
@@ -21,6 +22,9 @@ const PackPage: React.FC = () => {
           <TabList>
             <Tab>My Packs</Tab>
             <Tab>My Loops</Tab>
+            <Button>
+              <Link to="/new-pack">Add Pack/Audio</Link>
+            </Button>
           </TabList>
           <TabPanels>
             <TabPanel>

@@ -79,10 +79,12 @@ const LoopResource: React.FC = () => {
       field: "path",
       label: "Upload Loop",
       type: "upload",
+      mimeType: "audio/*",
       fileOptions: {
         files: audioFiles,
         setFiles: setAudioFiles,
         uploadLink: "upload/audio",
+        
       },
       isRequired: false,
       validations: {},

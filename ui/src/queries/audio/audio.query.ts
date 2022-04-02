@@ -1,11 +1,6 @@
-import {
-  CursorPaging,
-  Maybe,
-  PackFilter,
-  PackSort,
-} from 'queries';
+import { CursorPaging, Maybe, PackFilter, PackSort } from "queries";
 
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const getAllPacks = gql`
   query Packs($paging: CursorPaging, $filter: packFilter) {
@@ -55,17 +50,17 @@ export const getAllPacksVariables = (
   };
   let onlyPackOrLoop: Maybe<PackFilter> = {
     isLoop: {
-      isNot: true
-    }
-  }
-  if(isLoop) {
-    onlyPackOrLoop= {
+      isNot: true,
+    },
+  };
+  if (isLoop) {
+    onlyPackOrLoop = {
       isLoop: {
-        is: true
-      }
-    }
+        is: true,
+      },
+    };
   }
-  
+
   return {
     variables: {
       ...paging,
@@ -101,6 +96,7 @@ export const getPackWithAudiosById = gql`
             audioType
             key
             tempo
+            deletedAt
           }
         }
       }

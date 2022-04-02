@@ -52,11 +52,13 @@ export const AllLoops: React.FC = () => {
                 <Skeleton height="20px" />
               </Stack>
             ) : data?.packs?.edges.length === 0 ? (
-              <Box>No Packs added</Box>
+              <>
+                <Box mb="10">No Audio Loops added</Box>
+              </>
             ) : (
               <VStack>
                 {data?.packs?.edges.map(({ node }, index) => (
-                  <> 
+                  <>
                     {/* <Link key={index} to={`/pack/${node.id}`}> */}
                     <LoopCardWithPack
                       key={node.id}

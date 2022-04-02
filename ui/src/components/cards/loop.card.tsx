@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 
-import { EditLoop } from 'components/audio/loop.edit';
+import { EditLoop } from "components/audio/loop.edit";
 import {
   deleteOneLoop,
   deleteOnePack,
@@ -9,18 +9,15 @@ import {
   MakeOptional,
   Pack,
   User,
-} from 'queries';
-import { FaFileAudio } from 'react-icons/fa';
-import {
-  FiEdit,
-  FiPlay,
-} from 'react-icons/fi';
-import { HiDotsVertical } from 'react-icons/hi';
-import { MdDeleteOutline } from 'react-icons/md';
-import { Link } from 'react-router-dom';
-import { IsOwn } from 'state/user';
+} from "queries";
+import { FaFileAudio } from "react-icons/fa";
+import { FiEdit, FiPlay } from "react-icons/fi";
+import { HiDotsVertical } from "react-icons/hi";
+import { MdDeleteOutline } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { IsOwn } from "state/user";
 
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -52,7 +49,7 @@ import {
   useDisclosure,
   useToast,
   VStack,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 
 function labelAndValue(label, value) {
   return (
@@ -128,7 +125,7 @@ const EditModal: React.FC<{
     <Box w={"full"} position="relative">
       <Modal isOpen={isEditOpen} onClose={closeEdit} size={"full"}>
         <ModalOverlay />
-        <ModalContent> 
+        <ModalContent>
           <ModalHeader>
             <Heading
               w="full"
@@ -171,7 +168,7 @@ export const LoopCardWithPack: React.FC<{
   const {
     audio: { edges: audioList },
   } = pack;
-  const audio = audioList[0].node;
+  const audio = audioList?.length > 0 ? audioList[0]?.node : undefined;
   const [deletePack] = useMutation<{ deleteOnePack: Pack }>(deleteOnePack);
   const [deleteAudio] = useMutation<{ deleteOneLoop: Loop }>(deleteOneLoop);
   const deleteRef = useRef();
@@ -239,112 +236,120 @@ export const LoopCardWithPack: React.FC<{
 
   return (
     <>
-      <Box
-        border={"1px solid"}
-        borderColor={"red.200"}
-        borderRadius={4}
-        p="5"
-        m="5"
-        boxShadow="2xl"
-        w="100%"
-      >
-        <HStack justifyContent="space-between" w="100%">
-          <Center>
-            <IconButton aria-label="play" icon={<FiPlay></FiPlay>}></IconButton>
-          </Center>
-          <VStack justifyContent={"baseline"} width="30%">
-            <Box display={{ base: "none", lg: "flex" }}>
-              <Badge colorScheme={"red"}>Name</Badge>
-            </Box>
-            <Box fontWeight={"bold"} textAlign="center" w="100%">
-              <Text isTruncated>{audio.name.toUpperCase()}</Text>
-            </Box>
-          </VStack>
-          {labelAndValue("BPM", audio.bpm)}
-          {labelAndValue("Genre", audio.genre)}
-          {labelAndValue("Tempo", audio.tempo)}
-          {audio.key && labelAndValue("Note", audio.key)}
-          {labelAndValue("Type", audio.audioType)}
-          {showPrice(pack)}
-          <Center>
-            <IconButton
-              variant={"ghost"}
-              aria-label="extra"
-              icon={<HiDotsVertical />}
-              onClick={openAudioModal}
-            />
-          </Center>
-        </HStack>
-      </Box>
-      <Drawer
-        isOpen={isAudioModalOpen}
-        placement="right"
-        onClose={closeAudioModal}
-        size={"sm"}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <HStack justifyContent="center" alignItems="baseline">
-              <Text fontSize={"xl"} fontWeight={"bold"}>
-                {audio.name.toUpperCase()}{" "}
-              </Text>
-              {showPrice(pack)}
-            </HStack>
-          </DrawerHeader>
-          <DrawerBody>
-            <VStack h="100%" alignItems={"start"}>
-              {labelHorizontal("BPM", audio.bpm)}
-              {labelHorizontal("Genre", audio.genre)}
-              {labelHorizontal("Tempo", audio.tempo)}
-              {audio.key && labelHorizontal("Note", audio.key)}
-              {labelHorizontal("Type", audio.audioType)}
-            </VStack>
-          </DrawerBody>
-          <DrawerFooter>
-            <IsOwn userId={user?.id}>
-              <HStack w="100%" justifyContent={"center"}>
-                <Box>
-                  <Button
-                    leftIcon={<FiEdit />}
-                    onClick={() => {
-                      closeAudioModal();
-                      OpenEdit();
-                    }}
-                  >
-                    Edit Audio
-                  </Button>
-                </Box>
-                <Box>
-                  <Button
-                    leftIcon={<MdDeleteOutline />}
-                    ref={deleteRef}
-                    onClick={openDelete}
-                  >
-                    Delete Audio
-                  </Button>
-                </Box>
-              </HStack>
-            </IsOwn>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
       {audio && (
-        <EditModal
-          name={audio.name}
-          isEditOpen={isEditOpen}
-          closeEdit={closeEdit}
-        >
-          <EditLoop
-            packId={packId}
-            loop={audio}
-            isLoop={true}
-            refetch={refetch}
-          />
-        </EditModal>
+        <>
+          <Box
+            border={"1px solid"}
+            borderColor={"red.200"}
+            borderRadius={4}
+            p="5"
+            m="5"
+            boxShadow="2xl"
+            w="100%"
+          >
+            <HStack justifyContent="space-between" w="100%">
+              <Center>
+                <IconButton
+                  aria-label="play"
+                  icon={<FiPlay></FiPlay>}
+                ></IconButton>
+              </Center>
+              <VStack justifyContent={"baseline"} width="30%">
+                <Box display={{ base: "none", lg: "flex" }}>
+                  <Badge colorScheme={"red"}>Name</Badge>
+                </Box>
+                <Box fontWeight={"bold"} textAlign="center" w="100%">
+                  <Text isTruncated>{audio.name.toUpperCase()}</Text>
+                </Box>
+              </VStack>
+              {labelAndValue("BPM", audio.bpm)}
+              {labelAndValue("Genre", audio.genre)}
+              {labelAndValue("Tempo", audio.tempo)}
+              {audio.key && labelAndValue("Note", audio.key)}
+              {labelAndValue("Type", audio.audioType)}
+              {showPrice(pack)}
+              <Center>
+                <IconButton
+                  variant={"ghost"}
+                  aria-label="extra"
+                  icon={<HiDotsVertical />}
+                  onClick={openAudioModal}
+                />
+              </Center>
+            </HStack>
+          </Box>
+          <Drawer
+            isOpen={isAudioModalOpen}
+            placement="right"
+            onClose={closeAudioModal}
+            size={"sm"}
+          >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>
+                <HStack justifyContent="center" alignItems="baseline">
+                  <Text fontSize={"xl"} fontWeight={"bold"}>
+                    {audio.name.toUpperCase()}{" "}
+                  </Text>
+                  {showPrice(pack)}
+                </HStack>
+              </DrawerHeader>
+              <DrawerBody>
+                <VStack h="100%" alignItems={"start"}>
+                  {labelHorizontal("BPM", audio.bpm)}
+                  {labelHorizontal("Genre", audio.genre)}
+                  {labelHorizontal("Tempo", audio.tempo)}
+                  {audio.key && labelHorizontal("Note", audio.key)}
+                  {labelHorizontal("Type", audio.audioType)}
+                </VStack>
+              </DrawerBody>
+              <DrawerFooter>
+                <IsOwn userId={user?.id}>
+                  <HStack w="100%" justifyContent={"center"}>
+                    <Box>
+                      <Button
+                        leftIcon={<FiEdit />}
+                        onClick={() => {
+                          closeAudioModal();
+                          OpenEdit();
+                        }}
+                      >
+                        Edit Audio
+                      </Button>
+                    </Box>
+                    <Box>
+                      <Button
+                        leftIcon={<MdDeleteOutline />}
+                        ref={deleteRef}
+                        onClick={openDelete}
+                      >
+                        Delete Audio
+                      </Button>
+                    </Box>
+                  </HStack>
+                </IsOwn>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+
+          <EditModal
+            name={audio.name}
+            isEditOpen={isEditOpen}
+            closeEdit={closeEdit}
+          >
+            <EditLoop
+              packId={packId}
+              loop={audio}
+              isLoop={true}
+              refetch={refetch}
+              closeEdit={closeEdit}
+            />
+          </EditModal>
+
+          {deleteAlert(deleteRef, toDelete, closeDelete, deleteAudioFn)}
+        </>
       )}
-      {deleteAlert(deleteRef, toDelete, closeDelete, deleteAudioFn)}
     </>
   );
 };
@@ -515,6 +520,7 @@ export const LoopCard: React.FC<{
             loop={audio}
             isLoop={false}
             refetch={refetch}
+            closeEdit={closeEdit}
           />
         </EditModal>
       )}

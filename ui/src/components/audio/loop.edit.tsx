@@ -19,6 +19,7 @@ import {
 } from 'queries/model';
 import { useForm } from 'react-hook-form';
 import { MdGraphicEq } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 import { loopValidations } from 'validations/loop.validation';
 import { packValidations } from 'validations/pack.validation';
 
@@ -61,9 +62,16 @@ const EditLoop: React.FC<{
   loop: MakeOptional<Loop, keyof Loop>;
   isLoop: boolean;
   refetch?: any;
-}> = ({ packId, loop: defaultValue = {}, isLoop = false, refetch }) => {
-  const [updatePack] = useMutation<{ UpdateOnePack: Pack }>(updateOnePack);
-  const [updateLoop] = useMutation<{ UpdateOneLoop: Loop }>(updateOneAudio);
+  closeEdit?: any;
+}> = ({
+  packId,
+  loop: defaultValue = {},
+  isLoop = false,
+  refetch,
+  closeEdit,
+}) => {
+  const [updatePack] = useMutation<{ updateOnePack: Pack }>(updateOnePack);
+  const [updateLoop] = useMutation<{ updateOneLoop: Loop }>(updateOneAudio);
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -97,6 +105,7 @@ const EditLoop: React.FC<{
   const onDelete = (id) => {
     setFiles(files.filter((x) => x.id !== id));
   };
+  const history = useNavigate();
 
   const submit = async (data) => {
     data.tempo = tempoValue;
@@ -129,14 +138,15 @@ const EditLoop: React.FC<{
       return false;
     }
     const authorId = cookies.get("userId");
+    debugger;
     try {
       if (!isLoop) {
         // submit the audio to a package
         data.packId = packId;
         setLoading(true);
-        const loop: MakeOptional<Loop, keyof Loop> = await updateLoop(
-          updateOneLoopVariables(data)
-        );
+        const {
+          data: { updateOneLoop: loop },
+        } = await updateLoop(updateOneLoopVariables(data));
         setLoading(false);
         toast({
           title: `Success updated audio details`,
@@ -150,7 +160,10 @@ const EditLoop: React.FC<{
           refetch();
         }
         //redirect to pack page
-        return;
+        // history(`/pack/${loop.id}`, { replace: true });
+        refetch && refetch();
+        closeEdit && closeEdit();
+        !refetch && history(`/pack/${loop.id}`, { replace: true });
       } else {
         const packInput: MakeOptional<Pack, keyof Pack> = {
           id: packId,
@@ -162,7 +175,7 @@ const EditLoop: React.FC<{
         };
         setLoading(true);
         const {
-          data: { UpdateOnePack: pack },
+          data: { updateOnePack: pack },
         } = await updatePack(updateOnePackVariables(packInput));
 
         delete data.type;
@@ -170,7 +183,7 @@ const EditLoop: React.FC<{
         delete data.price;
         data.packId = pack.id;
         const {
-          data: { UpdateOneLoop: loop },
+          data: { updateOneLoop: loop },
         } = await updateLoop(updateOneLoopVariables(data));
         toast({
           title: `Successfully updated loop`,
@@ -181,7 +194,10 @@ const EditLoop: React.FC<{
           position: "top",
         });
         setLoading(false);
-        return;
+        // history("/pack", { replace: true });
+        refetch && refetch();
+        closeEdit && closeEdit();
+        !refetch && history("/pack", { replace: true });
       }
     } catch (e) {
       toast({

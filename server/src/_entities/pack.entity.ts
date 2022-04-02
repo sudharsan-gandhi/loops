@@ -61,8 +61,9 @@ export class Pack extends BaseEntity {
   @FilterableField(() => Float, {
     description: 'Example field (placeholder)',
     defaultValue: 0,
+    nullable: true
   })
-  @Column('int', { name: 'price' })
+  @Column('int', { name: 'price', default: 0, nullable: true })
   price: number;
 
   @Field(() => String, { description: 'Example field (placeholder)' })

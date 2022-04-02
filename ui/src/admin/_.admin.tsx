@@ -1,25 +1,22 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
-import axios from 'axios';
-import { PaginationButton } from 'components/button/pagination.button';
-import { KBCheckbox } from 'components/checkbox/checkbox';
-import { KBDatePicker } from 'components/date/date';
+import axios from "axios";
+import { PaginationButton } from "components/button/pagination.button";
+import { KBCheckbox } from "components/checkbox/checkbox";
+import { KBDatePicker } from "components/date/date";
 import {
   FilterUI,
   KBFilterInterface,
   KBSortInterface,
-} from 'components/pagination';
-import pluralize from 'pluralize';
+} from "components/pagination";
+import pluralize from "pluralize";
 import {
   DeleteManyResponse,
   MakeOptional,
   User,
   UserConnection,
-} from 'queries';
-import { useForm } from 'react-hook-form';
+} from "queries";
+import { useForm } from "react-hook-form";
 import {
   MdAdd,
   MdDelete,
@@ -28,17 +25,11 @@ import {
   MdOutlinePassword,
   MdRemoveRedEye,
   MdVisibility,
-} from 'react-icons/md';
-import {
-  useAccess,
-  useUser,
-} from 'state/user';
-import create from 'zustand';
+} from "react-icons/md";
+import { useAccess, useUser } from "state/user";
+import create from "zustand";
 
-import {
-  useLazyQuery,
-  useMutation,
-} from '@apollo/client';
+import { useLazyQuery, useMutation } from "@apollo/client";
 import {
   Avatar,
   Box,
@@ -83,17 +74,11 @@ import {
   useDisclosure,
   useToast,
   VStack,
-} from '@chakra-ui/react';
-import {
-  Dropzone,
-  FileItem,
-} from '@dropzone-ui/react';
+} from "@chakra-ui/react";
+import { Dropzone, FileItem } from "@dropzone-ui/react";
 
-import AdminQueries, {
-  MutationField,
-  ViewField,
-} from './@query.admin';
-import ValidationHelper from './@validation.admin';
+import AdminQueries, { MutationField, ViewField } from "./@query.admin";
+import ValidationHelper from "./@validation.admin";
 
 export const useAdminViewData = create((set: any, get) => ({
   viewData: undefined,
@@ -158,13 +143,15 @@ const Resource: React.FC<{
 
   const [formData, setFormData] = useState();
 
-  const [getAll, { loading, fetchMore, refetch }] =
-    useLazyQuery<{ users: UserConnection }>(viewQuery);
+  const [getAll, { loading, fetchMore, refetch }] = useLazyQuery<{
+    users: UserConnection;
+  }>(viewQuery);
 
   const [deleteOne] = useMutation<{ deleteOneUser: User }>(deleteOneQuery);
 
-  const [deleteMany] =
-    useMutation<{ deleteManyUsers: DeleteManyResponse }>(deleteManyQuery);
+  const [deleteMany] = useMutation<{ deleteManyUsers: DeleteManyResponse }>(
+    deleteManyQuery
+  );
 
   const deleteOneFn = async (id: string) => {
     if (!accessList || !accessList.delete) {
@@ -173,7 +160,7 @@ const Resource: React.FC<{
     try {
       const { data } = await deleteOne(deleteOneVariable(id));
       resetChecked();
-      refetch().then(({ data }) => {
+      refetch({ variables }).then(({ data }) => {
         setViewData(data[pluralize(resource.toLowerCase())]);
       });
       toast({
@@ -208,7 +195,7 @@ const Resource: React.FC<{
         });
         const { data } = await deleteMany(deleteManyVariable(deleteItemsArr));
         resetChecked();
-        refetch().then(({ data }) => {
+        refetch({ variables }).then(({ data }) => {
           setViewData(data[pluralize(resource.toLowerCase())]);
         });
         toast({
@@ -972,7 +959,7 @@ export const BuildForm: React.FC<{
       // also if current field is undefined then set default value
       data = mutationFields.reduce((acc, curr) => {
         acc[curr.field] = data[curr.field];
-        if (acc[curr.field] === undefined || acc[curr.field].trim() === "") {
+        if (acc[curr.field] === undefined || (acc[curr.field]?.trim && acc[curr.field].trim() === "")) {
           acc[curr.field] = defaultValue[curr.field];
         }
         return acc;
@@ -1052,7 +1039,7 @@ export const BuildForm: React.FC<{
           setViewData(data[pluralize(resource.toLowerCase())]);
         });
       }
-      if(submit2) {
+      if (submit2) {
         submit2(response.data[key]);
       }
       close();
